@@ -3,20 +3,9 @@
 import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "../ThemeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
 
 export const ToggleThemeButton = () => {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   const { theme, toggleTheme } = useTheme();
-
-  if (!mounted) {
-    return null;
-  }
 
   return (
     <button

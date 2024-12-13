@@ -19,6 +19,11 @@ export default {
           dark: "var(--background-dark)",
         },
       },
+      fontFamily: {
+        roboto: ["var(--font-roboto)"],
+        lato: ["var(--font-lato)"],
+        montserrat: ["var(--font-montserrat)"],
+      },
     },
   },
   plugins: [],
