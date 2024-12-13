@@ -1,3 +1,4 @@
+import { PluginAPI } from "tailwindcss/types/config";
 import type { Config } from "tailwindcss";
 
 export default {
@@ -9,7 +10,15 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
+      textShadow: {
+        sm: "1px 1px 2px rgba(0, 0, 0, 0.5)",
+        md: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+        lg: "3px 3px 6px rgba(0, 0, 0, 0.5)",
+        none: "none",
+      },
       colors: {
+        dark: "var(--dark)",
+        light: "var(--light)",
         text: {
           light: "var(--text-light)",
           dark: "var(--text-dark)",
@@ -26,5 +35,16 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function (api: PluginAPI) {
+      const { addUtilities, theme } = api;
+
+      const textShadow = theme("textShadow") as Record<string, string>;
+      const utilities = Object.entries(textShadow).map(([key, value]) => ({
+        [`.text-shadow-${key}`]: { textShadow: value },
+      }));
+
+      addUtilities(Object.assign({}, ...utilities));
+    },
+  ],
 } satisfies Config;
