@@ -4,6 +4,7 @@ import { ThemeProvider } from "./ThemeContext";
 import "./globals.css";
 import { ToggleThemeButton } from "./components/ToggleThemeButton";
 import Navbar from "./components/Navbar";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -58,7 +59,9 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <ToggleThemeButton />
-          <Navbar />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Navbar />
+          </Suspense>
           {children}
         </ThemeProvider>
       </body>
