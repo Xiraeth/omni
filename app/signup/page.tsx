@@ -32,7 +32,7 @@ const Signup = () => {
     const { email, password } = data;
 
     try {
-      const req = await fetch("http://localhost:3004/api/register", {
+      const req = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

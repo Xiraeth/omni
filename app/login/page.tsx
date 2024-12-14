@@ -7,20 +7,48 @@ import { LoginFormData } from "../common/types";
 import ConnectWithGoogle from "../components/SignupWithGoogle";
 import Link from "next/link";
 import ConnectButton from "../components/ConnectButton";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
   const {
     control,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<LoginFormData>({
     mode: "onSubmit",
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log("Form submitted with data:", data);
-  };
+  const onSubmit = async (data: LoginFormData) => {
+    const { email, password } = data;
 
+    try {
+      const req = await fetch("http://localhost:3004/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const response = await req.json();
+
+      if (response.error) {
+        setError("root", { message: response.error });
+        return;
+      }
+
+      if (response.user) {
+        router.push("/login?userCreated=true");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setError("root", {
+        message: "An unexpected error occurred. Please try again later.",
+      });
+    }
+  };
   return (
     <div className="flex flex-col items-center justify-center h-screen w-full transition-all duration-150">
       <div className="w-[300px] sm:w-[500px] mx-auto bg-zinc-50 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
@@ -77,7 +105,11 @@ const Login = () => {
               />
             )}
           />
-
+          {errors?.root?.message && (
+            <p className="text-red-500 font-bold text-xs font-geistSans">
+              {errors?.root?.message}
+            </p>
+          )}
           <ConnectButton text="Log in" />
         </form>
         <div className="flex items-center justify-center gap-2 font-lato opacity-80 mb-2 transition-all duration-150 text-xs sm:text-sm">
