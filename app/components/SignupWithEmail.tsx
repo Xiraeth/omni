@@ -2,6 +2,11 @@ import Image from "next/image";
 import google from "@/public/google.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+
+// Prevent FontAwesome from dynamically adding its CSS
+config.autoAddCss = false;
 
 const SignupWithEmail = ({ onClick }: { onClick: () => void }) => {
   return (

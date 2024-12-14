@@ -37,8 +37,7 @@ const Input = forwardRef<HTMLInputElement, FormElementPropsType>(
           "outline-none w-full py-2 px-4 rounded-md transition-all duration-150 border-2",
           {
             "border-blue-400": state.isFocused && !isInvalid,
-            "border-slate-200": !(state.isFocused && !isInvalid),
-            "bg-red-400/20": isInvalid,
+            "bg-red-400/15": isInvalid,
             "bg-zinc-50": !isInvalid,
           },
           className

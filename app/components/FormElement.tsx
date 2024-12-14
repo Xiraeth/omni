@@ -12,7 +12,9 @@ const FormElement = memo(({ errorMsg, InputProps }: FormElementProps) => {
     <div className="w-full flex flex-col gap-1">
       <Input {...InputProps} isInvalid={!!errorMsg} />
       {errorMsg && (
-        <span className="text-red-500 text-xs pl-1">{errorMsg}</span>
+        <span className="text-xs relative bottom-1 text-red-500 rounded-full flex items-center justify-center w-fit px-2">
+          {errorMsg}
+        </span>
       )}
     </div>
   );
