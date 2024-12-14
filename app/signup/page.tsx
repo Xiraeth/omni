@@ -10,6 +10,7 @@ import ConnectWithGoogle from "../components/SignupWithGoogle";
 import ConnectButton from "../components/ConnectButton";
 import { useRouter } from "next/navigation";
 import { useTheme } from "../ThemeContext";
+import request from "../common/functions/request";
 
 const Signup = () => {
   const router = useRouter();
@@ -32,15 +33,10 @@ const Signup = () => {
     const { email, password } = data;
 
     try {
-      const req = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+      const response = await request({
+        data: { email, password },
+        url: "register",
       });
-
-      const response = await req.json();
 
       if (response.error) {
         setError("root", { message: response.error });
@@ -50,7 +46,6 @@ const Signup = () => {
       if (response.user) {
         router.push("/login?userCreated=true");
       }
-      console.log("done");
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("root", {
