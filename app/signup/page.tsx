@@ -1,7 +1,6 @@
 "use client";
 
 import { useForm, Controller } from "react-hook-form";
-import { ToastContainer, toast, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Link from "next/link";
@@ -14,21 +13,6 @@ import { useTheme } from "../ThemeContext";
 
 const Signup = () => {
   const router = useRouter();
-  const { theme } = useTheme();
-
-  const successToast = () =>
-    toast("Account created successfully", {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      type: "success",
-      theme,
-      transition: Slide,
-    });
 
   const {
     control,
@@ -48,26 +32,25 @@ const Signup = () => {
     const { email, password } = data;
 
     try {
-      // const req = await fetch("http://localhost:3004/api/register", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({ email, password }),
-      // });
+      const req = await fetch("http://localhost:3004/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // const response = await req.json();
+      const response = await req.json();
 
-      // if (response.error) {
-      //   setError("root", { message: response.error });
-      //   return;
-      // }
+      if (response.error) {
+        setError("root", { message: response.error });
+        return;
+      }
 
-      // if (response.user) {
-      //   router.push("/login");
-      // }
+      if (response.user) {
+        router.push("/login?userCreated=true");
+      }
       console.log("done");
-      successToast();
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("root", {
@@ -78,7 +61,6 @@ const Signup = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen w-full transition-all duration-150">
-      <ToastContainer />
       <div className="w-[300px] sm:w-[500px] mx-auto bg-zinc-50 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
         <p className="text-xl sm:text-2xl font-bold font-geistSans transition-all duration-150">
           Sign Up
