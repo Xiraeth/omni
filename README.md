@@ -29,9 +29,4 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Features
 
-- [ ] Login/Signup
-- [ ] Dashboard
-- [ ] Expenses
-- [ ] Income
-- [ ] Budgets
-- [ ] Reports
+Nothing yet
