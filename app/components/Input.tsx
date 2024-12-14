@@ -1,4 +1,4 @@
-import { useRef, useState, forwardRef } from "react";
+import { useRef, useState, forwardRef, useMemo } from "react";
 import { FormElementPropsType } from "../common/types";
 import clsx from "clsx";
 
@@ -23,79 +23,69 @@ const Input = forwardRef<HTMLInputElement, FormElementPropsType>(
     },
     forwardedRef
   ) => {
-    const [isFocused, setIsFocused] = useState(false);
-    const [isEmpty, setIsEmpty] = useState(true);
+    // Combine states into a single object to reduce re-renders
+    const [state, setState] = useState({
+      isFocused: false,
+      isEmpty: true,
+    });
+
     const innerRef = useRef<HTMLInputElement>(null);
 
+    // Memoize class calculations
+    const { inputClasses, labelClasses } = useMemo(
+      () => ({
+        inputClasses: clsx(
+          "outline-none w-full py-2 px-4 rounded-md transition-all duration-150 border-2",
+          {
+            "border-blue-400": state.isFocused && !isInvalid,
+            "border-slate-200": !(state.isFocused && !isInvalid),
+            "bg-red-400/20": isInvalid,
+            "bg-zinc-50": !isInvalid,
+          },
+          className
+        ),
+        labelClasses: clsx(
+          "absolute left-4 -translate-y-1/2 text-black/70 transition-all duration-50 z-10 px-1 cursor-text select-none",
+          {
+            "top-0 text-xs": state.isFocused || !state.isEmpty,
+            "top-1/2 text-base": !(state.isFocused || !state.isEmpty),
+            "text-blue-400": state.isFocused && !isInvalid,
+            "text-black/70": !(state.isFocused && !isInvalid),
+            "text-red-500": state.isFocused && isInvalid,
+            "bg-transparent": !state.isFocused && isInvalid,
+            "bg-zinc-50": state.isFocused && !isInvalid,
+          }
+        ),
+      }),
+      [state.isFocused, state.isEmpty, isInvalid, className]
+    );
+
+    // Memoize event handlers
     const handleElementClick = () => {
-      if (innerRef.current) {
-        innerRef.current.focus();
-        setIsFocused(true);
+      // If forwardedRef is a function, use innerRef as fallback
+      if (typeof forwardedRef === "function") {
+        innerRef.current?.focus();
+        setState((prev) => ({ ...prev, isFocused: true }));
+        return;
       }
+
+      // Use the forwarded ref if available, otherwise fall back to inner ref
+      const targetRef = forwardedRef || innerRef;
+      targetRef.current?.focus();
+      setState((prev) => ({ ...prev, isFocused: true }));
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.value.trim()) {
-        setIsEmpty(false);
-      } else {
-        setIsEmpty(true);
-      }
+      setState((prev) => ({
+        ...prev,
+        isEmpty: !e.target.value.trim(),
+      }));
       onChange?.(e);
     };
 
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-      setIsFocused(false);
+      setState((prev) => ({ ...prev, isFocused: false }));
       onBlur?.(e);
-    };
-
-    // Combine base classes with dynamic focus classes and custom classes
-    const inputClasses = clsx(
-      "outline-none",
-      "w-full",
-      "py-2",
-      "px-4",
-      "rounded-md",
-      "transition-all",
-      "duration-150",
-      "border-2",
-      {
-        "border-blue-400": isFocused && !isInvalid,
-        "border-slate-200": !(isFocused && !isInvalid),
-        "bg-red-400/20": isInvalid,
-        "bg-zinc-50": !isInvalid,
-      },
-      className
-    );
-
-    const labelClasses = clsx(
-      "absolute",
-      "left-4",
-      "-translate-y-1/2",
-      "text-black/70",
-      "transition-all",
-      "duration-50",
-      "z-10",
-      "px-1",
-      "cursor-text",
-      "select-none",
-      {
-        "top-0 text-xs": isFocused || !isEmpty,
-        "top-1/2 text-base": !(isFocused || !isEmpty),
-        "text-blue-400": isFocused && !isInvalid,
-        "text-black/70": !(isFocused && !isInvalid),
-        "text-red-500": isFocused && isInvalid,
-        "bg-transparent": !isFocused && isInvalid,
-        "bg-zinc-50": isFocused && !isInvalid,
-      }
-    );
-
-    const combinedRef = (node: HTMLInputElement | null) => {
-      innerRef.current = node;
-      if (typeof forwardedRef === "function") {
-        forwardedRef(node);
-      } else if (forwardedRef) {
-        forwardedRef.current = node;
-      }
     };
 
     return (
@@ -105,11 +95,11 @@ const Input = forwardRef<HTMLInputElement, FormElementPropsType>(
         </label>
         <input
           {...props}
-          ref={combinedRef}
+          ref={forwardedRef || innerRef}
           type={type}
           className={inputClasses}
           onChange={handleInputChange}
-          onFocus={() => setIsFocused(true)}
+          onFocus={() => setState((prev) => ({ ...prev, isFocused: true }))}
           onBlur={handleBlur}
         />
       </div>

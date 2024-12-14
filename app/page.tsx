@@ -9,7 +9,7 @@ export default function Home() {
         color="black"
         text="About me"
         href="/"
-        className="absolute top-4 left-4"
+        className="absolute top-4 left-4 z-20"
       />
       <div className=" italic select-none flex flex-col items-center justify-center h-screen w-fit gap-8 transition-all duration-200 mx-auto text-text-dark dark:text-text-light relative z-10">
         <p className="text-6xl font-bold font-montserrat drop-shadow-lg shadow-black text-center">

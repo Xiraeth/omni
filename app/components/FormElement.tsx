@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { FormElementPropsType } from "../common/types";
 import Input from "./Input";
 
@@ -6,7 +7,7 @@ interface FormElementProps {
   InputProps: FormElementPropsType;
 }
 
-const FormElement = ({ errorMsg, InputProps }: FormElementProps) => {
+const FormElement = memo(({ errorMsg, InputProps }: FormElementProps) => {
   return (
     <div className="w-full flex flex-col gap-1">
       <Input {...InputProps} isInvalid={!!errorMsg} />
@@ -15,6 +16,8 @@ const FormElement = ({ errorMsg, InputProps }: FormElementProps) => {
       )}
     </div>
   );
-};
+});
+
+FormElement.displayName = "FormElement";
 
 export default FormElement;
