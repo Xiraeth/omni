@@ -1,18 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 
 import Link from "next/link";
-import SignupWithGoogle from "../components/SignupWithGoogle";
-import SignupWithEmail from "../components/SignupWithEmail";
 import FormElement from "../components/FormElement";
-
-interface SignupFormData {
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+import { SignupFormData } from "../common/types";
+import ConnectWithGoogle from "../components/SignupWithGoogle";
 
 const Signup = () => {
   const {
@@ -44,6 +37,7 @@ const Signup = () => {
         <form
           className="w-full flex flex-col items-center justify-center gap-2"
           onSubmit={handleSubmit(onSubmit)}
+          id="signup-form"
         >
           <Controller
             name="email"
@@ -121,7 +115,7 @@ const Signup = () => {
         <div className="flex items-center justify-center gap-2 font-lato opacity-80 mb-2 transition-all duration-150 text-xs sm:text-sm">
           <p>Already have an account?</p>
           <Link
-            href="/"
+            href="/login"
             className="text-blue-600 hover:text-blue-400 transition-all duration-150"
           >
             Sign in
@@ -132,8 +126,8 @@ const Signup = () => {
           <span className="text-sm sm:text-base">or</span>
           <div className="h-[2px] w-full bg-black/10"></div>
         </div>
-        <SignupWithGoogle />
-        <div className="text-xs sm:text-base font-geistSans opacity-80 text-center transition-all duration-150">
+        <ConnectWithGoogle text="Sign up with Google" />
+        <div className="text-xs sm:text-sm font-geistSans opacity-80 text-center transition-all duration-150">
           This is a free and open source project. You do not have to agree to or
           pay for anything.
         </div>

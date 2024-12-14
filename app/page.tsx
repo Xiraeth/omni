@@ -19,7 +19,7 @@ export default function Home() {
           An app for many things
         </p>
         <div className="flex justify-center gap-24 w-full">
-          <LinkButton color="black" text="Log in" href="/" />
+          <LinkButton color="black" text="Log in" href="/login" />
           <LinkButton color="black" text="Sign up" href="/signup" />
         </div>
       </div>
