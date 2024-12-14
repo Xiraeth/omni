@@ -24,7 +24,7 @@ const Login = () => {
     const { email, password } = data;
 
     try {
-      const req = await fetch("http://localhost:3004/api/login", {
+      const req = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,10 +37,6 @@ const Login = () => {
       if (response.error) {
         setError("root", { message: response.error });
         return;
-      }
-
-      if (response.user) {
-        router.push("/login?userCreated=true");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -88,10 +84,6 @@ const Login = () => {
             control={control}
             rules={{
               required: "Password is required",
-              minLength: {
-                value: 6,
-                message: "Password must be at least 6 characters",
-              },
             }}
             render={({ field }) => (
               <FormElement
