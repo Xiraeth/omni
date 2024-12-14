@@ -58,8 +58,8 @@ const Input = forwardRef<HTMLInputElement, FormElementPropsType>(
             "text-red-500": state.isFocused && isInvalid,
             "bg-transparent": !state.isFocused && isInvalid,
             "dark:text-blue-400": state.isFocused && !isInvalid,
-            "bg-zinc-50": state.isFocused && !isInvalid,
-            "dark:bg-slate-800": state.isFocused && !isInvalid,
+            "bg-zinc-50": !isInvalid,
+            "dark:bg-slate-800": !isInvalid,
             "opacity-60": !state.isFocused,
           }
         ),
