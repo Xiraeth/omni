@@ -18,7 +18,7 @@ const Navbar = () => {
         ${isNavbarOpen ? "shadow-lg shadow-black" : "shadow-black shadow-sm"}
         text-dark dark:text-light bg-slate-300 dark:bg-slate-800 px-4 
         ${isNavbarOpen ? "translate-x-0" : "-translate-x-full"}
-        transition-all duration-500`}
+        transition-[color, background-color, box-shadow, transform] duration-[200ms,500ms,500ms,500ms]`}
     >
       <div className="flex items-center">
         <p className="text-4xl text-dark dark:text-light text-center drop-shadow-lg shadow-black font-bold font-montserrat mr-auto">
@@ -27,7 +27,7 @@ const Navbar = () => {
         <FontAwesomeIcon
           icon={faChevronLeft}
           onClick={onCloseClick}
-          className="bg-transparent text-dark dark:text-light rounded-full flex items-center justify-center text-lg py-3 px-4 border-2 border-dark dark:border-light cursor-pointer hover:bg-dark hover:text-light dark:hover:bg-light dark:hover:text-dark transition-all duration-100 z-10 justify-self-end shadow-lg shadow-black/10 dark:shadow-white/10"
+          className="bg-transparent text-dark dark:text-light rounded-full flex items-center justify-center text-md py-3 px-4 border-2 border-dark dark:border-light cursor-pointer hover:bg-dark hover:text-light dark:hover:bg-light dark:hover:text-dark transition-all duration-100 z-10 justify-self-end shadow-lg shadow-black/10 dark:shadow-white/10"
         />
       </div>
     </div>
