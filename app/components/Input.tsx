@@ -61,18 +61,19 @@ const Input = forwardRef<HTMLInputElement, FormElementPropsType>(
     );
 
     // Memoize event handlers
-    const handleElementClick = () => {
-      // If forwardedRef is a function, use innerRef as fallback
-      if (typeof forwardedRef === "function") {
-        innerRef.current?.focus();
-        setState((prev) => ({ ...prev, isFocused: true }));
-        return;
-      }
+    const handleElementClick = (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-      // Use the forwarded ref if available, otherwise fall back to inner ref
-      const targetRef = forwardedRef || innerRef;
-      targetRef.current?.focus();
-      setState((prev) => ({ ...prev, isFocused: true }));
+      const targetRef =
+        typeof forwardedRef === "function"
+          ? innerRef
+          : forwardedRef || innerRef;
+
+      if (targetRef.current) {
+        targetRef.current.focus();
+        setState((prev) => ({ ...prev, isFocused: true }));
+      }
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +96,11 @@ const Input = forwardRef<HTMLInputElement, FormElementPropsType>(
         </label>
         <input
           {...props}
-          ref={forwardedRef || innerRef}
+          ref={
+            typeof forwardedRef === "function"
+              ? innerRef
+              : forwardedRef || innerRef
+          }
           type={type}
           className={inputClasses}
           onChange={handleInputChange}
