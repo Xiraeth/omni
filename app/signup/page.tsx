@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
 import Link from "next/link";
 import SignupWithGoogle from "../components/SignupWithGoogle";
 import SignupWithEmail from "../components/SignupWithEmail";
-import Input from "../components/Input";
 import FormElement from "../components/FormElement";
 
 type ViewMode = "email" | "google" | undefined;
@@ -21,17 +20,20 @@ const Signup = () => {
   const [viewMode, setViewMode] = useState<ViewMode>(undefined);
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<SignupFormData>({
     mode: "onSubmit",
+    defaultValues: {
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
   });
 
-  const onSubmit: SubmitHandler<SignupFormData> = (data) => {
-    console.log("Form Data:", data);
-    console.log("Form Errors:", errors);
+  const onSubmit = (data: SignupFormData) => {
+    console.log("Form submitted with data:", data);
   };
 
   return (
@@ -54,47 +56,68 @@ const Signup = () => {
             className="w-full flex flex-col items-center justify-center gap-2 mb-4"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <FormElement
-              errorMsg={errors?.email?.message}
-              InputProps={{
-                type: "email",
-                placeholder: "Email",
-                ...register("email", {
-                  required: "Email is required",
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Invalid email address",
-                  },
-                }),
+            <Controller
+              name="email"
+              control={control}
+              rules={{
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address",
+                },
               }}
+              render={({ field }) => (
+                <FormElement
+                  errorMsg={errors?.email?.message}
+                  InputProps={{
+                    type: "email",
+                    placeholder: "Email",
+                    ...field,
+                  }}
+                />
+              )}
             />
 
-            <FormElement
-              errorMsg={errors?.password?.message}
-              InputProps={{
-                type: "password",
-                placeholder: "Password",
-                ...register("password", {
-                  required: "Password is required",
-                  minLength: {
-                    value: 6,
-                    message: "Password must be at least 6 characters",
-                  },
-                }),
+            <Controller
+              name="password"
+              control={control}
+              rules={{
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters",
+                },
               }}
+              render={({ field }) => (
+                <FormElement
+                  errorMsg={errors?.password?.message}
+                  InputProps={{
+                    type: "password",
+                    placeholder: "Password",
+                    ...field,
+                  }}
+                />
+              )}
             />
 
-            <FormElement
-              errorMsg={errors?.confirmPassword?.message}
-              InputProps={{
-                type: "password",
-                placeholder: "Confirm Password",
-                ...register("confirmPassword", {
-                  required: "Please confirm your password",
-                  validate: (value) =>
-                    value === watch("password") || "Passwords do not match",
-                }),
+            <Controller
+              name="confirmPassword"
+              control={control}
+              rules={{
+                required: "Please confirm your password",
+                validate: (value, formValues) =>
+                  value === formValues.password || "Passwords do not match",
               }}
+              render={({ field }) => (
+                <FormElement
+                  errorMsg={errors?.confirmPassword?.message}
+                  InputProps={{
+                    type: "password",
+                    placeholder: "Confirm Password",
+                    ...field,
+                  }}
+                />
+              )}
             />
 
             <button

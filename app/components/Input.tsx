@@ -18,20 +18,19 @@ const Input = forwardRef<HTMLInputElement, FormElementPropsType>(
       className = "",
       onChange,
       onBlur,
+      value,
       isInvalid = false,
       ...props
     },
     forwardedRef
   ) => {
-    // Combine states into a single object to reduce re-renders
     const [state, setState] = useState({
       isFocused: false,
-      isEmpty: true,
+      isEmpty: !value,
     });
 
     const innerRef = useRef<HTMLInputElement>(null);
 
-    // Memoize class calculations
     const { inputClasses, labelClasses } = useMemo(
       () => ({
         inputClasses: clsx(
@@ -60,7 +59,6 @@ const Input = forwardRef<HTMLInputElement, FormElementPropsType>(
       [state.isFocused, state.isEmpty, isInvalid, className]
     );
 
-    // Memoize event handlers
     const handleElementClick = (e: React.MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
@@ -106,6 +104,7 @@ const Input = forwardRef<HTMLInputElement, FormElementPropsType>(
           onChange={handleInputChange}
           onFocus={() => setState((prev) => ({ ...prev, isFocused: true }))}
           onBlur={handleBlur}
+          value={value}
         />
       </div>
     );
