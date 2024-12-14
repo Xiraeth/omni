@@ -6,6 +6,7 @@ import Link from "next/link";
 import FormElement from "../components/FormElement";
 import { SignupFormData } from "../common/types";
 import ConnectWithGoogle from "../components/SignupWithGoogle";
+import ConnectButton from "../components/ConnectButton";
 
 const Signup = () => {
   const {
@@ -27,7 +28,7 @@ const Signup = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen w-full transition-all duration-150">
-      <div className="w-[300px] sm:w-[500px] mx-auto bg-zinc-50 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150">
+      <div className="w-[300px] sm:w-[500px] mx-auto bg-zinc-50 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
         <p className="text-xl sm:text-2xl font-bold font-geistSans transition-all duration-150">
           Sign Up
         </p>
@@ -102,29 +103,22 @@ const Signup = () => {
               />
             )}
           />
-
-          <button
-            type="submit"
-            className="w-full flex items-center justify-center border-[1px] border-black/20 rounded-md py-2 shadow-sm shadow-black/10 transition-all duration-200 font-roboto font-bold text-sm sm:text-base bg-dark text-white hover:bg-slate-700/90 active:bg-slate-700/95"
-          >
-            <div className="flex items-center justify-center text-center w-[160px] sm:w-[180px]">
-              Sign up
-            </div>
-          </button>
+          <ConnectButton text="Sign up" />
         </form>
+
         <div className="flex items-center justify-center gap-2 font-lato opacity-80 mb-2 transition-all duration-150 text-xs sm:text-sm">
           <p>Already have an account?</p>
           <Link
             href="/login"
-            className="text-blue-600 hover:text-blue-400 transition-all duration-150"
+            className="text-blue-500 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-150"
           >
             Sign in
           </Link>
         </div>
         <div className="w-full flex items-center justify-center gap-2 mb-4">
-          <div className="h-[2px] w-full bg-black/10"></div>
+          <div className="h-[2px] w-full bg-black/10 dark:bg-white/10 transition-all duration-150"></div>
           <span className="text-sm sm:text-base">or</span>
-          <div className="h-[2px] w-full bg-black/10"></div>
+          <div className="h-[2px] w-full bg-black/10 dark:bg-white/10 transition-all duration-150"></div>
         </div>
         <ConnectWithGoogle text="Sign up with Google" />
         <div className="text-xs sm:text-sm font-geistSans opacity-80 text-center transition-all duration-150">

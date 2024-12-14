@@ -34,16 +34,22 @@ const Input = forwardRef<HTMLInputElement, FormElementPropsType>(
     const { inputClasses, labelClasses } = useMemo(
       () => ({
         inputClasses: clsx(
-          "outline-none w-full py-2 px-4 rounded-md transition-all duration-150 border-2",
+          "outline-none w-full py-2 px-4 rounded-md transition-all duration-150 border-2  dark:text-white",
           {
             "border-blue-400": state.isFocused && !isInvalid,
+            "border-slate-200": !state.isFocused,
+            "dark:border-white/20": !state.isFocused,
+            "border-red-400/30": state.isFocused && isInvalid,
+            "dark:border-red-400/70": state.isFocused && isInvalid,
             "bg-red-400/15": isInvalid,
+            "dark:bg-red-400/10": isInvalid,
+            "dark:bg-slate-800": !isInvalid,
             "bg-zinc-50": !isInvalid,
           },
           className
         ),
         labelClasses: clsx(
-          "absolute left-4 -translate-y-1/2 text-black/70 transition-all duration-50 z-10 px-1 cursor-text select-none",
+          "absolute left-4 -translate-y-1/2 text-black/70 transition-all duration-50 z-10 px-1 cursor-text select-none dark:text-white",
           {
             "top-0 text-xs": state.isFocused || !state.isEmpty,
             "top-1/2 text-base": !(state.isFocused || !state.isEmpty),
@@ -51,7 +57,10 @@ const Input = forwardRef<HTMLInputElement, FormElementPropsType>(
             "text-black/70": !(state.isFocused && !isInvalid),
             "text-red-500": state.isFocused && isInvalid,
             "bg-transparent": !state.isFocused && isInvalid,
+            "dark:text-blue-400": state.isFocused && !isInvalid,
             "bg-zinc-50": state.isFocused && !isInvalid,
+            "dark:bg-slate-800": state.isFocused && !isInvalid,
+            "opacity-60": !state.isFocused,
           }
         ),
       }),
