@@ -29,9 +29,11 @@ export default {
         },
       },
       fontFamily: {
+        geistSans: ["var(--font-geist-sans)"],
+        geistMono: ["var(--font-geist-mono)"],
+        montserrat: ["var(--font-montserrat)"],
         roboto: ["var(--font-roboto)"],
         lato: ["var(--font-lato)"],
-        montserrat: ["var(--font-montserrat)"],
       },
     },
   },
