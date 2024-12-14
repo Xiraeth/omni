@@ -4,10 +4,10 @@
 
 :root {
   --dark: #334155;
-  --light: #e2e8f0;
-  --text-light: #e2e8f0;
+  --light: #f3f4f6;
+  --text-light: #f3f4f6;
   --text-dark: #334155;
-  --background-light: #e2e8f0;
+  --background-light: #f3f4f6;
   --background-dark: #334155;
   --dark-hover: ;
 }

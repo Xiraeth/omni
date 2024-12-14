@@ -6,17 +6,21 @@ export default function Home() {
   return (
     <>
       <LinkButton
-        text="finances"
-        href="/finances"
+        color="black"
+        text="About me"
+        href="/about-me"
         className="absolute top-4 left-4"
       />
-      <div className=" italic select-none font-bold flex flex-col items-center justify-center h-screen w-fit gap-12 mx-auto text-text-dark dark:text-text-light relative z-10">
-        <p className="text-6xl font-montserrat drop-shadow-lg shadow-black text-center">
+      <div className=" italic select-none flex flex-col items-center justify-center h-screen w-fit gap-8 transition-all duration-200 mx-auto text-text-dark dark:text-text-light relative z-10">
+        <p className="text-6xl font-bold font-montserrat drop-shadow-lg shadow-black text-center">
+          Omni
+        </p>
+        <p className="text-xl font-montserrat drop-shadow-lg shadow-black text-center">
           An app for many things
         </p>
         <div className="flex justify-center gap-24 w-full">
-          <LinkButton text="Login" href="/login" />
-          <LinkButton text="Sign up" href="/signup" />
+          <LinkButton color="black" text="Log in" href="/" />
+          <LinkButton color="black" text="Sign up" href="/signup" />
         </div>
       </div>
     </>
