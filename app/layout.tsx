@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Montserrat } from "next/font/google";
 import { ThemeProvider } from "./ThemeContext";
 import "./globals.css";
+import { ToggleThemeButton } from "./components/ToggleThemeButton";
+import Navbar from "./components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,8 +21,8 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Dashboard",
+  title: "Omni",
+  description: "An app for many things",
 };
 
 export default function RootLayout({
@@ -54,7 +56,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} min-h-screen bg-background-light dark:bg-background-dark transition-colors duration-200 antialiased`}
         suppressHydrationWarning
       >
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <ToggleThemeButton />
+          <Navbar />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
