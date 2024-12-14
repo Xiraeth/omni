@@ -8,7 +8,7 @@ export default function Home() {
       <LinkButton
         color="black"
         text="About me"
-        href="/about-me"
+        href="/"
         className="absolute top-4 left-4"
       />
       <div className=" italic select-none flex flex-col items-center justify-center h-screen w-fit gap-8 transition-all duration-200 mx-auto text-text-dark dark:text-text-light relative z-10">
