@@ -35,7 +35,7 @@ const Signup = () => {
     try {
       const response = await request({
         data: { email, password },
-        url: "auth/register",
+        url: "/register",
       });
 
       if (response.error) {
