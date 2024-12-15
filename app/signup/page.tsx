@@ -11,6 +11,7 @@ import ConnectButton from "../components/ConnectButton";
 import { useRouter } from "next/navigation";
 import { useTheme } from "../context/ThemeContext";
 import request from "../common/functions/request";
+import LinkButton from "../components/LinkButton";
 
 const Signup = () => {
   const router = useRouter();
@@ -56,6 +57,12 @@ const Signup = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen w-full transition-all duration-150">
+      <LinkButton
+        href="/"
+        color="blue"
+        text="Home"
+        className="absolute bottom-4 right-4"
+      />
       <div className="w-[300px] sm:w-[500px] mx-auto bg-zinc-50 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
         <p className="text-xl sm:text-2xl font-bold font-geistSans transition-all duration-150">
           Sign Up

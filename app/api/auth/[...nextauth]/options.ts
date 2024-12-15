@@ -5,7 +5,12 @@ import User from "@/models/user";
 import bcrypt from "bcrypt";
 import dbConnect from "@/lib/connectToDb";
 
+if (!process.env.NEXTAUTH_SECRET) {
+  throw new Error("NEXTAUTH_SECRET is not defined");
+}
+
 export const options: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,
@@ -86,5 +91,8 @@ export const options: NextAuthOptions = {
       }
       return session;
     },
+  },
+  jwt: {
+    maxAge: 60 * 60 * 24, // 1 day
   },
 };

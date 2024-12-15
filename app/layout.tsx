@@ -1,10 +1,12 @@
-import type { Metadata } from "next";
 import { Geist, Geist_Mono, Lato, Montserrat, Roboto } from "next/font/google";
-import { ThemeProvider } from "./context/ThemeContext";
 import "./globals.css";
 import { ToggleThemeButton } from "./components/ToggleThemeButton";
 import Navbar from "./components/Navbar";
 import { Suspense } from "react";
+import Providers from "./components/Providers";
+import { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { options } from "./api/auth/[...nextauth]/options";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,15 +36,17 @@ const lato = Lato({
 });
 
 export const metadata: Metadata = {
-  title: "Omni",
-  description: "An app for many things",
+  title: "Your Title",
+  description: "Your Description",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(options);
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -69,13 +73,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} ${roboto.variable} ${lato.variable} min-h-screen bg-background-light dark:bg-background-dark transition-colors duration-200 antialiased`}
         suppressHydrationWarning
       >
-        <ThemeProvider>
+        <Providers session={session}>
           <ToggleThemeButton />
           <Suspense fallback={<div>Loading...</div>}>
             <Navbar />
           </Suspense>
           {children}
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

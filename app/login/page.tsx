@@ -7,8 +7,13 @@ import { LoginFormData } from "../common/types";
 import ConnectWithGoogle from "../components/SignupWithGoogle";
 import Link from "next/link";
 import ConnectButton from "../components/ConnectButton";
+import LinkButton from "../components/LinkButton";
+import { redirect, useRouter } from "next/navigation";
+import request from "../common/functions/request";
+import { signIn } from "next-auth/react";
 
 const Login = () => {
+  const router = useRouter();
   const {
     control,
     handleSubmit,
@@ -22,20 +27,19 @@ const Login = () => {
     const { email, password } = data;
 
     try {
-      const req = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
       });
 
-      const response = await req.json();
-
-      if (response.error) {
-        setError("root", { message: response.error });
+      if (result?.error) {
+        setError("root", { message: result.error });
         return;
       }
+
+      router.push("/");
+      router.refresh();
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("root", {
@@ -45,6 +49,12 @@ const Login = () => {
   };
   return (
     <div className="flex flex-col items-center justify-center h-screen w-full transition-all duration-150">
+      <LinkButton
+        href="/"
+        color="blue"
+        text="Home"
+        className="absolute bottom-4 right-4"
+      />
       <div className="w-[300px] sm:w-[500px] mx-auto bg-zinc-50 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
         <p className="text-xl sm:text-2xl font-bold font-geistSans transition-all duration-150">
           Login

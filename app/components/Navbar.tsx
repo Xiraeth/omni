@@ -3,8 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { useSearchParams } from "next/navigation";
 import { changeUrlParams } from "../common/functions/changeParams";
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
+  const { data: session } = useSession();
+
   const searchParams = useSearchParams();
   const isNavbarOpen = searchParams.get("isNavbarOpen") === "true";
 
