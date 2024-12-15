@@ -17,10 +17,15 @@ export async function POST(req: NextRequest) {
 
   try {
     // Check if the user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
+      return NextResponse.json({ error: "Username is taken" }, { status: 400 });
+    }
+
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
       return NextResponse.json(
-        { error: "User already exists" },
+        { error: "Email is already in use" },
         { status: 400 }
       );
     }

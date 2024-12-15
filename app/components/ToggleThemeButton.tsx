@@ -5,12 +5,7 @@ import { useTheme } from "../context/ThemeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const ToggleThemeButton = () => {
-  const { theme, toggleTheme, isThemeLoading } = useTheme();
-
-  // Don't render anything while theme is loading to prevent flash
-  if (isThemeLoading) {
-    return null;
-  }
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <button
