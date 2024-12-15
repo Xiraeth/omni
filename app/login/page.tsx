@@ -51,12 +51,11 @@ const Login = () => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    const { email, password, username } = data;
+    const { email, password } = data;
     try {
       const result = await signIn("credentials", {
         email,
         password,
-        username,
         redirect: false,
       });
 
@@ -76,12 +75,6 @@ const Login = () => {
   };
   return (
     <div className="flex flex-col items-center justify-center h-screen w-full transition-all duration-150">
-      <LinkButton
-        href="/"
-        color="blue"
-        text="Home"
-        className="absolute bottom-4 right-4"
-      />
       <ToastContainer className="relative z-50" />
       <div className="w-[300px] sm:w-[500px] mx-auto bg-zinc-50 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
         <p className="text-xl sm:text-2xl font-bold font-geistSans transition-all duration-150">

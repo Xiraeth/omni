@@ -84,15 +84,18 @@ export const options: NextAuthOptions = {
   },
   // Add callbacks for JWT and Session handling
   callbacks: {
-    async jwt({ token, user }: { token: any; user: any }) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.username = user.username as string;
       }
       return token;
     },
-    async session({ session, token }: { session: any; token: any }) {
+    async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        session.user.username = token.username as string;
+        session.user.email = token.email as string;
       }
       return session;
     },

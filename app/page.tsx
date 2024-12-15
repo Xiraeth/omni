@@ -42,11 +42,13 @@ export default function Home() {
       ) : (
         <div className="select-none flex flex-col items-center justify-center h-screen w-fit gap-8 transition-all duration-200 mx-auto text-text-dark dark:text-text-light relative z-10">
           {!isNavbarOpen ? (
-            <div className="fixed top-4 left-4">
+            <div
+              onClick={onOpenClick}
+              className="fixed top-4 left-4 w-8 h-8 flex hover:bg-slate-200 items-center justify-center transition-all duration-200 active:bg-slate-300 drop-shadow-lg shadow-black dark:text-light dark:hover:bg-slate-500 dark:active:bg-slate-400 cursor-pointer rounded-full"
+            >
               <FontAwesomeIcon
-                onClick={onOpenClick}
                 icon={faAnglesRight}
-                className="text-lg width-[20px] height-[20px] text-dark p-2 flex items-center justify-center hover:bg-slate-200 rounded-full transition-all duration-200 cursor-pointer active:bg-slate-300 drop-shadow-lg shadow-black dark:text-light dark:hover:bg-slate-500 dark:active:bg-slate-400"
+                className="w-4 h-4 text-dark dark:text-light"
               />
             </div>
           ) : null}
