@@ -2,7 +2,7 @@
 
 type UrlParamsInput = {
   params: string;
-  value: string;
+  value: string | null;
 };
 
 /**
@@ -17,6 +17,10 @@ export const changeUrlParams = ({ params, value }: UrlParamsInput): void => {
 
   const url = new URL(window.location.href);
 
-  url.searchParams.set(params, value);
+  if (value) {
+    url.searchParams.set(params, value);
+  } else {
+    url.searchParams.delete(params);
+  }
   window.history.pushState({}, "", url);
 };

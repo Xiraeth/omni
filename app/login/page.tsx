@@ -8,8 +8,7 @@ import ConnectWithGoogle from "../components/SignupWithGoogle";
 import Link from "next/link";
 import ConnectButton from "../components/ConnectButton";
 import LinkButton from "../components/LinkButton";
-import { redirect, useRouter } from "next/navigation";
-import request from "../common/functions/request";
+import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 const Login = () => {
@@ -24,12 +23,13 @@ const Login = () => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    const { email, password } = data;
+    const { email, password, username } = data;
 
     try {
       const result = await signIn("credentials", {
         email,
         password,
+        username,
         redirect: false,
       });
 
@@ -39,7 +39,6 @@ const Login = () => {
       }
 
       router.push("/");
-      router.refresh();
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("root", {

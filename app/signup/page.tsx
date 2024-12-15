@@ -27,6 +27,7 @@ const Signup = () => {
       email: "",
       password: "",
       confirmPassword: "",
+      username: "",
     },
   });
 
@@ -75,6 +76,29 @@ const Signup = () => {
           onSubmit={handleSubmit(onSubmit)}
           id="signup-form"
         >
+          <Controller
+            name="username"
+            control={control}
+            rules={{
+              required: "Username is required",
+              minLength: {
+                value: 3,
+                message: "Username must be at least 3 characters long",
+              },
+            }}
+            render={({ field }) => (
+              <FormElement
+                errorMsg={errors?.username?.message}
+                InputProps={{
+                  type: "text",
+                  placeholder: "Username",
+                  ...field,
+                  value: field.value || "",
+                }}
+              />
+            )}
+          />
+
           <Controller
             name="email"
             control={control}

@@ -4,6 +4,7 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
+      username: string;
     } & DefaultSession["user"];
   }
 
@@ -22,10 +23,12 @@ export interface FormElementPropsType
 export interface LoginFormData {
   email: string;
   password: string;
+  username: string;
 }
 
 export interface SignupFormData {
   email: string;
   password: string;
   confirmPassword: string;
+  username: string;
 }

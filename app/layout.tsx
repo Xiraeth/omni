@@ -36,8 +36,8 @@ const lato = Lato({
 });
 
 export const metadata: Metadata = {
-  title: "Your Title",
-  description: "Your Description",
+  title: "Omni",
+  description: "An app for many things",
 };
 
 export default async function RootLayout({

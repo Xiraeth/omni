@@ -28,8 +28,12 @@ export const options: NextAuthOptions = {
         password: { label: "Password", type: "password", required: true },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email and password are required");
+        if (!credentials?.email) {
+          throw new Error("Email is required");
+        }
+
+        if (!credentials?.password) {
+          throw new Error("Password is required");
         }
 
         try {
@@ -57,6 +61,7 @@ export const options: NextAuthOptions = {
           return {
             id: user._id.toString(),
             email: user.email,
+            username: user.username,
             createdAt: user.createdAt,
           };
         } catch (error) {
