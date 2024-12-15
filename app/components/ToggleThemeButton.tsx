@@ -1,7 +1,7 @@
 "use client";
 
 import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
-import { useTheme } from "../ThemeContext";
+import { useTheme } from "../context/ThemeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const ToggleThemeButton = () => {

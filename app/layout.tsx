@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Lato, Montserrat, Roboto } from "next/font/google";
-import { ThemeProvider } from "./ThemeContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import "./globals.css";
 import { ToggleThemeButton } from "./components/ToggleThemeButton";
 import Navbar from "./components/Navbar";

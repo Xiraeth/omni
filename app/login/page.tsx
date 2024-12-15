@@ -7,10 +7,8 @@ import { LoginFormData } from "../common/types";
 import ConnectWithGoogle from "../components/SignupWithGoogle";
 import Link from "next/link";
 import ConnectButton from "../components/ConnectButton";
-import { useRouter } from "next/navigation";
 
 const Login = () => {
-  const router = useRouter();
   const {
     control,
     handleSubmit,
@@ -41,7 +39,7 @@ const Login = () => {
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("root", {
-        message: "An unexpected error occurred. Please try again later.",
+        message: "Server is not responding. Please try again later.",
       });
     }
   };

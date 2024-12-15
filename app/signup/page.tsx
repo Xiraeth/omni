@@ -9,7 +9,7 @@ import { SignupFormData } from "../common/types";
 import ConnectWithGoogle from "../components/SignupWithGoogle";
 import ConnectButton from "../components/ConnectButton";
 import { useRouter } from "next/navigation";
-import { useTheme } from "../ThemeContext";
+import { useTheme } from "../context/ThemeContext";
 import request from "../common/functions/request";
 
 const Signup = () => {
@@ -35,7 +35,7 @@ const Signup = () => {
     try {
       const response = await request({
         data: { email, password },
-        url: "register",
+        url: "auth/register",
       });
 
       if (response.error) {
@@ -44,12 +44,12 @@ const Signup = () => {
       }
 
       if (response.user) {
-        router.push("/login?userCreated=true");
+        router.push("/login");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("root", {
-        message: "An unexpected error occurred. Please try again later.",
+        message: "Server is not responding. Please try again later.",
       });
     }
   };
