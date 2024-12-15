@@ -8,11 +8,39 @@ import ConnectWithGoogle from "../components/SignupWithGoogle";
 import Link from "next/link";
 import ConnectButton from "../components/ConnectButton";
 import LinkButton from "../components/LinkButton";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { toast, ToastContainer } from "react-toastify";
+import { useTheme } from "../context/ThemeContext";
+import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
+import { changeUrlParams } from "../common/functions/changeParams";
 
 const Login = () => {
+  const { theme } = useTheme();
+  const searchParams = useSearchParams();
+  const userCreated = searchParams.get("userCreated");
   const router = useRouter();
+
+  const userCreatedToast = () => {
+    toast("User created successfully", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      closeButton: true,
+      type: "success",
+      theme,
+    });
+  };
+
+  useEffect(() => {
+    if (userCreated === "true") {
+      changeUrlParams({ params: "userCreated", value: null });
+      userCreatedToast();
+    }
+  }, [userCreated]);
+
   const {
     control,
     handleSubmit,
@@ -24,7 +52,6 @@ const Login = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     const { email, password, username } = data;
-
     try {
       const result = await signIn("credentials", {
         email,
@@ -39,6 +66,7 @@ const Login = () => {
       }
 
       router.push("/");
+      router.refresh();
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("root", {
@@ -54,6 +82,7 @@ const Login = () => {
         text="Home"
         className="absolute bottom-4 right-4"
       />
+      <ToastContainer className="relative z-50" />
       <div className="w-[300px] sm:w-[500px] mx-auto bg-zinc-50 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
         <p className="text-xl sm:text-2xl font-bold font-geistSans transition-all duration-150">
           Login

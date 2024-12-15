@@ -32,11 +32,11 @@ const Signup = () => {
   });
 
   const onSubmit = async (data: SignupFormData) => {
-    const { email, password } = data;
+    const { email, password, username } = data;
 
     try {
       const response = await request({
-        data: { email, password },
+        data: { email, password, username },
         url: "/register",
       });
 
@@ -46,7 +46,7 @@ const Signup = () => {
       }
 
       if (response.user) {
-        router.push("/login");
+        router.push("/login?userCreated=true");
       }
     } catch (error) {
       console.error("Error submitting form:", error);

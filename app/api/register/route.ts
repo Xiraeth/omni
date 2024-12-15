@@ -6,11 +6,11 @@ import User from "@/models/user";
 export async function POST(req: NextRequest) {
   await dbConnect();
 
-  const { email, password } = await req.json();
+  const { email, password, username } = await req.json();
 
-  if (!email || !password) {
+  if (!email || !password || !username) {
     return NextResponse.json(
-      { error: "Email and password are required" },
+      { error: "Email, password and username are required" },
       { status: 400 }
     );
   }
@@ -26,12 +26,12 @@ export async function POST(req: NextRequest) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ email, password: hashedPassword });
+    const user = new User({ email, password: hashedPassword, username });
 
     await user.save();
 
     return NextResponse.json(
-      { message: "User registered successfully" },
+      { message: "User registered successfully", user },
       { status: 201 }
     );
   } catch (error) {

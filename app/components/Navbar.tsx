@@ -15,15 +15,17 @@ const Navbar = () => {
 
   const isNavbarOpen = searchParams.get("isNavbarOpen") === "true";
 
-  const onCloseClick = () => {
+  const closeNavbar = () => {
     changeUrlParams({ params: "isNavbarOpen", value: null });
   };
 
   const handleLogout = async () => {
     await signOut();
-    changeUrlParams({ params: "isNavbarOpen", value: null });
-    router.push("/login");
   };
+
+  if (!session) {
+    return null;
+  }
 
   return (
     <div
@@ -39,7 +41,7 @@ const Navbar = () => {
         </p>
         <FontAwesomeIcon
           icon={faAnglesLeft}
-          onClick={onCloseClick}
+          onClick={closeNavbar}
           className="text-lg width-[20px] height-[20px] text-dark p-2 flex items-center justify-center hover:bg-slate-200 rounded-full transition-all duration-200 cursor-pointer active:bg-slate-300 drop-shadow-lg shadow-black dark:text-light dark:hover:bg-slate-500 dark:active:bg-slate-400"
         />
       </div>

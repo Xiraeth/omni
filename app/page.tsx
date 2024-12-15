@@ -1,22 +1,28 @@
 "use client";
 
-import { User } from "next-auth";
 import LinkButton from "./components/LinkButton";
 import { useUser } from "./context/UserContext";
 import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { changeUrlParams } from "./common/functions/changeParams";
 import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
   const { session } = useUser();
-  const user = session?.user;
+
   const searchParams = useSearchParams();
   const isNavbarOpen = searchParams.get("isNavbarOpen") === "true";
 
   const onOpenClick = () => {
     changeUrlParams({ params: "isNavbarOpen", value: "true" });
   };
+
+  useEffect(() => {
+    if (!session) {
+      changeUrlParams({ params: "isNavbarOpen", value: null });
+    }
+  }, [session]);
 
   return (
     <>
