@@ -67,7 +67,9 @@ export const options: NextAuthOptions = {
         } catch (error) {
           // Log the error for debugging but don't expose details to client
           console.error("Auth error:", error);
-          throw new Error("Authentication failed");
+          const errorMessage =
+            error instanceof Error ? error.message : "Unknown error";
+          throw new Error(errorMessage);
         }
       },
     }),

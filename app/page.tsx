@@ -6,10 +6,38 @@ import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { changeUrlParams } from "./common/functions/changeParams";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const { session } = useUser();
+  const [currentTime, setCurrentTime] = useState<string>("");
+
+  const date = new Date();
+  const formattedDate = date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour12: false,
+  });
+
+  const formatTimeWithSeconds = (date: Date): string => {
+    return date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
+  };
+
+  useEffect(() => {
+    setCurrentTime(formatTimeWithSeconds(new Date()));
+
+    const timer = setInterval(() => {
+      setCurrentTime(formatTimeWithSeconds(new Date()));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const searchParams = useSearchParams();
   const isNavbarOpen = searchParams.get("isNavbarOpen") === "true";
@@ -40,11 +68,11 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <div className="select-none flex flex-col items-center justify-center h-screen w-fit gap-8 transition-all duration-200 mx-auto text-text-dark dark:text-text-light relative z-10">
+        <div className="flex w-full px-40 h-20 border-b-[1px] border-b-black mx-auto justify-between items-center">
           {!isNavbarOpen ? (
             <div
               onClick={onOpenClick}
-              className="fixed top-4 left-4 w-8 h-8 flex hover:bg-slate-200 items-center justify-center transition-all duration-200 active:bg-slate-300 drop-shadow-lg shadow-black dark:text-light dark:hover:bg-slate-500 dark:active:bg-slate-400 cursor-pointer rounded-full"
+              className="fixed top-[22px] left-4 w-8 h-8 flex hover:bg-slate-200 items-center justify-center transition-all duration-200 active:bg-slate-300 drop-shadow-lg shadow-black dark:text-light dark:hover:bg-slate-500 dark:active:bg-slate-400 cursor-pointer rounded-full"
             >
               <FontAwesomeIcon
                 icon={faAnglesRight}
@@ -52,10 +80,15 @@ export default function Home() {
               />
             </div>
           ) : null}
-
-          <h1 className="text-6xl font-bold font-montserrat drop-shadow-lg shadow-black text-center text-violet-600 dark:text-red-500">
-            Welcome back, <i>Master</i>
-          </h1>
+          <p className="text-dark dark:text-light text-3xl font-bold select-none">
+            Dashboard
+          </p>
+          <p className="text-dark dark:text-light text-3xl font-lato select-none">
+            {formattedDate}
+          </p>
+          <p className="transition-all h-12 flex items-center justify-center duration-200 text-dark dark:text-light text-3xl py-2 w-40 text-center bg-slate-300 text-purple-600 dark:bg-slate-800 rounded-md dark:text-green-500 font-montserrat select-none">
+            {currentTime}
+          </p>
         </div>
       )}
     </>

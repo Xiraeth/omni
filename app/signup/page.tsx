@@ -9,12 +9,14 @@ import { SignupFormData } from "../common/types";
 import ConnectWithGoogle from "../components/SignupWithGoogle";
 import ConnectButton from "../components/ConnectButton";
 import { useRouter } from "next/navigation";
-import { useTheme } from "../context/ThemeContext";
 import request from "../common/functions/request";
-import LinkButton from "../components/LinkButton";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const Signup = () => {
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     control,
@@ -35,6 +37,7 @@ const Signup = () => {
     const { email, password, username } = data;
 
     try {
+      setIsSubmitting(true);
       const response = await request({
         data: { email, password, username },
         url: "/register",
@@ -53,6 +56,8 @@ const Signup = () => {
       setError("root", {
         message: "Server is not responding. Please try again later.",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -156,6 +161,14 @@ const Signup = () => {
               />
             )}
           />
+          {isSubmitting && (
+            <div className="w-full flex items-center justify-center">
+              <FontAwesomeIcon
+                icon={faSpinner}
+                className="w-4 h-4 animate-spin"
+              />
+            </div>
+          )}
           {errors?.root?.message && (
             <p className="text-red-500 font-bold text-xs font-geistSans">
               {errors?.root?.message}

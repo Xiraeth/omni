@@ -13,14 +13,17 @@ import { signIn } from "next-auth/react";
 import { toast, ToastContainer } from "react-toastify";
 import { useTheme } from "../context/ThemeContext";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { changeUrlParams } from "../common/functions/changeParams";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const Login = () => {
   const { theme } = useTheme();
   const searchParams = useSearchParams();
   const userCreated = searchParams.get("userCreated");
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const userCreatedToast = () => {
     toast("User created successfully", {
@@ -53,6 +56,7 @@ const Login = () => {
   const onSubmit = async (data: LoginFormData) => {
     const { email, password } = data;
     try {
+      setIsSubmitting(true);
       const result = await signIn("credentials", {
         email,
         password,
@@ -63,7 +67,6 @@ const Login = () => {
         setError("root", { message: result.error });
         return;
       }
-
       router.push("/");
       router.refresh();
     } catch (error) {
@@ -71,6 +74,8 @@ const Login = () => {
       setError("root", {
         message: "Server is not responding. Please try again later.",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (
@@ -126,6 +131,14 @@ const Login = () => {
               />
             )}
           />
+          {isSubmitting && (
+            <div className="w-full flex items-center justify-center">
+              <FontAwesomeIcon
+                icon={faSpinner}
+                className="w-4 h-4 animate-spin"
+              />
+            </div>
+          )}
           {errors?.root?.message && (
             <p className="text-red-500 font-bold text-xs font-geistSans">
               {errors?.root?.message}
