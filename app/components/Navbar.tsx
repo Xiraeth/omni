@@ -69,7 +69,7 @@ const Navbar = () => {
         <div className="flex flex-col">
           <NavbarButton
             text="Dashboard"
-            onClick={() => {}}
+            onClick={() => router.push("/")}
             icon={faChartLine}
           />
           <div className="container flex flex-col">
@@ -93,9 +93,7 @@ const Navbar = () => {
             >
               <NavbarButton
                 text="Income"
-                onClick={
-                  isDropdownOpen ? () => router.push("/income") : undefined
-                }
+                onClick={isDropdownOpen ? () => () => {} : undefined}
                 icon={faSackDollar}
                 className={`mt-[1px] ${
                   !isDropdownOpen ? "cursor-default" : ""
