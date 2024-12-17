@@ -53,19 +53,21 @@ const Navbar = () => {
         transition-[color, background-color, box-shadow, transform] duration-[200ms,200ms,500ms,500ms] z-50`}
     >
       <div className="flex items-center border-b-[1px] border-dark pb-2">
-        <Image
-          src={session?.user?.image || "/default-avatar.png"}
-          alt={`${session?.user?.username || "User"}'s Avatar`}
-          width={32}
-          height={32}
-          className="rounded-full mr-2"
-          onError={(e) => {
-            // Fallback to default avatar if image fails to load
-            const target = e.target as HTMLImageElement;
-            target.src = "/default-avatar.png";
-          }}
-        />
-        <p className="text-base sm:text-2xl text-dark dark:text-light font-bold drop-shadow-lg shadow-black w-2/3 text-wrap break-words font-montserrat mr-auto ">
+        {session?.user?.image && (
+          <Image
+            src={session?.user?.image || "/default-avatar.png"}
+            alt={`${session?.user?.username || "User"}'s Avatar`}
+            width={32}
+            height={32}
+            className="rounded-full mr-2"
+            onError={(e) => {
+              // Fallback to default avatar if image fails to load
+              const target = e.target as HTMLImageElement;
+              target.src = "/default-avatar.png";
+            }}
+          />
+        )}
+        <p className="text-base sm:text-xl text-dark dark:text-light font-bold drop-shadow-lg shadow-black w-2/3 text-wrap break-words font-montserrat mr-auto ">
           {session?.user?.username ||
             session?.user?.name ||
             session?.user?.email}
@@ -80,14 +82,18 @@ const Navbar = () => {
           />
         </div>
       </div>
-      <div className="flex flex-col justify-between h-[calc(100%-70px)]">
-        <div className="flex flex-col">
+      <div className="flex flex-col justify-between h-[calc(100%-70px)] mt-4">
+        <div className="flex flex-col gap-2">
           <NavbarButton
             text="Dashboard"
             onClick={() => router.push("/")}
             icon={faChartLine}
           />
-          <div className="container flex flex-col">
+          <div
+            className={`container flex flex-col ${
+              isDropdownOpen ? "h-auto" : "h-[32px]"
+            }`}
+          >
             <NavbarButton
               text="Finance"
               onClick={toggleDropdown}
@@ -100,10 +106,8 @@ const Navbar = () => {
               }`}
             />
             <div
-              className={`flex flex-col gap-2 p-2 pl-4 overflow-hidden transition-[max-height,opacity] duration-300 ${
-                isDropdownOpen
-                  ? "max-h-[200px] opacity-100"
-                  : "max-h-0 opacity-0"
+              className={`flex flex-col gap-2 p-2 pl-4 overflow-hidden transition-[opacity] duration-300 ${
+                isDropdownOpen ? "opacity-100" : "opacity-0"
               }`}
             >
               <NavbarButton
@@ -111,25 +115,18 @@ const Navbar = () => {
                 onClick={isDropdownOpen ? () => {} : undefined}
                 icon={faSackDollar}
                 className={`${!isDropdownOpen ? "cursor-default" : ""}`}
-                mt={0}
               />
               <NavbarButton
                 text="Expenses"
                 onClick={() => {}}
                 icon={faSackXmark}
                 className={`${!isDropdownOpen ? "cursor-default" : ""}`}
-                mt={0}
               />
             </div>
           </div>
-          <NavbarButton
-            text="Todos"
-            onClick={() => {}}
-            icon={faListCheck}
-            mt={0}
-          />
+          <NavbarButton text="Todos" onClick={() => {}} icon={faListCheck} />
         </div>
-        <div>
+        <div className="flex flex-col gap-2 pb-2">
           <NavbarButton text="Settings" onClick={() => {}} icon={faGear} />
           <NavbarButton
             text="Logout"

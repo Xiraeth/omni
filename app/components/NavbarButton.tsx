@@ -8,7 +8,7 @@ const NavbarButton = ({
   icon,
   className = "cursor-pointer",
   isDropdown,
-  mt = 4,
+  mt = 0,
 }: {
   text: string;
   onClick?: () => void;

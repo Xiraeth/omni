@@ -55,9 +55,26 @@ const Login = () => {
   });
 
   const loginWithGithub = async () => {
-    await signIn("github", {
-      callbackUrl: "http://localhost:3000",
-    });
+    try {
+      setIsSubmitting(true);
+      const result = await signIn("github", {
+        callbackUrl: "http://localhost:3000",
+        redirect: false,
+      });
+
+      if (result?.error) {
+        toast.error("Failed to connect with GitHub");
+        return;
+      }
+
+      if (result?.url) {
+        setIsSubmitting(false);
+        router.push(result.url);
+      }
+    } catch (error) {
+      console.error("GitHub login error:", error);
+      toast.error("Failed to connect with GitHub");
+    }
   };
 
   const onSubmit = async (data: LoginFormData) => {
