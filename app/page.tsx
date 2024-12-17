@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const { session } = useUser();
+
   const [currentTime, setCurrentTime] = useState<string>("");
 
   const date = new Date();

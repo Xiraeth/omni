@@ -6,13 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import FormElement from "../components/FormElement";
 import { SignupFormData } from "../common/types";
-import ConnectWithGoogle from "../components/SignupWithGoogle";
+import ConnectWithGoogle from "../components/ConnectWithGoogle";
 import ConnectButton from "../components/ConnectButton";
 import { useRouter } from "next/navigation";
 import request from "../common/functions/request";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import ConnectWithGithub from "../components/ConnectWithGithub";
 
 const Signup = () => {
   const router = useRouter();
@@ -191,10 +192,12 @@ const Signup = () => {
           <span className="text-sm sm:text-base">or</span>
           <div className="h-[2px] w-full bg-black/10 dark:bg-white/10 transition-all duration-150"></div>
         </div>
-        <ConnectWithGoogle text="Sign up with Google" />
+        <div className="w-full flex flex-col items-center justify-center gap-2">
+          <ConnectWithGoogle text="Sign up with Google" />
+          <ConnectWithGithub text="Sign up with Github" />
+        </div>
         <div className="text-xs sm:text-sm font-geistSans opacity-80 text-center transition-all duration-150">
-          This is a free and open source project. You do not have to agree to or
-          pay for anything.
+          Placeholder for privacy policy and other stuff like that
         </div>
       </div>
     </div>

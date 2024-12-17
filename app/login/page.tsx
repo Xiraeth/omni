@@ -4,7 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 
 import FormElement from "../components/FormElement";
 import { LoginFormData } from "../common/types";
-import ConnectWithGoogle from "../components/SignupWithGoogle";
+import ConnectWithGoogle from "../components/ConnectWithGoogle";
 import Link from "next/link";
 import ConnectButton from "../components/ConnectButton";
 import LinkButton from "../components/LinkButton";
@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { changeUrlParams } from "../common/functions/changeParams";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import ConnectWithGithub from "../components/ConnectWithGithub";
 
 const Login = () => {
   const { theme } = useTheme();
@@ -53,6 +54,12 @@ const Login = () => {
     mode: "onSubmit",
   });
 
+  const loginWithGithub = async () => {
+    await signIn("github", {
+      callbackUrl: "http://localhost:3000",
+    });
+  };
+
   const onSubmit = async (data: LoginFormData) => {
     const { email, password } = data;
     try {
@@ -60,7 +67,7 @@ const Login = () => {
       const result = await signIn("credentials", {
         email,
         password,
-        redirect: false,
+        callbackUrl: "http://localhost:3000",
       });
 
       if (result?.error) {
@@ -160,10 +167,15 @@ const Login = () => {
           <span className="text-sm sm:text-base">or</span>
           <div className="h-[2px] w-full bg-black/10 dark:bg-white/10 transition-all duration-150"></div>
         </div>
-        <ConnectWithGoogle text="Login with Google" />
+        <div className="w-full flex flex-col items-center justify-center gap-2">
+          <ConnectWithGoogle text="Login with Google" />
+          <ConnectWithGithub
+            onClick={loginWithGithub}
+            text="Login with Github"
+          />
+        </div>
         <div className="text-xs sm:text-sm font-geistSans opacity-80 text-center transition-all duration-150">
-          This is a free and open source project. You do not have to agree to or
-          pay for anything.
+          Placeholder for privacy policy and other stuff like that
         </div>
       </div>
     </div>

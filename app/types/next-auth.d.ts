@@ -7,11 +7,16 @@ declare module "next-auth" {
     email: string;
     createdAt: Date;
   }
+
+  interface Profile {
+    login?: string;
+  }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     username: string;
+    email: string;
   }
 }

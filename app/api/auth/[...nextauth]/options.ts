@@ -15,6 +15,11 @@ export const options: NextAuthOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
+      authorization: {
+        params: {
+          scope: "read:user user:email",
+        },
+      },
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -86,18 +91,32 @@ export const options: NextAuthOptions = {
   },
   // Add callbacks for JWT and Session handling
   callbacks: {
-    async jwt({ token, user }) {
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    },
+    async jwt({ token, user, profile, account }) {
       if (user) {
         token.id = user.id;
-        token.username = user.username as string;
+        token.email = user.email as string;
+
+        // Set username based on the authentication method
+        if (account?.provider === "github") {
+          token.username = profile?.login as string;
+        } else {
+          // For credentials provider, use the username from user object
+          token.username = user.username as string;
+        }
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
-        session.user.username = token.username as string;
         session.user.email = token.email as string;
+        session.user.username = token.username as string;
+        // Remove githibUsername as it's now handled in the unified username field
       }
       return session;
     },
