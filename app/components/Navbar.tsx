@@ -93,25 +93,25 @@ const Navbar = () => {
             >
               <NavbarButton
                 text="Income"
-                onClick={isDropdownOpen ? () => () => {} : undefined}
+                onClick={isDropdownOpen ? () => {} : undefined}
                 icon={faSackDollar}
-                className={`mt-[1px] ${
-                  !isDropdownOpen ? "cursor-default" : ""
-                }`}
+                className={`${!isDropdownOpen ? "cursor-default" : ""}`}
+                mt={0}
               />
               <NavbarButton
                 text="Expenses"
                 onClick={() => {}}
                 icon={faSackXmark}
-                className="mt-0"
+                className={`${!isDropdownOpen ? "cursor-default" : ""}`}
+                mt={0}
               />
             </div>
           </div>
           <NavbarButton
-            text="Todo"
+            text="Todos"
             onClick={() => {}}
             icon={faListCheck}
-            className="mt-0"
+            mt={0}
           />
         </div>
         <div>

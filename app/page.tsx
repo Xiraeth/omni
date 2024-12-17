@@ -86,7 +86,7 @@ export default function Home() {
           <p className="text-dark dark:text-light text-3xl font-lato select-none">
             {formattedDate}
           </p>
-          <p className="transition-all h-12 flex items-center justify-center duration-200 text-dark dark:text-light text-3xl py-2 w-40 text-center bg-slate-300 text-purple-600 dark:bg-slate-800 rounded-md dark:text-green-500 font-montserrat select-none">
+          <p className="transition-all h-12 flex items-center justify-center duration-200 text-3xl py-2 w-40 text-center bg-slate-300 text-purple-600 dark:bg-slate-800 rounded-md dark:text-green-500 font-montserrat select-none">
             {currentTime}
           </p>
         </div>
