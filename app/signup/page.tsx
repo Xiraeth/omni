@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import FormElement from "../components/FormElement";
 import { SignupFormData } from "../common/types";
-import ConnectWithGoogle from "../components/ConnectWithGoogle";
+import ConnectWithDiscord from "../components/ConnectWithDiscord";
 import ConnectButton from "../components/ConnectButton";
 import { useRouter } from "next/navigation";
 import request from "../common/functions/request";
@@ -14,6 +14,8 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import ConnectWithGithub from "../components/ConnectWithGithub";
+import { signIn } from "next-auth/react";
+import { toast } from "react-toastify";
 
 const Signup = () => {
   const router = useRouter();
@@ -33,6 +35,25 @@ const Signup = () => {
       username: "",
     },
   });
+
+  const signupWithGithub = async () => {
+    try {
+      setIsSubmitting(true);
+      const result = await signIn("github", {
+        callbackUrl: "/",
+        redirect: true,
+      });
+
+      if (result?.error) {
+        setIsSubmitting(false);
+        toast.error("Failed to connect with GitHub");
+        return;
+      }
+    } catch (error) {
+      console.error("GitHub login error:", error);
+      toast.error("Failed to connect with GitHub");
+    }
+  };
 
   const onSubmit = async (data: SignupFormData) => {
     const { email, password, username } = data;
@@ -54,6 +75,7 @@ const Signup = () => {
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+      setIsSubmitting(false);
       setError("root", {
         message: "Server is not responding. Please try again later.",
       });
@@ -193,8 +215,14 @@ const Signup = () => {
           <div className="h-[2px] w-full bg-black/10 dark:bg-white/10 transition-all duration-150"></div>
         </div>
         <div className="w-full flex flex-col items-center justify-center gap-2">
-          <ConnectWithGoogle text="Sign up with Google" />
-          <ConnectWithGithub text="Sign up with Github" />
+          {/* <ConnectWithDiscord
+            text="Sign up with Discord"
+            onClick={signupWithDiscord}
+          /> */}
+          <ConnectWithGithub
+            text="Sign up with Github"
+            onClick={signupWithGithub}
+          />
         </div>
         <div className="text-xs sm:text-sm font-geistSans opacity-80 text-center transition-all duration-150">
           Placeholder for privacy policy and other stuff like that

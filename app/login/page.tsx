@@ -4,7 +4,6 @@ import { useForm, Controller } from "react-hook-form";
 
 import FormElement from "../components/FormElement";
 import { LoginFormData } from "../common/types";
-import ConnectWithGoogle from "../components/ConnectWithGoogle";
 import Link from "next/link";
 import ConnectButton from "../components/ConnectButton";
 import LinkButton from "../components/LinkButton";
@@ -18,6 +17,7 @@ import { changeUrlParams } from "../common/functions/changeParams";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import ConnectWithGithub from "../components/ConnectWithGithub";
+import ConnectWithDiscord from "../components/ConnectWithDiscord";
 
 const Login = () => {
   const { theme } = useTheme();
@@ -64,6 +64,7 @@ const Login = () => {
 
       if (result?.error) {
         toast.error("Failed to connect with GitHub");
+        setIsSubmitting(false);
         return;
       }
 
@@ -84,15 +85,21 @@ const Login = () => {
       const result = await signIn("credentials", {
         email,
         password,
-        callbackUrl: "http://localhost:3000",
+        redirect: false,
+        callbackUrl: "/",
       });
 
       if (result?.error) {
         setError("root", { message: result.error });
+        setIsSubmitting(false);
         return;
       }
-      router.push("/");
-      router.refresh();
+
+      if (result?.ok) {
+        setIsSubmitting(false);
+        router.push("/");
+        router.refresh();
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("root", {
@@ -185,7 +192,6 @@ const Login = () => {
           <div className="h-[2px] w-full bg-black/10 dark:bg-white/10 transition-all duration-150"></div>
         </div>
         <div className="w-full flex flex-col items-center justify-center gap-2">
-          <ConnectWithGoogle text="Login with Google" />
           <ConnectWithGithub
             onClick={loginWithGithub}
             text="Login with Github"

@@ -17,6 +17,7 @@ export default {
         none: "none",
       },
       colors: {
+        discordBlue: "#5865F2",
         dark: "var(--dark)",
         light: "var(--light)",
         text: {
