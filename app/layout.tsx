@@ -35,22 +35,17 @@ const lato = Lato({
   weight: ["100", "300", "400", "700", "900"],
 });
 
-const themeScript = `
-  if (typeof window !== 'undefined') {
-    let theme = localStorage.getItem('theme')
-    if (!theme) {
-      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-      localStorage.setItem('theme', theme)
-    }
-    document.documentElement.classList.add(theme)
-    document.documentElement.setAttribute('data-theme', theme)
-  }
-`;
-
 export const metadata: Metadata = {
   title: "Omni",
   description: "An app for many things",
 };
+
+// Create a script that will run immediately
+const themeInitScript = `
+  const theme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  document.documentElement.classList.add(theme);
+  document.documentElement.setAttribute("data-theme", theme);
+`;
 
 export default async function RootLayout({
   children,
@@ -63,7 +58,11 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="color-scheme" content="light dark" />
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: themeInitScript,
+          }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} ${roboto.variable} ${lato.variable} min-h-screen bg-background-light dark:bg-background-dark transition-colors duration-200 antialiased`}
