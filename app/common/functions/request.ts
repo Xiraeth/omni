@@ -7,12 +7,6 @@ const request = async <T>({
   url: string;
   baseUrl?: string;
 }) => {
-  console.log(`Fetching from: ${baseUrl}${url}`);
-
-  if (!baseUrl || !url) {
-    throw new Error("Base URL or URL is not defined");
-  }
-
   const req = await fetch(`${baseUrl}/${url}`, {
     method: "POST",
     headers: {
