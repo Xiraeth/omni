@@ -7,7 +7,7 @@ const request = async <T>({
   url: string;
   baseUrl?: string;
 }) => {
-  console.log(`Fetching from: ${baseUrl}/${url}`);
+  console.log(`Fetching from: ${baseUrl}${url}`);
 
   if (!baseUrl || !url) {
     throw new Error("Base URL or URL is not defined");
