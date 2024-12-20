@@ -7,9 +7,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { changeUrlParams } from "./common/functions/changeParams";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import OpenNavbarButton from "./components/OpenNavbarButton";
+import { useNavbar } from "../hooks/useNavbar";
+import { formatTimeWithSeconds } from "./common/functions/formatTime";
 
 export default function Home() {
   const { session } = useUser();
+  const isNavbarOpen = useNavbar();
 
   const [currentTime, setCurrentTime] = useState<string>("");
 
@@ -21,15 +25,6 @@ export default function Home() {
     hour12: false,
   });
 
-  const formatTimeWithSeconds = (date: Date): string => {
-    return date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-    });
-  };
-
   useEffect(() => {
     setCurrentTime(formatTimeWithSeconds(new Date()));
 
@@ -39,13 +34,6 @@ export default function Home() {
 
     return () => clearInterval(timer);
   }, []);
-
-  const searchParams = useSearchParams();
-  const isNavbarOpen = searchParams.get("isNavbarOpen") === "true";
-
-  const onOpenClick = () => {
-    changeUrlParams({ params: "isNavbarOpen", value: "true" });
-  };
 
   useEffect(() => {
     if (!session) {
@@ -70,17 +58,7 @@ export default function Home() {
         </div>
       ) : (
         <div className="flex w-full px-40 h-20 border-b-[1px] border-b-black mx-auto justify-between items-center">
-          {!isNavbarOpen ? (
-            <div
-              onClick={onOpenClick}
-              className="fixed top-[22px] left-4 w-8 h-8 flex hover:bg-slate-200 items-center justify-center transition-all duration-200 active:bg-slate-300 drop-shadow-lg shadow-black dark:text-light dark:hover:bg-slate-500 dark:active:bg-slate-400 cursor-pointer rounded-full"
-            >
-              <FontAwesomeIcon
-                icon={faAnglesRight}
-                className="w-4 h-4 text-dark dark:text-light"
-              />
-            </div>
-          ) : null}
+          {!isNavbarOpen ? <OpenNavbarButton /> : null}
           <p className="text-dark dark:text-light text-3xl font-bold select-none">
             Dashboard
           </p>

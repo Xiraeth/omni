@@ -1,3 +1,10 @@
+/**
+ * Sends a POST request to the specified URL with the given data
+ * @param data - The data to send
+ * @param url - The URL to send the request to
+ * @param baseUrl - The base URL to use for the request
+ * @returns The response from the request
+ */
 const request = async <T>({
   data,
   url,
