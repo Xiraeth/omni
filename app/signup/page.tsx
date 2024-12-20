@@ -62,7 +62,7 @@ const Signup = () => {
       setIsSubmitting(true);
       const response = await request({
         data: { email, password, username },
-        url: "/register",
+        url: `register`,
       });
 
       if (response.error) {
