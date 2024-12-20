@@ -35,6 +35,18 @@ const lato = Lato({
   weight: ["100", "300", "400", "700", "900"],
 });
 
+const themeScript = `
+  if (typeof window !== 'undefined') {
+    let theme = localStorage.getItem('theme')
+    if (!theme) {
+      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      localStorage.setItem('theme', theme)
+    }
+    document.documentElement.classList.add(theme)
+    document.documentElement.setAttribute('data-theme', theme)
+  }
+`;
+
 export const metadata: Metadata = {
   title: "Omni",
   description: "An app for many things",
@@ -47,40 +59,11 @@ export default async function RootLayout({
 }>) {
   const session = await getServerSession(options);
 
-  // Initialize theme variables
-  let initialTheme = "light"; // Default theme
-
-  // Check if running on the client side
-  if (typeof window !== "undefined") {
-    // Get the saved theme from localStorage
-    const savedTheme = localStorage.getItem("theme");
-    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-      .matches
-      ? "dark"
-      : "light";
-    initialTheme = savedTheme || systemTheme;
-  }
-
   return (
-    <html lang="en" suppressHydrationWarning className={initialTheme}>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="color-scheme" content="light dark" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  const storedTheme = localStorage.getItem('theme');
-                  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                  const theme = storedTheme || systemTheme;
-                  document.documentElement.classList.add(theme);
-                } catch (e) {
-                  document.documentElement.classList.add('light');
-                }
-              })()
-            `,
-          }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} ${roboto.variable} ${lato.variable} min-h-screen bg-background-light dark:bg-background-dark transition-colors duration-200 antialiased`}
