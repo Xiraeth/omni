@@ -64,14 +64,16 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={initialTheme}>
       <head>
+        <meta name="color-scheme" content="light dark" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
-                  const theme = localStorage.getItem('theme') || '${initialTheme}';
+                  const storedTheme = localStorage.getItem('theme');
+                  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  const theme = storedTheme || systemTheme;
                   document.documentElement.classList.add(theme);
-                  document.body.setAttribute("data-theme", theme);
                 } catch (e) {
                   document.documentElement.classList.add('light');
                 }

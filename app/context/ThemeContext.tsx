@@ -17,20 +17,19 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [isThemeLoading, setIsThemeLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial theme from localStorage or system preference
     const savedTheme = localStorage.getItem("theme") as Theme;
     const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
       .matches
       ? "dark"
       : "light";
-
     setTheme(savedTheme || systemTheme);
     setIsThemeLoading(false);
   }, []);
 
   useEffect(() => {
     if (!isThemeLoading) {
-      document.documentElement.classList.toggle("dark", theme === "dark");
+      document.documentElement.classList.remove("light", "dark");
+      document.documentElement.classList.add(theme);
       localStorage.setItem("theme", theme);
     }
   }, [theme, isThemeLoading]);

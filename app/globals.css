@@ -3,10 +3,17 @@
 @tailwind utilities;
 
 :root {
+  color-scheme: light dark;
   --dark: #334155;
   --light: #f3f4f6;
   --text-light: #f3f4f6;
   --text-dark: #334155;
   --background-light: #f3f4f6;
   --background-dark: #334155;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
 }
