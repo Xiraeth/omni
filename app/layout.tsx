@@ -47,20 +47,31 @@ export default async function RootLayout({
 }>) {
   const session = await getServerSession(options);
 
+  // Initialize theme variables
+  let initialTheme = "light"; // Default theme
+
+  // Check if running on the client side
+  if (typeof window !== "undefined") {
+    // Get the saved theme from localStorage
+    const savedTheme = localStorage.getItem("theme");
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+      .matches
+      ? "dark"
+      : "light";
+    initialTheme = savedTheme || systemTheme;
+  }
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={initialTheme}>
       <head>
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
-                  const theme = localStorage.getItem('theme');
-                  if (theme) {
-                    document.documentElement.classList.add(theme);
-                  } else {
-                    document.documentElement.classList.add('light');
-                  }
+                  const theme = localStorage.getItem('theme') || '${initialTheme}';
+                  document.documentElement.classList.add(theme);
+                  document.body.setAttribute("data-theme", theme);
                 } catch (e) {
                   document.documentElement.classList.add('light');
                 }
