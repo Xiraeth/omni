@@ -11,7 +11,7 @@ export type IncomeFormErrorsType = {
 };
 
 export type IncomeDataType = {
-  id: string;
+  _id: string;
   name: string;
   amount: number;
   date: string;

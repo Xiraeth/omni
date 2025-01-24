@@ -54,7 +54,7 @@ const Dropdown = ({
     <div
       className={clsx(
         "grid grid-rows-[auto,0fr] [&.open]:grid-rows-[auto,1fr]",
-        "font-lato drop-shadow-md border-[1px] rounded-md cursor-pointer transition-all duration-100 min-w-40 w-full md:max-w-72 text-dark dark:text-light",
+        "font-lato drop-shadow-md border-[1px] rounded-md cursor-pointer transition-all duration-200 min-w-40 w-full md:max-w-72 text-dark dark:text-light",
         {
           "dark:border-amber-400 dark:hover:border-amber-400 border-sky-400 hover:border-sky-400 dark:bg-slate-900 bg-white/80 ":
             isOpen,

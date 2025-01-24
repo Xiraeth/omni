@@ -18,6 +18,7 @@ import { IncomeDataType, IncomeFormDataType } from "../types/income";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import AddIncomeForm from "./components/AddIncomeForm";
+import IncomeTable from "./components/IncomeTable";
 
 const IncomePage = () => {
   const router = useRouter();
@@ -58,6 +59,7 @@ const IncomePage = () => {
     <div className="w-screen h-screen overflow-x-hidden">
       <OpenNavbarButton />
       <AddIncomeForm />
+      <IncomeTable incomeData={incomeData} />
     </div>
   ) : (
     <NoSessionDiv />
