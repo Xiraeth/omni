@@ -60,9 +60,12 @@ const Dropdown = ({ options, onSelect, placeholder }: DropdownPropsType) => {
         "duration-200",
         "relative",
         "min-w-40",
+        "dark:bg-slate-900",
+        "text-dark dark:text-light",
         {
-          "border-teal-400 hover:border-teal-400": isOpen,
-          "hover:border-slate-400/80": !isOpen,
+          "border-sky-400 hover:border-sky-400": isOpen,
+          "hover:border-slate-400/80 dark:hover:border-slate-600/80 dark:border-slate-600 dark:hover:border-slate-500":
+            !isOpen,
         }
       )}
       onClick={handleToggleDropdown}
@@ -77,7 +80,7 @@ const Dropdown = ({ options, onSelect, placeholder }: DropdownPropsType) => {
         )}
       </div>
       {isOpen && (
-        <div className="dropdownOptions absolute top-[60px] bg-white/80 w-full left-0 rounded-md border-[1px] border-slate-400/80">
+        <div className="dropdownOptions absolute top-[60px] bg-white/80 w-full left-0 rounded-md border-[1px] border-slate-400/80 dark:border-slate-600 dark:bg-slate-900">
           {options.map((option, index) => {
             const isLast = index === options.length - 1;
             const isFirst = index === 0;
@@ -85,7 +88,7 @@ const Dropdown = ({ options, onSelect, placeholder }: DropdownPropsType) => {
             return (
               <div
                 className={clsx(
-                  "cursor-pointer px-4 py-2 hover:bg-slate-200/80 transition-all duration-200",
+                  "cursor-pointer px-4 py-2 hover:bg-slate-200/80 dark:hover:bg-slate-800 transition-all duration-200",
                   {
                     "rounded-t-md": isFirst,
                     "rounded-b-md": isLast,
