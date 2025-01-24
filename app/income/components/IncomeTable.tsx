@@ -35,14 +35,12 @@ const IncomeTable = ({
     <div className="w-10/12 mx-auto flex gap-2 flex-col items-start">
       {isFiltersModalOpen && (
         <>
-          {/* Overlay */}
           <div
             className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
             onClick={handleCloseFiltersModal}
             aria-hidden="true"
           />
 
-          {/* Modal */}
           <div
             role="dialog"
             aria-labelledby="modal-title"
