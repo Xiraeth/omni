@@ -5,18 +5,19 @@ type DateInputProps = {
    * Callback function triggered when the date value changes
    * @param value - The selected date value as string
    */
-  onChange?: (value: string) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   /**
    * Optional default value for the date input
    */
-  defaultValue?: string;
+  value: string;
 };
 
-const DateInput = ({ onChange, defaultValue }: DateInputProps) => {
+const DateInput = ({ onChange, value }: DateInputProps) => {
   return (
     <input
       type="date"
-      defaultValue={defaultValue}
+      value={value}
+      onChange={onChange}
       className={clsx(
         "outline-none",
         "font-lato",
@@ -47,7 +48,6 @@ const DateInput = ({ onChange, defaultValue }: DateInputProps) => {
         "[&::-webkit-calendar-picker-indicator]:opacity-70",
         "[&::-webkit-calendar-picker-indicator]:hover:opacity-100"
       )}
-      onChange={(e) => onChange?.(e.target.value)}
     />
   );
 };

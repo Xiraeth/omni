@@ -15,6 +15,7 @@ import ConnectWithGithub from "../components/ConnectWithGithub";
 import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
 import GenericButton from "../components/GenericButton";
+import Input from "../components/Input";
 
 const Signup = () => {
   const router = useRouter();
@@ -62,6 +63,7 @@ const Signup = () => {
       const response = await request({
         data: { email, password, username },
         url: `register`,
+        method: "POST",
       });
 
       if (response.error) {
@@ -108,15 +110,15 @@ const Signup = () => {
               },
             }}
             render={({ field }) => (
-              <FormElement
-                errorMsg={errors?.username?.message}
-                InputProps={{
-                  type: "text",
-                  placeholder: "Username",
-                  ...field,
-                  value: field.value || "",
-                }}
-              />
+              <FormElement errorMsg={errors?.username?.message}>
+                <Input
+                  type="text"
+                  placeholder="Username"
+                  {...field}
+                  value={field.value || ""}
+                  isInvalid={!!errors?.username?.message}
+                />
+              </FormElement>
             )}
           />
 
@@ -131,14 +133,15 @@ const Signup = () => {
               },
             }}
             render={({ field }) => (
-              <FormElement
-                errorMsg={errors?.email?.message}
-                InputProps={{
-                  type: "email",
-                  placeholder: "Email",
-                  ...field,
-                }}
-              />
+              <FormElement errorMsg={errors?.email?.message}>
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  {...field}
+                  value={field.value || ""}
+                  isInvalid={!!errors?.email?.message}
+                />
+              </FormElement>
             )}
           />
 
@@ -153,14 +156,15 @@ const Signup = () => {
               },
             }}
             render={({ field }) => (
-              <FormElement
-                errorMsg={errors?.password?.message}
-                InputProps={{
-                  type: "password",
-                  placeholder: "Password",
-                  ...field,
-                }}
-              />
+              <FormElement errorMsg={errors?.password?.message}>
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  {...field}
+                  value={field.value || ""}
+                  isInvalid={!!errors?.password?.message}
+                />
+              </FormElement>
             )}
           />
 
@@ -173,14 +177,15 @@ const Signup = () => {
                 value === formValues.password || "Passwords do not match",
             }}
             render={({ field }) => (
-              <FormElement
-                errorMsg={errors?.confirmPassword?.message}
-                InputProps={{
-                  type: "password",
-                  placeholder: "Confirm Password",
-                  ...field,
-                }}
-              />
+              <FormElement errorMsg={errors?.confirmPassword?.message}>
+                <Input
+                  type="password"
+                  placeholder="Confirm Password"
+                  {...field}
+                  value={field.value || ""}
+                  isInvalid={!!errors?.confirmPassword?.message}
+                />
+              </FormElement>
             )}
           />
           {isSubmitting && (

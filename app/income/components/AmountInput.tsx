@@ -1,13 +1,17 @@
 import clsx from "clsx";
 
 type AmountInputProps = {
-  onChange?: (value: string) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value: string;
 };
 
-const AmountInput = ({ onChange }: AmountInputProps) => {
+const AmountInput = ({ onChange, value }: AmountInputProps) => {
   return (
     <input
       type="number"
+      placeholder="&#8364;"
+      onChange={onChange}
+      value={value}
       className={clsx(
         "outline-none",
         "font-lato",
@@ -35,8 +39,6 @@ const AmountInput = ({ onChange }: AmountInputProps) => {
         "[&::-webkit-outer-spin-button]:appearance-none",
         "[&::-webkit-inner-spin-button]:appearance-none"
       )}
-      placeholder="&#8364;"
-      onChange={(e) => onChange?.(e.target.value)}
     />
   );
 };

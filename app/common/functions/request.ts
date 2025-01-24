@@ -1,30 +1,40 @@
 /**
- * Sends a POST request to the specified URL with the given data
- * @param data - The data to send
+ * Sends an HTTP request to the specified URL with the given data
+ * @param data - The data to send (for POST requests)
  * @param url - The URL to send the request to
  * @param baseUrl - The base URL to use for the request
+ * @param method - The HTTP method to use (GET or POST)
  * @returns The response from the request
  */
-const request = async <T>({
+const httpRequest = async <T>({
   data,
   url,
   baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
+  method = "POST",
 }: {
-  data: T;
+  data?: T;
   url: string;
   baseUrl?: string;
+  method?: "GET" | "POST";
 }) => {
-  const req = await fetch(`${baseUrl}/${url}`, {
-    method: "POST",
+  const options: RequestInit = {
+    method,
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
-  });
+  };
 
+  // Only include body for POST requests
+  if (method === "POST" && data) {
+    options.body = JSON.stringify(data);
+  }
+
+  const req = await fetch(`${baseUrl}/${url}`, options);
   const response = await req.json();
 
-  return response;
+  if (response) {
+    return response;
+  }
 };
 
-export default request;
+export default httpRequest;

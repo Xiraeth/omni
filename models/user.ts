@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-interface IUser {
+interface User {
   email: string;
   password: string;
   username: string;
@@ -8,7 +8,7 @@ interface IUser {
   updatedAt: Date;
 }
 
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema<User>({
   email: {
     type: String,
     required: true,
@@ -38,6 +38,6 @@ userSchema.pre("save", function (next) {
   next();
 });
 
-const User = mongoose.models.User || mongoose.model<IUser>("User", userSchema);
+const User = mongoose.models.User || mongoose.model<User>("User", userSchema);
 
 export default User;

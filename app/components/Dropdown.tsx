@@ -7,11 +7,17 @@ type DropdownPropsType = {
   options: string[];
   placeholder: string;
   onSelect: (option: string) => void;
+  value: string;
 };
 
-const Dropdown = ({ options, onSelect, placeholder }: DropdownPropsType) => {
+const Dropdown = ({
+  options,
+  onSelect,
+  placeholder,
+  value,
+}: DropdownPropsType) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState(value);
 
   const [isFocused, setIsFocused] = useState(false);
 

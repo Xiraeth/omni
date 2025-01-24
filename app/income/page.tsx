@@ -10,6 +10,14 @@ import NameInput from "./components/NameInput";
 import AmountInput from "./components/AmountInput";
 import DateInput from "./components/DateInput";
 import GenericButton from "../components/GenericButton";
+import request from "../common/functions/request";
+import { Controller, useForm } from "react-hook-form";
+import FormElement from "../components/FormElement";
+import useCustomToast from "@/hooks/useCustomToast";
+import { IncomeDataType, IncomeFormDataType } from "../types/income";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import AddIncomeForm from "./components/AddIncomeForm";
 
 const IncomePage = () => {
   const router = useRouter();
@@ -21,33 +29,35 @@ const IncomePage = () => {
     }
   }, [session]);
 
-  const [category, setCategory] = useState("");
-  const [incomeName, setIncomeName] = useState("");
-  const [amount, setAmount] = useState("");
-  const [date, setDate] = useState("");
+  const [incomeData, setIncomeData] = useState<IncomeDataType[]>([]);
+  const [incomeDataLoading, setIncomeDataLoading] = useState<boolean>(false);
 
-  return session ? (
+  useEffect(() => {
+    const fetchIncomeData = async () => {
+      setIncomeDataLoading(true);
+      const data = await request({
+        url: "income",
+        data: {
+          userId: session?.user?.id,
+        },
+        method: "GET",
+      });
+
+      setIncomeData(data);
+      setIncomeDataLoading(false);
+    };
+
+    fetchIncomeData();
+  }, []);
+
+  return incomeDataLoading ? (
+    <div className="w-screen h-screen overflow-x-hidden flex justify-center items-center">
+      <FontAwesomeIcon icon={faSpinner} className="animate-spin text-4xl" />
+    </div>
+  ) : session ? (
     <div className="w-screen h-screen overflow-x-hidden">
       <OpenNavbarButton />
-      <div
-        id="add-income-row"
-        className="w-10/12 p-4 mx-auto flex flex-col lg:flex-row items-center md:items-start mt-20 gap-4"
-      >
-        <div className="lg:w-1/2 w-full">
-          <NameInput />
-        </div>
-
-        <div className="flex gap-4 md:flex-row flex-col w-full justify-end">
-          <Dropdown
-            options={["Salary", "Freelance", "Investment", "Other"]}
-            placeholder="Category"
-            onSelect={(option) => setCategory(option)}
-          />
-          <AmountInput />
-          <DateInput />
-          <GenericButton text="Add income" width="md" />
-        </div>
-      </div>
+      <AddIncomeForm />
     </div>
   ) : (
     <NoSessionDiv />
