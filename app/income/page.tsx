@@ -9,7 +9,7 @@ import Dropdown from "../components/Dropdown";
 import NameInput from "./components/NameInput";
 import AmountInput from "./components/AmountInput";
 import DateInput from "./components/DateInput";
-import SubmitButton from "./components/SubmitButton";
+import GenericButton from "../components/GenericButton";
 
 const IncomePage = () => {
   const router = useRouter();
@@ -31,13 +31,13 @@ const IncomePage = () => {
       <OpenNavbarButton />
       <div
         id="add-income-row"
-        className="w-10/12 p-4 mx-auto flex justify-between items-center mt-20"
+        className="w-10/12 p-4 mx-auto flex flex-col lg:flex-row items-center md:items-start mt-20 gap-4"
       >
-        <div className="w-1/2">
+        <div className="lg:w-1/2 w-full">
           <NameInput />
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex gap-4 md:flex-row flex-col w-full justify-end">
           <Dropdown
             options={["Salary", "Freelance", "Investment", "Other"]}
             placeholder="Category"
@@ -45,9 +45,8 @@ const IncomePage = () => {
           />
           <AmountInput />
           <DateInput />
+          <GenericButton text="Add income" width="md" />
         </div>
-
-        <SubmitButton />
       </div>
     </div>
   ) : (

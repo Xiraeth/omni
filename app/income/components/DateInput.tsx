@@ -25,9 +25,10 @@ const DateInput = ({ onChange, defaultValue }: DateInputProps) => {
         "rounded-md",
         "p-4",
         "text-center",
-        "min-w-40", // Slightly wider to accommodate date format
-        "max-w-48",
-        "bg-white/80",
+        "min-w-40",
+        "w-full md:max-w-60",
+        "h-[48px]",
+        "bg-white/60 focus:bg-white/80",
         "transition-all",
         "duration-200",
         "dark:bg-slate-800 focus:dark:bg-slate-900",

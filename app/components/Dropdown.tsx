@@ -47,39 +47,34 @@ const Dropdown = ({ options, onSelect, placeholder }: DropdownPropsType) => {
   return (
     <div
       className={clsx(
-        "dropdownContainer",
-        "font-lato",
-        "drop-shadow-md",
-        "border-[1px]",
-        "rounded-md",
-        "p-4",
-        "cursor-pointer",
-        "bg-white/80",
-        "transition-all",
-        "duration-200",
-        "relative",
-        "min-w-40",
-        "text-dark dark:text-light",
+        "grid grid-rows-[auto,0fr] [&.open]:grid-rows-[auto,1fr]",
+        "font-lato drop-shadow-md border-[1px] rounded-md cursor-pointer transition-all duration-100 min-w-40 w-full md:max-w-72 text-dark dark:text-light",
         {
-          "dark:border-amber-400 dark:hover:border-amber-400 border-sky-400 hover:border-sky-400 dark:bg-slate-900":
+          "dark:border-amber-400 dark:hover:border-amber-400 border-sky-400 hover:border-sky-400 dark:bg-slate-900 bg-white/80 ":
             isOpen,
-          "hover:border-slate-400/80 dark:hover:border-slate-600/80 dark:border-slate-600 dark:hover:border-slate-500 dark:bg-slate-800":
+          "hover:border-slate-400/80 dark:hover:border-slate-600/80 dark:border-slate-600 dark:hover:border-slate-500 dark:bg-slate-800 bg-white/60 ":
             !isOpen,
+          open: isOpen,
         }
       )}
       onClick={handleToggleDropdown}
       ref={dropdownRef}
     >
-      <div className="dropdownButton flex items-center gap-4 justify-between">
-        {selectedOption || placeholder}
+      <div className="h-[48px] flex items-center justify-between px-4">
+        <span>{selectedOption || placeholder}</span>
         {isOpen ? (
           <FontAwesomeIcon icon={faChevronUp} width={20} height={20} />
         ) : (
           <FontAwesomeIcon icon={faChevronDown} width={20} height={20} />
         )}
       </div>
-      {isOpen && (
-        <div className="dropdownOptions absolute top-[60px] bg-white/80 w-full left-0 rounded-md border-[1px] border-slate-400/80 dark:border-slate-600 dark:bg-slate-900">
+
+      <div className="overflow-hidden">
+        <div
+          className={clsx(
+            "bg-white/80 dark:bg-slate-900 border-t border-slate-400/80 dark:border-slate-600"
+          )}
+        >
           {options.map((option, index) => {
             const isLast = index === options.length - 1;
             const isFirst = index === 0;
@@ -101,7 +96,7 @@ const Dropdown = ({ options, onSelect, placeholder }: DropdownPropsType) => {
             );
           })}
         </div>
-      )}
+      </div>
     </div>
   );
 };

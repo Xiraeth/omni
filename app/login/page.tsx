@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import FormElement from "../components/FormElement";
 import { LoginFormData } from "../common/types";
 import Link from "next/link";
-import ConnectButton from "../components/ConnectButton";
+import GenericButton from "../components/GenericButton";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast, ToastContainer } from "react-toastify";
@@ -169,7 +169,7 @@ const Login = () => {
               {errors?.root?.message}
             </p>
           )}
-          <ConnectButton text="Log in" />
+          <GenericButton text="Log in" width="full" />
         </form>
         <div className="flex items-center justify-center gap-2 font-lato opacity-80 mb-2 transition-all duration-150 text-xs sm:text-sm">
           <p>Don&apos;t have an account?</p>

@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import FormElement from "../components/FormElement";
 import { SignupFormData } from "../common/types";
-import ConnectButton from "../components/ConnectButton";
 import { useRouter } from "next/navigation";
 import request from "../common/functions/request";
 import { useState } from "react";
@@ -15,6 +14,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import ConnectWithGithub from "../components/ConnectWithGithub";
 import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
+import GenericButton from "../components/GenericButton";
 
 const Signup = () => {
   const router = useRouter();
@@ -196,7 +196,7 @@ const Signup = () => {
               {errors?.root?.message}
             </p>
           )}
-          <ConnectButton text="Sign up" />
+          <GenericButton text="Sign up" width="full" />
         </form>
 
         <div className="flex items-center justify-center gap-2 font-lato opacity-80 mb-2 transition-all duration-150 text-xs sm:text-sm">
