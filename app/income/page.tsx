@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import NoSessionDiv from "@/app/components/NoSessionDiv";
 import Dropdown from "../components/Dropdown";
 import NameInput from "./components/NameInput";
+import AmountInput from "./components/AmountInput";
+import DateInput from "./components/DateInput";
 
 const IncomePage = () => {
   const router = useRouter();
@@ -31,7 +33,7 @@ const IncomePage = () => {
         className="w-10/12 p-4 mx-auto flex justify-between items-center mt-20"
       >
         <div className="w-1/2">
-          <NameInput placeholder="Income name" />
+          <NameInput />
         </div>
 
         <div className="flex gap-4">
@@ -40,8 +42,8 @@ const IncomePage = () => {
             placeholder="Category"
             onSelect={(option) => setCategory(option)}
           />
-
-          <input type="number" placeholder="Amount" />
+          <AmountInput />
+          <DateInput />
         </div>
       </div>
     </div>
