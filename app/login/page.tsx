@@ -6,42 +6,32 @@ import FormElement from "../components/FormElement";
 import { LoginFormData } from "../common/types";
 import Link from "next/link";
 import ConnectButton from "../components/ConnectButton";
-import LinkButton from "../components/LinkButton";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast, ToastContainer } from "react-toastify";
-import { useTheme } from "../context/ThemeContext";
-import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 import { changeUrlParams } from "../common/functions/changeParams";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import ConnectWithGithub from "../components/ConnectWithGithub";
-import ConnectWithDiscord from "../components/ConnectWithDiscord";
+import useToast from "@/hooks/useToast";
 
 const Login = () => {
-  const { theme } = useTheme();
   const searchParams = useSearchParams();
   const userCreated = searchParams.get("userCreated");
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const userCreatedToast = () => {
-    toast("User created successfully", {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      closeButton: true,
-      type: "success",
-      theme,
-    });
-  };
+  const customToast = useToast({
+    message: "User created successfully",
+    position: "top-right",
+    type: "success",
+  });
 
   useEffect(() => {
     if (userCreated === "true") {
       changeUrlParams({ params: "userCreated", value: null });
-      userCreatedToast();
+      customToast();
     }
   }, [userCreated]);
 
@@ -116,7 +106,7 @@ const Login = () => {
       }`}
     >
       <ToastContainer className="relative z-50" />
-      <div className="w-[300px] sm:w-[500px] mx-auto bg-zinc-50 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
+      <div className="w-[300px] sm:w-[500px] mx-auto bg-slate-200 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
         <p className="text-xl sm:text-2xl font-bold font-geistSans transition-all duration-150">
           Login
         </p>

@@ -11,7 +11,7 @@ import {
   faSackDollar,
   faSackXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 import { changeUrlParams } from "../common/functions/changeParams";
 import { useUser } from "../context/UserContext";
 import { signOut } from "next-auth/react";
@@ -24,8 +24,19 @@ const Navbar = () => {
   const router = useRouter();
   const { session } = useUser();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const isNavbarOpen = searchParams.get("isNavbarOpen") === "true";
+
+  const handleIncomeClick = () => {
+    if (pathname !== "/income") {
+      router.push("/income");
+    }
+  };
+
+  const handleExpensesClick = () => {
+    router.push("/expenses");
+  };
 
   const closeNavbar = () => {
     setIsDropdownOpen(false);
@@ -112,13 +123,13 @@ const Navbar = () => {
             >
               <NavbarButton
                 text="Income"
-                onClick={isDropdownOpen ? () => {} : undefined}
+                onClick={isDropdownOpen ? handleIncomeClick : undefined}
                 icon={faSackDollar}
                 className={`${!isDropdownOpen ? "cursor-default" : ""}`}
               />
               <NavbarButton
                 text="Expenses"
-                onClick={() => {}}
+                onClick={isDropdownOpen ? handleExpensesClick : undefined}
                 icon={faSackXmark}
                 className={`${!isDropdownOpen ? "cursor-default" : ""}`}
               />
