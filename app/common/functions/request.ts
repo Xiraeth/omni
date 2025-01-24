@@ -15,7 +15,7 @@ const httpRequest = async <T>({
   data?: T;
   url: string;
   baseUrl?: string;
-  method?: "GET" | "POST";
+  method?: "GET" | "POST" | "DELETE";
 }) => {
   const options: RequestInit = {
     method,

@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import AddIncomeForm from "./components/AddIncomeForm";
 import IncomeTable from "./components/IncomeTable";
+import useCustomToast from "@/hooks/useCustomToast";
 
 const IncomePage = () => {
   const router = useRouter();
@@ -43,6 +44,31 @@ const IncomePage = () => {
     fetchIncomeData();
   }, []);
 
+  const successToast = useCustomToast({
+    message: "Income deleted successfully",
+  });
+
+  const errorToast = useCustomToast({
+    message: "Error deleting income",
+  });
+
+  const handleDeleteIncome = async (id: string) => {
+    const response = await request({
+      url: `income/${id}`,
+      method: "DELETE",
+    });
+
+    if (response.error) {
+      errorToast();
+      return;
+    }
+
+    successToast();
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+  };
+
   return incomeDataLoading ? (
     <div className="w-screen h-screen overflow-x-hidden flex justify-center items-center">
       <FontAwesomeIcon icon={faSpinner} className="animate-spin text-4xl" />
@@ -51,7 +77,10 @@ const IncomePage = () => {
     <div className="w-screen h-screen overflow-x-hidden">
       <OpenNavbarButton />
       <AddIncomeForm />
-      <IncomeTable incomeData={incomeData} />
+      <IncomeTable
+        incomeData={incomeData}
+        handleDeleteIncome={handleDeleteIncome}
+      />
     </div>
   ) : (
     <NoSessionDiv />
