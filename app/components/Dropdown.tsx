@@ -59,12 +59,11 @@ const Dropdown = ({ options, onSelect, placeholder }: DropdownPropsType) => {
         "duration-200",
         "relative",
         "min-w-40",
-        "dark:bg-slate-900",
         "text-dark dark:text-light",
         {
-          "dark:border-amber-400 dark:hover:border-amber-400 border-sky-400 hover:border-sky-400 ":
+          "dark:border-amber-400 dark:hover:border-amber-400 border-sky-400 hover:border-sky-400 dark:bg-slate-900":
             isOpen,
-          "hover:border-slate-400/80 dark:hover:border-slate-600/80 dark:border-slate-600 dark:hover:border-slate-500":
+          "hover:border-slate-400/80 dark:hover:border-slate-600/80 dark:border-slate-600 dark:hover:border-slate-500 dark:bg-slate-800":
             !isOpen,
         }
       )}

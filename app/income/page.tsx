@@ -9,6 +9,7 @@ import Dropdown from "../components/Dropdown";
 import NameInput from "./components/NameInput";
 import AmountInput from "./components/AmountInput";
 import DateInput from "./components/DateInput";
+import SubmitButton from "./components/SubmitButton";
 
 const IncomePage = () => {
   const router = useRouter();
@@ -45,6 +46,8 @@ const IncomePage = () => {
           <AmountInput />
           <DateInput />
         </div>
+
+        <SubmitButton />
       </div>
     </div>
   ) : (

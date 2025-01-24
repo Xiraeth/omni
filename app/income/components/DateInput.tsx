@@ -30,7 +30,7 @@ const DateInput = ({ onChange, defaultValue }: DateInputProps) => {
         "bg-white/80",
         "transition-all",
         "duration-200",
-        "dark:bg-slate-900",
+        "dark:bg-slate-800 focus:dark:bg-slate-900",
         "text-dark dark:text-light",
         "hover:border-slate-400/80",
         "dark:hover:border-slate-600/80",
