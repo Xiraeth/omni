@@ -3,8 +3,8 @@ module.exports = {
   plugins: ["@typescript-eslint"],
   extends: ["next/core-web-vitals"],
   rules: {
-    "@typescript-eslint/no-unused-vars": "off",
-    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "no-unused-vars": "warn",
     "react-hooks/exhaustive-deps": "off",
   },
 };

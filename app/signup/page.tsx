@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import FormElement from "../components/FormElement";
 import { SignupFormData } from "../common/types";
-import ConnectWithDiscord from "../components/ConnectWithDiscord";
 import ConnectButton from "../components/ConnectButton";
 import { useRouter } from "next/navigation";
 import request from "../common/functions/request";
@@ -86,7 +85,7 @@ const Signup = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen w-full transition-all duration-150">
-      <div className="w-[300px] sm:w-[500px] mx-auto bg-zinc-50 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
+      <div className="w-[300px] sm:w-[500px] mx-auto bg-slate-200 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
         <p className="text-xl sm:text-2xl font-bold font-geistSans transition-all duration-150">
           Sign Up
         </p>

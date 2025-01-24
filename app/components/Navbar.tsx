@@ -27,6 +27,19 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const isNavbarOpen = searchParams.get("isNavbarOpen") === "true";
 
+  const handleDashboardClick = () => {
+    setIsDropdownOpen(false);
+    router.push("/");
+  };
+
+  const handleIncomeClick = () => {
+    router.push("/income");
+  };
+
+  const handleExpensesClick = () => {
+    router.push("/expenses");
+  };
+
   const closeNavbar = () => {
     setIsDropdownOpen(false);
     changeUrlParams({ params: "isNavbarOpen", value: null });
@@ -86,7 +99,7 @@ const Navbar = () => {
         <div className="flex flex-col gap-2">
           <NavbarButton
             text="Dashboard"
-            onClick={() => router.push("/")}
+            onClick={handleDashboardClick}
             icon={faChartLine}
           />
           <div
@@ -112,13 +125,13 @@ const Navbar = () => {
             >
               <NavbarButton
                 text="Income"
-                onClick={isDropdownOpen ? () => {} : undefined}
+                onClick={isDropdownOpen ? handleIncomeClick : undefined}
                 icon={faSackDollar}
                 className={`${!isDropdownOpen ? "cursor-default" : ""}`}
               />
               <NavbarButton
                 text="Expenses"
-                onClick={() => {}}
+                onClick={isDropdownOpen ? handleExpensesClick : undefined}
                 icon={faSackXmark}
                 className={`${!isDropdownOpen ? "cursor-default" : ""}`}
               />
