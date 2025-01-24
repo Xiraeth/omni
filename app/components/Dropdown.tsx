@@ -28,7 +28,6 @@ const Dropdown = ({ options, onSelect, placeholder }: DropdownPropsType) => {
         setIsFocused(false);
       }
     };
-    console.log("isOpen", isOpen);
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   });
@@ -63,7 +62,8 @@ const Dropdown = ({ options, onSelect, placeholder }: DropdownPropsType) => {
         "dark:bg-slate-900",
         "text-dark dark:text-light",
         {
-          "border-sky-400 hover:border-sky-400": isOpen,
+          "dark:border-amber-400 dark:hover:border-amber-400 border-sky-400 hover:border-sky-400 ":
+            isOpen,
           "hover:border-slate-400/80 dark:hover:border-slate-600/80 dark:border-slate-600 dark:hover:border-slate-500":
             !isOpen,
         }
