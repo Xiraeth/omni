@@ -25,4 +25,7 @@ const FormElement = memo(({ errorMsg, children }: FormElementProps) => {
   );
 });
 
+// Add displayName for better debugging
+FormElement.displayName = "FormElement";
+
 export default FormElement;
