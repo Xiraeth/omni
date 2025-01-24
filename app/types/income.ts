@@ -1,3 +1,5 @@
+export type CategoriesType = "salary" | "freelance" | "investment" | "other";
+
 export type IncomeFormDataType = {
   name: string;
   amount: string;

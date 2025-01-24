@@ -3,14 +3,33 @@ import Income from "@/models/income";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * GET handler to retrieve all income records
+ * GET handler to retrieve income records with optional date filtering
  * @param req - Next.js request object
- * @returns NextResponse containing array of income records
+ * @returns NextResponse containing filtered array of income records
  */
 export async function GET(req: NextRequest) {
   try {
     await dbConnect();
-    const allIncomesList = await Income.find();
+
+    // Get date filters from URL search params
+    const searchParams = req.nextUrl.searchParams;
+    const dateFrom = searchParams.get("dateFrom");
+    const dateTo = searchParams.get("dateTo");
+
+    // Build query object
+    const query: { date?: { $gte?: Date; $lte?: Date } } = {};
+
+    if (dateFrom || dateTo) {
+      query.date = {};
+      if (dateFrom) {
+        query.date.$gte = new Date(dateFrom);
+      }
+      if (dateTo) {
+        query.date.$lte = new Date(dateTo);
+      }
+    }
+
+    const allIncomesList = await Income.find(query);
 
     return NextResponse.json(allIncomesList);
   } catch (error) {

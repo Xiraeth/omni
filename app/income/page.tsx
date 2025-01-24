@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import OpenNavbarButton from "@/app/components/OpenNavbarButton";
 import { useUser } from "@/app/context/UserContext";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import NoSessionDiv from "@/app/components/NoSessionDiv";
 import request from "../common/functions/request";
 import { IncomeDataType } from "../types/income";
@@ -25,12 +25,18 @@ const IncomePage = () => {
 
   const [incomeData, setIncomeData] = useState<IncomeDataType[]>([]);
   const [incomeDataLoading, setIncomeDataLoading] = useState<boolean>(false);
+  const urlSearchParams = useSearchParams();
+  const dateFrom = urlSearchParams.get("dateFrom");
+  const dateTo = urlSearchParams.get("dateTo");
+  const query = `income${dateFrom ? `?dateFrom=${dateFrom}` : ""}${
+    dateTo ? `?dateTo=${dateTo}` : ""
+  }`;
 
   useEffect(() => {
     const fetchIncomeData = async () => {
       setIncomeDataLoading(true);
       const data = await request({
-        url: "income",
+        url: query,
         data: {
           userId: session?.user?.id,
         },

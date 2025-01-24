@@ -10,6 +10,7 @@ import GenericButton from "@/app/components/GenericButton";
 import { useSession } from "next-auth/react";
 import request from "@/app/common/functions/request";
 import useCustomToast from "@/hooks/useCustomToast";
+import { INCOME_CATEGORIES } from "@/app/constants/constants";
 
 const AddIncomeForm = () => {
   const { data: session } = useSession();
@@ -95,7 +96,7 @@ const AddIncomeForm = () => {
           render={({ field: { onChange, value } }) => (
             <FormElement errorMsg={errors?.category?.message}>
               <Dropdown
-                options={["Salary", "Freelance", "Investment", "Other"]}
+                options={INCOME_CATEGORIES}
                 placeholder="Category"
                 value={value}
                 onSelect={(option) => onChange(option)}
