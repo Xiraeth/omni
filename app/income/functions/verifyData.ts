@@ -1,4 +1,6 @@
-import { IncomeFormDataType, IncomeFormErrorsType } from "../types";
+import { IncomeFormErrorsType } from "@/app/types/income";
+
+import { IncomeFormDataType } from "@/app/types/income";
 
 export const verifyData = (data: IncomeFormDataType) => {
   let errors: IncomeFormErrorsType[] = [];
