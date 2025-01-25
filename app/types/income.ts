@@ -20,3 +20,7 @@ export type IncomeDataType = {
   category: string;
   userId: string;
 };
+
+export type SortOrderType = "asc" | "desc";
+
+export type SortFieldType = "Category" | "Amount" | "Date";

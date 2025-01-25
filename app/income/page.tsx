@@ -6,7 +6,7 @@ import { useUser } from "@/app/context/UserContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import NoSessionDiv from "@/app/components/NoSessionDiv";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faFilter, faSort, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import AddIncomeForm from "./components/AddIncomeForm";
 import IncomeTable from "./components/IncomeTable";
 import useCustomToast from "@/hooks/useCustomToast";
@@ -14,7 +14,7 @@ import { changeUrlParams } from "../common/functions/changeParams";
 import FiltersModal from "./components/FiltersModal";
 import Dropmenu from "../components/Dropmenu";
 import axios from "axios";
-import { IncomeDataType } from "../types/income";
+import { IncomeDataType, SortFieldType, SortOrderType } from "../types/income";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const IncomePage = () => {
@@ -107,31 +107,47 @@ const IncomePage = () => {
     deleteIncome(id);
   };
 
-  const handleSortSelection = (option: string) => {
-    setSortField((prevField) => {
-      const newOrder =
-        prevField === option ? (sortOrder === "asc" ? "desc" : "asc") : "desc";
-      setSortOrder(newOrder);
-      return option;
+  const handleSort = (
+    data: IncomeDataType[],
+    field: SortFieldType,
+    order: SortOrderType
+  ) => {
+    return data.sort((a, b) => {
+      if (field === "Category") {
+        return order === "asc"
+          ? a.category.localeCompare(b.category)
+          : b.category.localeCompare(a.category);
+      } else if (field === "Amount") {
+        return order === "asc" ? a.amount - b.amount : b.amount - a.amount;
+      } else if (field === "Date") {
+        return order === "asc"
+          ? new Date(a.date).getTime() - new Date(b.date).getTime()
+          : new Date(b.date).getTime() - new Date(a.date).getTime();
+      }
+      return 0;
     });
+  };
 
+  const handleSortSelection = (option: string) => {
+    setSortField(option);
     queryClient.setQueryData(["incomeData"], (oldData: IncomeDataType[]) => {
-      return oldData.sort((a, b) => {
-        if (option === "Category") {
-          return sortOrder === "asc"
-            ? a.category.localeCompare(b.category)
-            : b.category.localeCompare(a.category);
-        } else if (option === "Amount") {
-          return sortOrder === "asc"
-            ? a.amount - b.amount
-            : b.amount - a.amount;
-        } else if (option === "Date") {
-          return sortOrder === "asc"
-            ? new Date(a.date).getTime() - new Date(b.date).getTime()
-            : new Date(b.date).getTime() - new Date(a.date).getTime();
-        }
-        return 0;
-      });
+      return handleSort(
+        [...oldData],
+        option as SortFieldType,
+        sortOrder as SortOrderType
+      );
+    });
+  };
+
+  const handleSortOrder = () => {
+    const newOrder = sortOrder === "asc" ? "desc" : "asc";
+    setSortOrder(newOrder);
+    queryClient.setQueryData(["incomeData"], (oldData: IncomeDataType[]) => {
+      return handleSort(
+        [...oldData],
+        sortField as SortFieldType,
+        newOrder as SortOrderType
+      );
     });
   };
 
@@ -151,16 +167,26 @@ const IncomePage = () => {
       )}
 
       <div className="w-10/12 mx-auto mb-4 flex justify-between items-center">
-        <Dropmenu
-          options={["Date", "Amount", "Category"]}
-          placeholder="Sort by"
-          onSelect={handleSortSelection}
-          width="[100px]"
-          value={sortField}
-        />
+        <div className="flex items-center gap-2">
+          <Dropmenu
+            options={["Date", "Amount", "Category"]}
+            placeholder="Sort by"
+            onSelect={handleSortSelection}
+            width="[100px]"
+            value={sortField}
+          />
+
+          <div
+            className="w-10 h-10 rounded-full flex items-center justify-center text-dark dark:text-light bg-buttonBgLight dark:bg-buttonBgDark border-[1px] dark:border-buttonBorderDark  hover:border-buttonBorderLightHover dark:hover:border-buttonBorderDarkHover transition-all duration-200 cursor-pointer active:bg-buttonBgLightFocus dark:active:bg-buttonBgDarkFocus"
+            onClick={handleSortOrder}
+          >
+            <FontAwesomeIcon icon={faSort} />
+          </div>
+        </div>
+
         <div>
           <button
-            className="flex items-center gap-2 bg-light border-[1px] drop-shadow-md border-dark text-dark rounded-md px-2 py-1 hover:bg-dark hover:text-light transition-all duration-200 dark:bg-dark dark:text-light dark:border-light dark:hover:bg-light dark:hover:text-dark"
+            className="flex items-center gap-2 bg-light border-[1px] drop-shadow-md border-dark text-dark rounded-md px-2 py-1 hover:bg-dark hover:text-light transition-all duration-200 dark:bg-dark dark:text-light dark:border-light dark:hover:bg-light dark:hover:text-dark select-none"
             onClick={handleOpenFiltersModal}
           >
             <FontAwesomeIcon icon={faFilter} />
