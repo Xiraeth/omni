@@ -25,6 +25,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { SORT_FIELDS, TOGGLED_CATEGORIES } from "../constants/constants";
 import IncomeCard from "./components/IncomeCard";
 import { handleSort } from "./functions/handleSort";
+import { isIncomeInFilters } from "./functions/isIncomeInFilters";
 
 const IncomePage = () => {
   const router = useRouter();
@@ -113,7 +114,7 @@ const IncomePage = () => {
 
   const incomeTotalAmount = incomeData?.reduce(
     (acc: number, cur: IncomeDataType) => {
-      return acc + cur.amount;
+      return isIncomeInFilters(cur, filtersData) ? acc + cur.amount : acc;
     },
     0
   );
@@ -197,7 +198,7 @@ const IncomePage = () => {
           />
 
           {/* total amount of money earned */}
-          {incomeTotalAmount && (
+          {incomeTotalAmount ? (
             <div className="w-10/12 mx-auto mt-12">
               <IncomeCard hasBorder={true}>
                 <div className="flex gap-2 items-center">
@@ -213,7 +214,7 @@ const IncomePage = () => {
                 </div>
               </IncomeCard>
             </div>
-          )}
+          ) : null}
         </>
       )}
     </div>

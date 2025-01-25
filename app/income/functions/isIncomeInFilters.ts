@@ -2,7 +2,7 @@ import { CategoriesType, FiltersType } from "@/app/types/income";
 
 import { IncomeDataType } from "@/app/types/income";
 
-export const isIncomeDisplayed = (
+export const isIncomeInFilters = (
   income: IncomeDataType,
   filters: FiltersType
 ) => {

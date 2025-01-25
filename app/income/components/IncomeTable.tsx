@@ -2,8 +2,7 @@ import { FiltersType, IncomeDataType } from "@/app/types/income";
 import IncomeCard from "./IncomeCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { CategoriesType } from "@/app/types/income";
-import { isIncomeDisplayed } from "../functions/isIncomeDisplayed";
+import { isIncomeInFilters } from "../functions/isIncomeInFilters";
 
 const IncomeTable = ({
   incomeData,
@@ -20,7 +19,7 @@ const IncomeTable = ({
         {incomeData?.map((income: IncomeDataType) => {
           const date = new Date(income?.date);
 
-          const shouldIncomeBeDisplayed = isIncomeDisplayed(
+          const shouldIncomeBeDisplayed = isIncomeInFilters(
             income,
             filtersData || {}
           );
