@@ -6,35 +6,40 @@ import FormElement from "../components/FormElement";
 import { LoginFormData } from "../common/types";
 import Link from "next/link";
 import GenericButton from "../components/GenericButton";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { changeUrlParams } from "../common/functions/changeParams";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import ConnectWithGithub from "../components/ConnectWithGithub";
-import useToast from "@/hooks/useCustomToast";
 import Input from "../components/Input";
+import useCustomToast from "@/hooks/useCustomToast";
+import { useUser } from "../context/UserContext";
 
 const Login = () => {
-  const searchParams = useSearchParams();
-  const userCreated = searchParams.get("userCreated");
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { session } = useUser();
 
-  const customToast = useToast({
+  useEffect(() => {
+    if (session) {
+      router.push("/");
+      return;
+    }
+  }, [session]);
+
+  const customToast = useCustomToast({
     message: "User created successfully",
-    position: "top-right",
-    type: "success",
   });
 
   useEffect(() => {
+    const userCreated = sessionStorage.getItem("userCreated");
     if (userCreated === "true") {
-      changeUrlParams({ params: "userCreated", value: null });
       customToast();
+      sessionStorage.removeItem("userCreated");
     }
-  }, [userCreated]);
+  }, []);
 
   const {
     control,
@@ -49,7 +54,7 @@ const Login = () => {
     try {
       setIsSubmitting(true);
       const result = await signIn("github", {
-        callbackUrl: "http://localhost:3000",
+        callbackUrl: `${window.location.origin}`,
         redirect: false,
       });
 
@@ -89,7 +94,6 @@ const Login = () => {
       if (result?.ok) {
         setIsSubmitting(false);
         router.push("/");
-        router.refresh();
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -100,13 +104,21 @@ const Login = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (session) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen w-full">
+        <FontAwesomeIcon icon={faSpinner} className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div
       className={`flex flex-col items-center justify-center h-screen w-full transition-all duration-150 ${
         isSubmitting ? "cursor-progress" : ""
       }`}
     >
-      <ToastContainer className="relative z-50" />
       <div className="w-[300px] sm:w-[500px] mx-auto bg-slate-200 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
         <p className="text-xl sm:text-2xl font-bold font-geistSans transition-all duration-150">
           Login
@@ -127,7 +139,7 @@ const Login = () => {
               },
             }}
             render={({ field }) => (
-              <FormElement errorMsg={errors?.email?.message}>
+              <FormElement errorMsg={errors?.email?.message} width="full">
                 <Input
                   type="email"
                   placeholder="Email"
@@ -146,7 +158,7 @@ const Login = () => {
               required: "Password is required",
             }}
             render={({ field }) => (
-              <FormElement errorMsg={errors?.password?.message}>
+              <FormElement errorMsg={errors?.password?.message} width="full">
                 <Input
                   type="password"
                   placeholder="Password"
