@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import OpenNavbarButton from "@/app/components/OpenNavbarButton";
 import { useUser } from "@/app/context/UserContext";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import NoSessionDiv from "@/app/components/NoSessionDiv";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faSort, faSpinner } from "@fortawesome/free-solid-svg-icons";
@@ -14,9 +14,15 @@ import { changeUrlParams } from "../common/functions/changeParams";
 import FiltersModal from "./components/FiltersModal";
 import Dropmenu from "../components/Dropmenu";
 import axios from "axios";
-import { IncomeDataType, SortFieldType, SortOrderType } from "../types/income";
+import {
+  CategoriesType,
+  FiltersType,
+  IncomeDataType,
+  SortFieldType,
+  SortOrderType,
+} from "../types/income";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { SORT_FIELDS } from "../constants/constants";
+import { SORT_FIELDS, TOGGLED_CATEGORIES } from "../constants/constants";
 import IncomeCard from "./components/IncomeCard";
 import { handleSort } from "./functions/handleSort";
 
@@ -37,19 +43,7 @@ const IncomePage = () => {
     }
   }, [session]);
 
-  const urlSearchParams = useSearchParams();
-  const dateFrom = urlSearchParams.get("dateFrom");
-  const dateTo = urlSearchParams.get("dateTo");
-  const categoryName = urlSearchParams.get("category");
-  const incomeName = urlSearchParams.get("incomeName");
-  const amountRange = urlSearchParams.get("amountRange");
-
   const query = `income?${new URLSearchParams({
-    ...(dateFrom && { dateFrom }),
-    ...(dateTo && { dateTo }),
-    ...(categoryName && { categoryName }),
-    ...(incomeName && { incomeName }),
-    ...(amountRange && { amountRange }),
     ...(session?.user?.id && { userId: session.user.id }),
   }).toString()}`;
 
@@ -82,6 +76,15 @@ const IncomePage = () => {
       return response.data;
     },
   });
+
+  const filtersData = queryClient.getQueryData<FiltersType>([
+    "filtersData",
+  ]) || {
+    filterName: "",
+    dateFrom: "",
+    dateTo: "",
+    toggledCategories: TOGGLED_CATEGORIES,
+  };
 
   const { mutate: deleteIncome } = useMutation({
     mutationFn: async (id: string) => {
@@ -156,7 +159,7 @@ const IncomePage = () => {
       )}
 
       {/* filter and sorting */}
-      {incomeData?.length && (
+      {(incomeData?.length || filtersData?.toggledCategories?.length) && (
         <>
           <div className="w-10/12 mx-auto mb-4 flex justify-between items-center">
             <div className="flex items-center gap-2">
@@ -189,25 +192,28 @@ const IncomePage = () => {
 
           <IncomeTable
             incomeData={incomeData}
+            filtersData={filtersData}
             handleDeleteIncome={handleDeleteIncome}
           />
 
           {/* total amount of money earned */}
-          <div className="w-10/12 mx-auto mt-12">
-            <IncomeCard hasBorder={true}>
-              <div className="flex gap-2 items-center">
-                {" "}
-                <div className="sm:text-xl text-base sm:font-bold">
-                  Total amount of money earned
+          {incomeTotalAmount && (
+            <div className="w-10/12 mx-auto mt-12">
+              <IncomeCard hasBorder={true}>
+                <div className="flex gap-2 items-center">
+                  {" "}
+                  <div className="sm:text-xl text-base sm:font-bold">
+                    Total amount of money earned
+                  </div>
                 </div>
-              </div>
-              <div className="flex gap-2 items-center">
-                <div className="text-green-600 sm:font-bold text-base sm:text-lg dark:text-green-500">
-                  {incomeTotalAmount}&#8364;
+                <div className="flex gap-2 items-center">
+                  <div className="text-green-600 sm:font-bold text-base sm:text-lg dark:text-green-500">
+                    {incomeTotalAmount}&#8364;
+                  </div>
                 </div>
-              </div>
-            </IncomeCard>
-          </div>
+              </IncomeCard>
+            </div>
+          )}
         </>
       )}
     </div>

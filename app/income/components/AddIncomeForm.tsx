@@ -32,7 +32,7 @@ const AddIncomeForm = () => {
       name: "",
       amount: "",
       date: "",
-      category: "",
+      category: undefined,
       userId: "",
     },
   });
@@ -52,7 +52,7 @@ const AddIncomeForm = () => {
       setValue("name", "");
       setValue("amount", "");
       setValue("date", "");
-      setValue("category", "");
+      setValue("category", undefined);
       queryClient.setQueryData(["incomeData"], (oldData: IncomeDataType[]) => {
         return [...oldData, data];
       });
@@ -110,7 +110,7 @@ const AddIncomeForm = () => {
               <Dropmenu
                 options={INCOME_CATEGORIES}
                 placeholder="Category"
-                value={value}
+                value={value || ""}
                 onSelect={(option) => onChange(option)}
               />
             </FormElement>

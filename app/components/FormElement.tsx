@@ -22,7 +22,7 @@ const FormElement = memo(({ errorMsg, children, width }: FormElementProps) => {
     >
       {children}
       {errorMsg && (
-        <span className="text-xs relative bottom-1 text-red-500 rounded-full flex items-center justify-center px-2">
+        <span className="text-xs relative bottom-1 text-red-600 font-bold rounded-full flex items-center justify-center px-2">
           {errorMsg}
         </span>
       )}
