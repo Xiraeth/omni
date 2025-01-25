@@ -36,7 +36,7 @@ const IncomeTable = ({
       {isFiltersModalOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/50 z-40 backdrop-blur-[2px]"
             onClick={handleCloseFiltersModal}
             aria-hidden="true"
           />
@@ -58,7 +58,7 @@ const IncomeTable = ({
               </p>
               <button
                 onClick={handleCloseFiltersModal}
-                className="absolute right-[-10px] top-[-10px] bg-light hover:bg-white rounded-full w-[35px] h-[35px] flex items-center justify-center transition-all duration-200 text-xl"
+                className="absolute right-[-10px] top-[-10px] bg-light hover:bg-dark hover:text-light rounded-full w-[35px] h-[35px] flex items-center justify-center transition-all duration-200 text-xl dark:bg-dark dark:hover:bg-light dark:text-light dark:hover:text-dark"
               >
                 <FontAwesomeIcon icon={faXmark} className="" />
               </button>

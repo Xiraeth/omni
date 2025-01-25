@@ -4,15 +4,15 @@ import { NextResponse } from "next/server";
 
 /**
  * Deletes an income record by ID
- * @param req - The incoming request
- * @param { params }: { params: { id: string } } - Contains route parameters including the income ID
+ * @param _req - The incoming request (unused)
+ * @param props - Route parameters
  */
 export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } }
+  _req: Request | NextRequest,
+  props: { params: { id: string } }
 ) {
   try {
-    const { id } = params;
+    const { id } = props.params;
 
     const deletedIncome = await Income.findByIdAndDelete(id);
 
