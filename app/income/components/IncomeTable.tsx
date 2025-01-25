@@ -29,17 +29,17 @@ const IncomeTable = ({
               className="flex justify-between items-center gap-4"
             >
               <IncomeCard key={income?._id}>
-                <div className="flex gap-2 items-center">
+                <div className="flex gap-2 items-center sm:w-1/2 w-full justify-between">
                   {" "}
-                  <div className="sm:text-xl text-base sm:font-bold">
-                    {income?.name},
+                  <div className="sm:text-xl text-sm sm:font-bold w-1/2">
+                    {income?.name}
                   </div>
-                  <div className="">{income?.category}</div>
+                  <div className="w-1/2">{income?.category}</div>
                 </div>
-                <div className="flex gap-2 items-center">
+                <div className="flex gap-2 items-center sm:w-1/2 w-full justify-between">
                   {" "}
-                  <div>{formattedDate} -</div>
-                  <div className="text-green-600 sm:font-bold text-base sm:text-lg dark:text-green-500">
+                  <div className="w-1/2">{formattedDate}</div>
+                  <div className="text-green-600 sm:font-bold text-base sm:text-lg dark:text-green-500 w-1/2 sm:text-right">
                     {income?.amount}&#8364;
                   </div>
                 </div>

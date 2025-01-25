@@ -17,6 +17,7 @@ import axios from "axios";
 import { IncomeDataType, SortFieldType, SortOrderType } from "../types/income";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { SORT_FIELDS } from "../constants/constants";
+import IncomeCard from "./components/IncomeCard";
 
 const IncomePage = () => {
   const router = useRouter();
@@ -24,25 +25,17 @@ const IncomePage = () => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    // Redirect to login if user is not logged in
     if (!session) {
       router.push("/login");
     }
-  }, [session]);
 
-  useEffect(() => {
+    // Set userId in URL params
     if (session) {
       changeUrlParams({ params: "userId", value: session.user.id });
     }
   }, [session]);
 
-  useEffect(() => {
-    if (sessionStorage.getItem("incomeDeleted") === "true") {
-      successToast();
-      sessionStorage.removeItem("incomeDeleted");
-    }
-  }, []);
-
-  // const [incomeData, setIncomeData] = useState<IncomeDataType[]>([]);
   const urlSearchParams = useSearchParams();
   const dateFrom = urlSearchParams.get("dateFrom");
   const dateTo = urlSearchParams.get("dateTo");
@@ -107,6 +100,13 @@ const IncomePage = () => {
   const handleDeleteIncome = async (id: string) => {
     deleteIncome(id);
   };
+
+  const incomeTotalAmount = incomeData?.reduce(
+    (acc: number, cur: IncomeDataType) => {
+      return acc + cur.amount;
+    },
+    0
+  );
 
   const handleSort = (
     data: IncomeDataType[],
@@ -203,6 +203,22 @@ const IncomePage = () => {
         incomeData={incomeData}
         handleDeleteIncome={handleDeleteIncome}
       />
+
+      <div className="w-10/12 mx-auto mt-12">
+        <IncomeCard hasBorder={true}>
+          <div className="flex gap-2 items-center">
+            {" "}
+            <div className="sm:text-xl text-base sm:font-bold">
+              Total amount of money earned
+            </div>
+          </div>
+          <div className="flex gap-2 items-center">
+            <div className="text-green-600 sm:font-bold text-base sm:text-lg dark:text-green-500">
+              {incomeTotalAmount}&#8364;
+            </div>
+          </div>
+        </IncomeCard>
+      </div>
     </div>
   ) : (
     <NoSessionDiv />

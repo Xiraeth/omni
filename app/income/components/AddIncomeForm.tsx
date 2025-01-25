@@ -6,15 +6,15 @@ import NameInput from "./NameInput";
 import AmountInput from "./AmountInput";
 import DateInput from "./DateInput";
 import GenericButton from "@/app/components/GenericButton";
-import { useSession } from "next-auth/react";
 import useCustomToast from "@/hooks/useCustomToast";
 import { INCOME_CATEGORIES } from "@/app/constants/constants";
 import Dropmenu from "@/app/components/Dropmenu";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useUser } from "@/app/context/UserContext";
 
 const AddIncomeForm = () => {
-  const { data: session } = useSession();
+  const { session } = useUser();
   const queryClient = useQueryClient();
   const successToast = useCustomToast({
     message: "Income added successfully",
@@ -25,6 +25,7 @@ const AddIncomeForm = () => {
     control,
     formState: { errors },
     setError,
+    setValue,
   } = useForm<IncomeFormDataType>({
     mode: "onSubmit",
     defaultValues: {
@@ -48,6 +49,10 @@ const AddIncomeForm = () => {
       return response.data.income;
     },
     onSuccess: (data) => {
+      setValue("name", "");
+      setValue("amount", "");
+      setValue("date", "");
+      setValue("category", "");
       queryClient.setQueryData(["incomeData"], (oldData: IncomeDataType[]) => {
         return [...oldData, data];
       });
