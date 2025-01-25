@@ -7,6 +7,8 @@ import Providers from "./components/Providers";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { options } from "./api/auth/[...nextauth]/options";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -74,6 +76,17 @@ export default async function RootLayout({
             <Navbar />
           </Suspense>
           {children}
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={true}
+            rtl={false}
+            pauseOnFocusLoss={false}
+            draggable={true}
+            pauseOnHover={true}
+          />
         </Providers>
       </body>
     </html>

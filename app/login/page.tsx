@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import FormElement from "../components/FormElement";
 import { LoginFormData } from "../common/types";
 import Link from "next/link";
-import ConnectButton from "../components/ConnectButton";
+import GenericButton from "../components/GenericButton";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast, ToastContainer } from "react-toastify";
@@ -14,7 +14,8 @@ import { changeUrlParams } from "../common/functions/changeParams";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import ConnectWithGithub from "../components/ConnectWithGithub";
-import useToast from "@/hooks/useToast";
+import useToast from "@/hooks/useCustomToast";
+import Input from "../components/Input";
 
 const Login = () => {
   const searchParams = useSearchParams();
@@ -126,15 +127,15 @@ const Login = () => {
               },
             }}
             render={({ field }) => (
-              <FormElement
-                errorMsg={errors?.email?.message}
-                InputProps={{
-                  type: "email",
-                  placeholder: "Email",
-                  ...field,
-                  value: field.value || "",
-                }}
-              />
+              <FormElement errorMsg={errors?.email?.message}>
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  {...field}
+                  value={field.value || ""}
+                  isInvalid={!!errors?.email?.message}
+                />
+              </FormElement>
             )}
           />
 
@@ -145,15 +146,15 @@ const Login = () => {
               required: "Password is required",
             }}
             render={({ field }) => (
-              <FormElement
-                errorMsg={errors?.password?.message}
-                InputProps={{
-                  type: "password",
-                  placeholder: "Password",
-                  ...field,
-                  value: field.value || "",
-                }}
-              />
+              <FormElement errorMsg={errors?.password?.message}>
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  {...field}
+                  value={field.value || ""}
+                  isInvalid={!!errors?.password?.message}
+                />
+              </FormElement>
             )}
           />
           {isSubmitting && (
@@ -169,7 +170,7 @@ const Login = () => {
               {errors?.root?.message}
             </p>
           )}
-          <ConnectButton text="Log in" />
+          <GenericButton text="Log in" width="full" />
         </form>
         <div className="flex items-center justify-center gap-2 font-lato opacity-80 mb-2 transition-all duration-150 text-xs sm:text-sm">
           <p>Don&apos;t have an account?</p>

@@ -25,8 +25,15 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-# A personal finance tracker app
+## An app to track various everyday stats
+
+A project I am building to hone my nextjs skills, while using various libraries
 
 ## Features
 
-Nothing yet
+Some of there features used in this app so far are:
+
+### Authentication
+
+- Custom login and signup authentication pages
+- Github authentication
