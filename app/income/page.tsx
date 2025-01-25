@@ -18,6 +18,7 @@ import { IncomeDataType, SortFieldType, SortOrderType } from "../types/income";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { SORT_FIELDS } from "../constants/constants";
 import IncomeCard from "./components/IncomeCard";
+import { handleSort } from "./functions/handleSort";
 
 const IncomePage = () => {
   const router = useRouter();
@@ -39,10 +40,16 @@ const IncomePage = () => {
   const urlSearchParams = useSearchParams();
   const dateFrom = urlSearchParams.get("dateFrom");
   const dateTo = urlSearchParams.get("dateTo");
+  const categoryName = urlSearchParams.get("category");
+  const incomeName = urlSearchParams.get("incomeName");
+  const amountRange = urlSearchParams.get("amountRange");
 
   const query = `income?${new URLSearchParams({
     ...(dateFrom && { dateFrom }),
     ...(dateTo && { dateTo }),
+    ...(categoryName && { categoryName }),
+    ...(incomeName && { incomeName }),
+    ...(amountRange && { amountRange }),
     ...(session?.user?.id && { userId: session.user.id }),
   }).toString()}`;
 
@@ -55,8 +62,8 @@ const IncomePage = () => {
   });
 
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState<boolean>(false);
-  const [sortField, setSortField] = useState<string>("");
-  const [sortOrder, setSortOrder] = useState<string>("");
+  const [sortField, setSortField] = useState<SortFieldType>("");
+  const [sortOrder, setSortOrder] = useState<SortOrderType>("");
 
   const handleOpenFiltersModal = () => {
     setIsFiltersModalOpen(true);
@@ -108,33 +115,9 @@ const IncomePage = () => {
     0
   );
 
-  const handleSort = (
-    data: IncomeDataType[],
-    field: SortFieldType,
-    order: SortOrderType
-  ) => {
-    return data.sort((a, b) => {
-      if (field === "Category") {
-        return order === "asc"
-          ? a.category.localeCompare(b.category)
-          : b.category.localeCompare(a.category);
-      } else if (field === "Amount") {
-        return order === "asc" ? a.amount - b.amount : b.amount - a.amount;
-      } else if (field === "Date") {
-        return order === "asc"
-          ? new Date(a.date).getTime() - new Date(b.date).getTime()
-          : new Date(b.date).getTime() - new Date(a.date).getTime();
-      } else if (field === "Name") {
-        return order === "asc"
-          ? a.name.localeCompare(b.name)
-          : b.name.localeCompare(a.name);
-      }
-      return 0;
-    });
-  };
-
   const handleSortSelection = (option: string) => {
-    setSortField(option);
+    setSortField(option as SortFieldType);
+
     queryClient.setQueryData(["incomeData"], (oldData: IncomeDataType[]) => {
       return handleSort(
         [...oldData],
@@ -147,6 +130,7 @@ const IncomePage = () => {
   const handleSortOrder = () => {
     const newOrder = sortOrder === "asc" ? "desc" : "asc";
     setSortOrder(newOrder);
+
     queryClient.setQueryData(["incomeData"], (oldData: IncomeDataType[]) => {
       return handleSort(
         [...oldData],
@@ -171,54 +155,61 @@ const IncomePage = () => {
         <FiltersModal handleCloseFiltersModal={handleCloseFiltersModal} />
       )}
 
-      <div className="w-10/12 mx-auto mb-4 flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <Dropmenu
-            options={SORT_FIELDS}
-            placeholder="Sort by"
-            onSelect={handleSortSelection}
-            width="[100px]"
-            value={sortField}
+      {/* filter and sorting */}
+      {incomeData?.length && (
+        <>
+          <div className="w-10/12 mx-auto mb-4 flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <Dropmenu
+                options={SORT_FIELDS}
+                placeholder="Sort by"
+                onSelect={handleSortSelection}
+                width="[100px]"
+                value={sortField}
+              />
+
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center text-dark dark:text-light bg-buttonBgLight dark:bg-buttonBgDark border-[1px] dark:border-buttonBorderDark  hover:border-buttonBorderLightHover dark:hover:border-buttonBorderDarkHover transition-all duration-200 cursor-pointer active:bg-buttonBgLightFocus dark:active:bg-buttonBgDarkFocus drop-shadow-md"
+                onClick={handleSortOrder}
+              >
+                <FontAwesomeIcon icon={faSort} />
+              </div>
+            </div>
+
+            <div>
+              <button
+                className="flex items-center gap-2 bg-light border-[1px] drop-shadow-md border-dark text-dark rounded-md px-2 py-1 hover:bg-dark hover:text-light transition-all duration-200 dark:bg-dark dark:text-light dark:border-light dark:hover:bg-light dark:hover:text-dark select-none"
+                onClick={handleOpenFiltersModal}
+              >
+                <FontAwesomeIcon icon={faFilter} />
+                Filters
+              </button>
+            </div>
+          </div>
+
+          <IncomeTable
+            incomeData={incomeData}
+            handleDeleteIncome={handleDeleteIncome}
           />
 
-          <div
-            className="w-10 h-10 rounded-full flex items-center justify-center text-dark dark:text-light bg-buttonBgLight dark:bg-buttonBgDark border-[1px] dark:border-buttonBorderDark  hover:border-buttonBorderLightHover dark:hover:border-buttonBorderDarkHover transition-all duration-200 cursor-pointer active:bg-buttonBgLightFocus dark:active:bg-buttonBgDarkFocus drop-shadow-md"
-            onClick={handleSortOrder}
-          >
-            <FontAwesomeIcon icon={faSort} />
+          {/* total amount of money earned */}
+          <div className="w-10/12 mx-auto mt-12">
+            <IncomeCard hasBorder={true}>
+              <div className="flex gap-2 items-center">
+                {" "}
+                <div className="sm:text-xl text-base sm:font-bold">
+                  Total amount of money earned
+                </div>
+              </div>
+              <div className="flex gap-2 items-center">
+                <div className="text-green-600 sm:font-bold text-base sm:text-lg dark:text-green-500">
+                  {incomeTotalAmount}&#8364;
+                </div>
+              </div>
+            </IncomeCard>
           </div>
-        </div>
-
-        <div>
-          <button
-            className="flex items-center gap-2 bg-light border-[1px] drop-shadow-md border-dark text-dark rounded-md px-2 py-1 hover:bg-dark hover:text-light transition-all duration-200 dark:bg-dark dark:text-light dark:border-light dark:hover:bg-light dark:hover:text-dark select-none"
-            onClick={handleOpenFiltersModal}
-          >
-            <FontAwesomeIcon icon={faFilter} />
-            Filters
-          </button>
-        </div>
-      </div>
-      <IncomeTable
-        incomeData={incomeData}
-        handleDeleteIncome={handleDeleteIncome}
-      />
-
-      <div className="w-10/12 mx-auto mt-12">
-        <IncomeCard hasBorder={true}>
-          <div className="flex gap-2 items-center">
-            {" "}
-            <div className="sm:text-xl text-base sm:font-bold">
-              Total amount of money earned
-            </div>
-          </div>
-          <div className="flex gap-2 items-center">
-            <div className="text-green-600 sm:font-bold text-base sm:text-lg dark:text-green-500">
-              {incomeTotalAmount}&#8364;
-            </div>
-          </div>
-        </IncomeCard>
-      </div>
+        </>
+      )}
     </div>
   ) : (
     <NoSessionDiv />

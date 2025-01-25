@@ -1,11 +1,14 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useQueryClient } from "@tanstack/react-query";
 
 const FiltersModal = ({
   handleCloseFiltersModal,
 }: {
   handleCloseFiltersModal: () => void;
 }) => {
+  const queryClient = useQueryClient();
+
   return (
     <>
       <div
@@ -19,13 +22,13 @@ const FiltersModal = ({
         aria-labelledby="modal-title"
         aria-modal="true"
         className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-      bg-light dark:bg-dark rounded-lg shadow-xl 
+      bg-light dark:bg-dark rounded-lg shadow-xl transition-all duration-200
       w-[90%] max-w-[600px] p-6"
       >
         <div className="flex items-center mb-4">
           <p
             id="modal-title"
-            className="text-xl font-bold text-dark dark:text-light"
+            className="text-base md:text-xl font-bold text-dark dark:text-light"
           >
             Select filters
           </p>
@@ -37,7 +40,7 @@ const FiltersModal = ({
           </button>
         </div>
 
-        <div className="space-y-4">{/* Your modal content goes here */}</div>
+        <div className="space-y-4 text-sm md:text-base">This is content</div>
       </div>
     </>
   );
