@@ -3,15 +3,17 @@ import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Deletes an income record by ID
- * @param req - The incoming request (unused)
- * @param context - Route context with params
+ * @param req - The incoming request
  */
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(req: NextRequest) {
   try {
-    const { id } = params;
+    // Extract the ID from the URL
+    const { searchParams } = req.nextUrl;
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
+    }
 
     const deletedIncome = await Income.findByIdAndDelete(id);
 
