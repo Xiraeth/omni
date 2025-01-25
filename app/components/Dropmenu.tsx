@@ -19,7 +19,7 @@ const Dropmenu = ({
   width = "full",
 }: DropmenuPropsType) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(value);
+  const [selectedOption, setSelectedOption] = useState<string>(value);
   const [isFocused, setIsFocused] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -56,16 +56,19 @@ const Dropmenu = ({
         className={clsx(
           "font-lato drop-shadow-md border-[1px] rounded-md cursor-pointer transition-all duration-200 min-w-32 w-full md:max-w-72 text-dark dark:text-light",
           {
-            "dark:border-amber-400 dark:hover:border-amber-400 border-sky-400 hover:border-sky-400 dark:bg-slate-900 bg-white/80":
+            "dark:border-amber-400 dark:hover:border-amber-400 border-sky-400 hover:border-sky-400 dark:bg-buttonBgDarkFocus bg-buttonBgLightFocus":
               isOpen,
-            "hover:border-slate-400/80 dark:hover:border-slate-600/80 dark:border-slate-600 dark:hover:border-slate-500 dark:bg-slate-800 bg-white/60":
+            "hover:border-buttonBorderLightHover dark:border-slate-600 dark:hover:border-slate-500 dark:bg-buttonBgDark bg-buttonBgLight":
               !isOpen,
           }
         )}
         onClick={handleToggleDropdown}
       >
         <div className="h-[48px] flex items-center justify-between px-4">
-          <span>{selectedOption || placeholder}</span>
+          <span>
+            {selectedOption?.charAt(0).toUpperCase() +
+              selectedOption?.slice(1) || placeholder}
+          </span>
           {isOpen ? (
             <FontAwesomeIcon icon={faChevronUp} width={20} height={20} />
           ) : (

@@ -56,9 +56,9 @@ const Dropdown = ({
         "grid grid-rows-[auto,0fr] [&.open]:grid-rows-[auto,1fr]",
         "font-lato drop-shadow-md border-[1px] rounded-md cursor-pointer transition-all duration-200 min-w-40 w-full md:max-w-72 text-dark dark:text-light",
         {
-          "dark:border-amber-400 dark:hover:border-amber-400 border-sky-400 hover:border-sky-400 dark:bg-slate-900 bg-white/80 ":
+          "dark:border-amber-400 dark:hover:border-amber-400 border-sky-400 hover:border-sky-400 dark:bg-buttonBgDark dark:hover:bg-buttonBgDarkHover bg-buttonBgLight hover:bg-buttonBorderLightHover":
             isOpen,
-          "hover:border-slate-400/80 dark:hover:border-slate-600/80 dark:border-slate-600 dark:hover:border-slate-500 dark:bg-slate-800 bg-white/60 ":
+          "hover:border-buttonBorderLightHover dark:border-buttonBorderDark dark:hover:border-buttonBorderDarkHover dark:bg-buttonBgDark bg-buttonBgLight":
             !isOpen,
           open: isOpen,
         }

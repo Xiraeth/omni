@@ -16,6 +16,13 @@ export default {
         discordBlue: "#5865F2",
         dark: "var(--dark)",
         light: "var(--light)",
+        buttonBgLight: "var(--button-bg-light)",
+        buttonBorderLightHover: "var(--button-border-light-hover)",
+        buttonBgLightFocus: "var(--button-bg-light-focus)",
+        buttonBgDark: "var(--button-bg-dark)",
+        buttonBorderDark: "var(--button-border-dark)",
+        buttonBorderDarkHover: "var(--button-border-dark-hover)",
+        buttonBgDarkFocus: "var(--button-bg-dark-focus)",
         text: {
           light: "var(--text-light)",
           dark: "var(--text-dark)",
