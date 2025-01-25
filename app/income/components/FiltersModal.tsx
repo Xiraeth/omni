@@ -1,6 +1,7 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 
 const FiltersModal = ({
   handleCloseFiltersModal,
@@ -8,6 +9,12 @@ const FiltersModal = ({
   handleCloseFiltersModal: () => void;
 }) => {
   const queryClient = useQueryClient();
+  const [filterName, setFilterName] = useState<string>("");
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+
+  const handleCheckboxChange = () => {
+    setIsChecked((prev) => !prev);
+  };
 
   return (
     <>
@@ -25,12 +32,12 @@ const FiltersModal = ({
       bg-light dark:bg-dark rounded-lg shadow-xl transition-all duration-200
       w-[90%] max-w-[600px] p-6"
       >
-        <div className="flex items-center mb-4">
+        <div className="flex items-center justify-center mb-4">
           <p
             id="modal-title"
-            className="text-base md:text-xl font-bold text-dark dark:text-light"
+            className="text-base md:text-xl font-bold text-dark dark:text-light font-montserrat"
           >
-            Select filters
+            Filter data to be displayed
           </p>
           <button
             onClick={handleCloseFiltersModal}
@@ -40,7 +47,25 @@ const FiltersModal = ({
           </button>
         </div>
 
-        <div className="space-y-4 text-sm md:text-base">This is content</div>
+        <div className="space-y-4 text-sm md:text-base">
+          <input
+            type="text"
+            placeholder="Filter by name"
+            className="py-2 px-4 bg-white/30 hover:bg-white/40 focus:bg-white/60 rounded-md w-full text-dark dark:text-light outline-none focus:border-b-black font-montserrat
+            transition-all duration-150 italic"
+            value={filterName}
+            onChange={(e) => setFilterName(e.target.value)}
+          />
+
+          <p className="font-montserrat text-dark dark:text-light font-bold">
+            Toggle categories
+          </p>
+          <div id="categories-container">
+            <div className="flex items-center justify-between">
+              <p>Salary</p>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
