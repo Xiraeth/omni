@@ -5,8 +5,6 @@ import OpenNavbarButton from "@/app/components/OpenNavbarButton";
 import { useUser } from "@/app/context/UserContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import NoSessionDiv from "@/app/components/NoSessionDiv";
-import request from "../common/functions/request";
-import { IncomeDataType } from "../types/income";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import AddIncomeForm from "./components/AddIncomeForm";
@@ -15,10 +13,14 @@ import useCustomToast from "@/hooks/useCustomToast";
 import { changeUrlParams } from "../common/functions/changeParams";
 import FiltersModal from "./components/FiltersModal";
 import Dropmenu from "../components/Dropmenu";
+import axios from "axios";
+import { IncomeDataType } from "../types/income";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const IncomePage = () => {
   const router = useRouter();
   const { session } = useUser();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (!session) {
@@ -32,8 +34,14 @@ const IncomePage = () => {
     }
   }, [session]);
 
-  const [incomeData, setIncomeData] = useState<IncomeDataType[]>([]);
-  const [incomeDataLoading, setIncomeDataLoading] = useState<boolean>(false);
+  useEffect(() => {
+    if (sessionStorage.getItem("incomeDeleted") === "true") {
+      successToast();
+      sessionStorage.removeItem("incomeDeleted");
+    }
+  }, []);
+
+  // const [incomeData, setIncomeData] = useState<IncomeDataType[]>([]);
   const urlSearchParams = useSearchParams();
   const dateFrom = urlSearchParams.get("dateFrom");
   const dateTo = urlSearchParams.get("dateTo");
@@ -42,6 +50,14 @@ const IncomePage = () => {
     ...(dateTo && { dateTo }),
     ...(session?.user?.id && { userId: session.user.id }),
   }).toString()}`;
+
+  const successToast = useCustomToast({
+    message: "Income deleted successfully",
+  });
+
+  const errorToast = useCustomToast({
+    message: "Error deleting income",
+  });
 
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState<boolean>(false);
 
@@ -53,58 +69,47 @@ const IncomePage = () => {
     setIsFiltersModalOpen(false);
   };
 
-  useEffect(() => {
-    const fetchIncomeData = async () => {
-      setIncomeDataLoading(true);
-
-      try {
-        const data = await request({
-          url: query,
-          data: {
-            userId: session?.user?.id,
-          },
-          method: "GET",
-        });
-
-        setIncomeData(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIncomeDataLoading(false);
-      }
-    };
-
-    fetchIncomeData();
-  }, []);
-
-  const successToast = useCustomToast({
-    message: "Income deleted successfully",
+  const { data: incomeData, isLoading: incomeDataLoading } = useQuery({
+    queryKey: ["incomeData"],
+    queryFn: async () => {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/${query}`
+      );
+      return response.data;
+    },
   });
 
-  const errorToast = useCustomToast({
-    message: "Error deleting income",
+  const { mutate: deleteIncome } = useMutation({
+    mutationFn: async (id: string) => {
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/income/${id}`
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      successToast();
+
+      const deletedEntry = data?.response;
+
+      queryClient.setQueryData(["incomeData"], (oldData: IncomeDataType[]) => {
+        return oldData.filter((item) => item._id !== deletedEntry._id);
+      });
+    },
+    onError: () => {
+      errorToast();
+    },
   });
 
   const handleDeleteIncome = async (id: string) => {
-    const response = await request({
-      url: `income/${id}`,
-      method: "DELETE",
-    });
-
-    if (response.error) {
-      errorToast();
-      return;
-    }
-
-    successToast();
-    setTimeout(() => {
-      window.location.reload();
-    }, 1500);
+    deleteIncome(id);
   };
 
   return incomeDataLoading ? (
     <div className="w-screen h-screen overflow-x-hidden flex justify-center items-center">
-      <FontAwesomeIcon icon={faSpinner} className="animate-spin text-4xl" />
+      <FontAwesomeIcon
+        icon={faSpinner}
+        className="animate-spin w-8 h-8 dark:text-light"
+      />
     </div>
   ) : session ? (
     <div className="w-screen h-screen overflow-x-hidden">
