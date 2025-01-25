@@ -15,9 +15,6 @@ export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams;
     const dateFrom = searchParams.get("dateFrom");
     const dateTo = searchParams.get("dateTo");
-    const categoryName = searchParams.get("category");
-    const incomeName = searchParams.get("incomeName");
-    const amountRange = searchParams.get("amountRange");
     const userId = searchParams.get("userId");
 
     // Validate userId is provided

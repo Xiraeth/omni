@@ -2,8 +2,11 @@ import { PluginAPI } from "tailwindcss/types/config";
 import type { Config } from "tailwindcss";
 
 export default {
-  content: ["./app/**/*.{js,ts,jsx,tsx,mdx}"],
-  darkMode: "class",
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  darkMode: ["class"],
   theme: {
     extend: {
       textShadow: {
@@ -52,5 +55,6 @@ export default {
 
       addUtilities(Object.assign({}, ...utilities));
     },
+    require("tailwindcss-animate"),
   ],
 } satisfies Config;

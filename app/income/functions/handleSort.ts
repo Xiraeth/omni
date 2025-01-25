@@ -9,8 +9,8 @@ export const handleSort = (
   return data.sort((a, b) => {
     if (field === "Category") {
       return order === "asc"
-        ? a.category.localeCompare(b.category)
-        : b.category.localeCompare(a.category);
+        ? (a.category || "").localeCompare(b.category || "")
+        : (b.category || "").localeCompare(a.category || "");
     } else if (field === "Amount") {
       return order === "asc" ? a.amount - b.amount : b.amount - a.amount;
     } else if (field === "Date") {
