@@ -8,6 +8,7 @@ import OpenNavbarButton from "./components/OpenNavbarButton";
 import { useNavbar } from "../hooks/useNavbar";
 import { formatTimeWithSeconds } from "./common/functions/formatTime";
 
+// the dashboard page if user is logged in, otherwise the landing/home page
 export default function Home() {
   const { session } = useUser();
   const isNavbarOpen = useNavbar();
@@ -46,7 +47,7 @@ export default function Home() {
             Omni
           </p>
           <p className="text-xl font-montserrat drop-shadow-lg shadow-black text-center">
-            An app for many things
+            An (under construction) app for many things
           </p>
           <div className="flex justify-center gap-24 w-full">
             <LinkButton color="black" text="Log in" href="/login" />

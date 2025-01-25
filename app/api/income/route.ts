@@ -11,27 +11,64 @@ export async function GET(req: NextRequest) {
   try {
     await dbConnect();
 
-    // Get date filters from URL search params
+    // Get date filters and userId from URL search params
     const searchParams = req.nextUrl.searchParams;
     const dateFrom = searchParams.get("dateFrom");
     const dateTo = searchParams.get("dateTo");
+    const userId = searchParams.get("userId");
 
-    // Build query object
-    const query: { date?: { $gte?: Date; $lte?: Date } } = {};
+    // Validate userId is provided
+    if (!userId) {
+      return NextResponse.json(
+        { error: "userId is required" },
+        { status: 400 }
+      );
+    }
 
+    // Build query object with userId
+    const query: {
+      userId: string;
+      date?: {
+        $gte?: Date;
+        $lte?: Date;
+      };
+    } = { userId: userId || "" };
+
+    // Add date filters with validation
     if (dateFrom || dateTo) {
       query.date = {};
+
       if (dateFrom) {
-        query.date.$gte = new Date(dateFrom);
+        const fromDate = new Date(dateFrom);
+        if (isNaN(fromDate.getTime())) {
+          return NextResponse.json(
+            { error: "Invalid dateFrom format. Use YYYY-MM-DD" },
+            { status: 400 }
+          );
+        }
+        query.date.$gte = fromDate;
       }
+
       if (dateTo) {
-        query.date.$lte = new Date(dateTo);
+        const toDate = new Date(dateTo);
+        if (isNaN(toDate.getTime())) {
+          return NextResponse.json(
+            { error: "Invalid dateTo format. Use YYYY-MM-DD" },
+            { status: 400 }
+          );
+        }
+        query.date.$lte = toDate;
       }
     }
 
-    const allIncomesList = await Income.find(query);
-
-    return NextResponse.json(allIncomesList);
+    // Ensure we return an array even if the query fails
+    try {
+      const incomes = await Income.find(query).sort({ date: -1 });
+      return NextResponse.json(incomes);
+    } catch (error) {
+      console.error("Database query error:", error);
+      return NextResponse.json([], { status: 500 });
+    }
   } catch (error) {
     console.error("Failed to fetch income records:", error);
     return NextResponse.json(
