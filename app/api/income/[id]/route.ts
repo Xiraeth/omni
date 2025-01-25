@@ -1,18 +1,17 @@
 import Income from "@/models/income";
-import { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Deletes an income record by ID
- * @param _req - The incoming request (unused)
- * @param props - Route parameters
+ * @param req - The incoming request (unused)
+ * @param context - Route context with params
  */
 export async function DELETE(
-  _req: Request | NextRequest,
-  props: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = props.params;
+    const { id } = params;
 
     const deletedIncome = await Income.findByIdAndDelete(id);
 
