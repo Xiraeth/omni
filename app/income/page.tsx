@@ -15,7 +15,6 @@ import FiltersModal from "./components/FiltersModal";
 import Dropmenu from "../components/Dropmenu";
 import axios from "axios";
 import {
-  CategoriesType,
   FiltersType,
   IncomeDataType,
   SortFieldType,

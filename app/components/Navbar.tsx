@@ -8,8 +8,10 @@ import {
   faGear,
   faHandHoldingDollar,
   faListCheck,
+  faMoon,
   faSackDollar,
   faSackXmark,
+  faSun,
 } from "@fortawesome/free-solid-svg-icons";
 import { useSearchParams } from "next/navigation";
 import { changeUrlParams } from "../common/functions/changeParams";
@@ -19,10 +21,12 @@ import NavbarButton from "./NavbarButton";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useTheme } from "../context/ThemeContext";
 
 const Navbar = () => {
   const router = useRouter();
   const { session } = useUser();
+  const { theme, toggleTheme } = useTheme();
   const searchParams = useSearchParams();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const isNavbarOpen = searchParams.get("isNavbarOpen") === "true";
@@ -37,12 +41,16 @@ const Navbar = () => {
   };
 
   const handleExpensesClick = () => {
-    router.push("/expenses");
+    // router.push("/expenses");
   };
 
   const closeNavbar = () => {
     setIsDropdownOpen(false);
     changeUrlParams({ params: "isNavbarOpen", value: null });
+  };
+
+  const handleThemeChange = () => {
+    toggleTheme();
   };
 
   const handleLogout = async () => {
@@ -63,7 +71,7 @@ const Navbar = () => {
         ${isNavbarOpen ? "shadow-lg shadow-black" : "shadow-black shadow-sm"}
         text-dark dark:text-light bg-slate-300 dark:bg-slate-800 px-4 
         ${isNavbarOpen ? "translate-x-0" : "-translate-x-full"}
-        transition-[color, background-color, box-shadow, transform] duration-[200ms,200ms,500ms,500ms] z-50`}
+        transition-[color, background-color, box-shadow, transform] duration-200 z-50`}
     >
       <div className="flex items-center border-b-[1px] border-dark pb-2">
         {session?.user?.image && (
@@ -140,6 +148,13 @@ const Navbar = () => {
           <NavbarButton text="Todos" onClick={() => {}} icon={faListCheck} />
         </div>
         <div className="flex flex-col gap-2 pb-2">
+          <div className="sm:hidden block">
+            <NavbarButton
+              text="Toggle theme"
+              onClick={handleThemeChange}
+              icon={theme === "light" ? faSun : faMoon}
+            />
+          </div>
           <NavbarButton text="Settings" onClick={() => {}} icon={faGear} />
           <NavbarButton
             text="Logout"

@@ -2,7 +2,6 @@ import { Geist, Geist_Mono, Lato, Montserrat, Roboto } from "next/font/google";
 import "./globals.css";
 import { ToggleThemeButton } from "./components/ToggleThemeButton";
 import Navbar from "./components/Navbar";
-import { Suspense } from "react";
 import Providers from "./components/Providers";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
@@ -72,9 +71,7 @@ export default async function RootLayout({
       >
         <Providers session={session}>
           <ToggleThemeButton />
-          <Suspense fallback={<div>Loading...</div>}>
-            <Navbar />
-          </Suspense>
+          <Navbar />
           {children}
           <ToastContainer
             position="top-right"

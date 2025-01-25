@@ -78,7 +78,7 @@ const AddIncomeForm = () => {
     <form
       id="add-income-row"
       onSubmit={handleSubmit(onSubmit)}
-      className="w-10/12 py-4 pb-16 mx-auto flex flex-col lg:flex-row items-center md:items-start mt-20 gap-4"
+      className="w-10/12 py-4 pb-16 mx-auto flex flex-col lg:flex-row items-center md:items-start mt-20 gap-4 relative z-10"
     >
       <div className="lg:w-1/2 w-full">
         <Controller
