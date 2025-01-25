@@ -45,6 +45,7 @@ const IncomePage = () => {
   const urlSearchParams = useSearchParams();
   const dateFrom = urlSearchParams.get("dateFrom");
   const dateTo = urlSearchParams.get("dateTo");
+
   const query = `income?${new URLSearchParams({
     ...(dateFrom && { dateFrom }),
     ...(dateTo && { dateTo }),
@@ -60,6 +61,8 @@ const IncomePage = () => {
   });
 
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState<boolean>(false);
+  const [sortField, setSortField] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<string>("");
 
   const handleOpenFiltersModal = () => {
     setIsFiltersModalOpen(true);
@@ -104,6 +107,34 @@ const IncomePage = () => {
     deleteIncome(id);
   };
 
+  const handleSortSelection = (option: string) => {
+    setSortField((prevField) => {
+      const newOrder =
+        prevField === option ? (sortOrder === "asc" ? "desc" : "asc") : "desc";
+      setSortOrder(newOrder);
+      return option;
+    });
+
+    queryClient.setQueryData(["incomeData"], (oldData: IncomeDataType[]) => {
+      return oldData.sort((a, b) => {
+        if (option === "Category") {
+          return sortOrder === "asc"
+            ? a.category.localeCompare(b.category)
+            : b.category.localeCompare(a.category);
+        } else if (option === "Amount") {
+          return sortOrder === "asc"
+            ? a.amount - b.amount
+            : b.amount - a.amount;
+        } else if (option === "Date") {
+          return sortOrder === "asc"
+            ? new Date(a.date).getTime() - new Date(b.date).getTime()
+            : new Date(b.date).getTime() - new Date(a.date).getTime();
+        }
+        return 0;
+      });
+    });
+  };
+
   return incomeDataLoading ? (
     <div className="w-screen h-screen overflow-x-hidden flex justify-center items-center">
       <FontAwesomeIcon
@@ -123,9 +154,9 @@ const IncomePage = () => {
         <Dropmenu
           options={["Date", "Amount", "Category"]}
           placeholder="Sort by"
-          onSelect={() => {}}
-          value=""
+          onSelect={handleSortSelection}
           width="[100px]"
+          value={sortField}
         />
         <div>
           <button

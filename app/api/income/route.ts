@@ -3,9 +3,9 @@ import Income from "@/models/income";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * GET handler to retrieve income records with optional date filtering
+ * GET handler to retrieve income records with optional date filtering and sorting
  * @param req - Next.js request object
- * @returns NextResponse containing filtered array of income records
+ * @returns NextResponse containing filtered and sorted array of income records
  */
 export async function GET(req: NextRequest) {
   try {
@@ -61,7 +61,6 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // Ensure we return an array even if the query fails
     try {
       const incomes = await Income.find(query).sort({ date: -1 });
       return NextResponse.json(incomes);

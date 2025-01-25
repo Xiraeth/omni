@@ -19,7 +19,7 @@ const Dropmenu = ({
   width = "full",
 }: DropmenuPropsType) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(value);
+  const [selectedOption, setSelectedOption] = useState<string>(value);
   const [isFocused, setIsFocused] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -65,7 +65,10 @@ const Dropmenu = ({
         onClick={handleToggleDropdown}
       >
         <div className="h-[48px] flex items-center justify-between px-4">
-          <span>{selectedOption || placeholder}</span>
+          <span>
+            {selectedOption?.charAt(0).toUpperCase() +
+              selectedOption?.slice(1) || placeholder}
+          </span>
           {isOpen ? (
             <FontAwesomeIcon icon={faChevronUp} width={20} height={20} />
           ) : (
