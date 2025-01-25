@@ -10,9 +10,17 @@ type DateInputProps = {
    * Optional default value for the date input
    */
   value: string;
+  /**
+   * Optional width for the date input
+   */
+  width?: string;
 };
 
-const DateInput = ({ onChange, value }: DateInputProps) => {
+const DateInput = ({
+  onChange,
+  value,
+  width = "w-full md:max-w-60",
+}: DateInputProps) => {
   return (
     <input
       type="date"
@@ -26,8 +34,8 @@ const DateInput = ({ onChange, value }: DateInputProps) => {
         "rounded-md",
         "p-4",
         "text-center",
-        "min-w-40",
-        "w-full md:max-w-60",
+        "min-w-20",
+        width,
         "h-[48px]",
         "bg-buttonBgLight focus:bg-buttonBgLightFocus",
         "transition-all",
