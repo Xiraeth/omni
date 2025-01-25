@@ -55,15 +55,15 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <div className="flex w-full px-40 h-20 border-b-[1px] border-b-black mx-auto justify-between items-center">
+        <div className="flex w-full px-24 sm:px-40 h-20 border-b-[1px] border-b-black mx-auto justify-center sm:justify-between items-center">
           {!isNavbarOpen ? <OpenNavbarButton /> : null}
-          <p className="text-dark dark:text-light text-3xl font-bold select-none">
+          <p className="text-dark dark:text-light text-xl lg:text-3xl font-bold select-none hidden md:block">
             Dashboard
           </p>
-          <p className="text-dark dark:text-light text-3xl font-lato select-none">
+          <p className="text-dark dark:text-light text-xl lg:text-3xl font-lato select-none">
             {formattedDate}
           </p>
-          <p className="transition-all h-12 flex items-center justify-center duration-200 text-3xl py-2 w-40 text-center bg-slate-200 text-purple-600 dark:bg-slate-800 rounded-md dark:text-green-500 font-montserrat select-none">
+          <p className="transition-all h-12 flex items-center justify-center duration-200 text-xl lg:text-3xl py-2 sm:block hidden w-32 lg:w-40 text-center bg-slate-200 text-purple-600 dark:bg-slate-800 rounded-md dark:text-green-500 font-montserrat select-none">
             {currentTime}
           </p>
         </div>

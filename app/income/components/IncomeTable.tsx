@@ -1,7 +1,7 @@
 import { IncomeDataType } from "@/app/types/income";
 import IncomeCard from "./IncomeCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 
 const IncomeTable = ({
