@@ -3,7 +3,6 @@ import { IncomeFormDataType } from "@/app/types/income";
 import { useForm } from "react-hook-form";
 import FormElement from "@/app/components/FormElement";
 import NameInput from "./NameInput";
-import Dropdown from "@/app/components/Dropdown";
 import AmountInput from "./AmountInput";
 import DateInput from "./DateInput";
 import GenericButton from "@/app/components/GenericButton";
@@ -11,6 +10,7 @@ import { useSession } from "next-auth/react";
 import request from "@/app/common/functions/request";
 import useCustomToast from "@/hooks/useCustomToast";
 import { INCOME_CATEGORIES } from "@/app/constants/constants";
+import Dropmenu from "@/app/components/Dropmenu";
 
 const AddIncomeForm = () => {
   const { data: session } = useSession();
@@ -95,7 +95,7 @@ const AddIncomeForm = () => {
           }}
           render={({ field: { onChange, value } }) => (
             <FormElement errorMsg={errors?.category?.message}>
-              <Dropdown
+              <Dropmenu
                 options={INCOME_CATEGORIES}
                 placeholder="Category"
                 value={value}

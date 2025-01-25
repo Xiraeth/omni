@@ -8,15 +8,13 @@ import NoSessionDiv from "@/app/components/NoSessionDiv";
 import request from "../common/functions/request";
 import { IncomeDataType } from "../types/income";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFilter,
-  faSpinner,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFilter, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import AddIncomeForm from "./components/AddIncomeForm";
 import IncomeTable from "./components/IncomeTable";
 import useCustomToast from "@/hooks/useCustomToast";
 import { changeUrlParams } from "../common/functions/changeParams";
+import FiltersModal from "./components/FiltersModal";
+import Dropmenu from "../components/Dropmenu";
 
 const IncomePage = () => {
   const router = useRouter();
@@ -58,16 +56,22 @@ const IncomePage = () => {
   useEffect(() => {
     const fetchIncomeData = async () => {
       setIncomeDataLoading(true);
-      const data = await request({
-        url: query,
-        data: {
-          userId: session?.user?.id,
-        },
-        method: "GET",
-      });
 
-      setIncomeData(data);
-      setIncomeDataLoading(false);
+      try {
+        const data = await request({
+          url: query,
+          data: {
+            userId: session?.user?.id,
+          },
+          method: "GET",
+        });
+
+        setIncomeData(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIncomeDataLoading(false);
+      }
     };
 
     fetchIncomeData();
@@ -107,51 +111,26 @@ const IncomePage = () => {
       <OpenNavbarButton />
       <AddIncomeForm />
       {isFiltersModalOpen && (
-        <>
-          <div
-            className="fixed inset-0 bg-black/50 z-40 backdrop-blur-[2px]"
-            onClick={handleCloseFiltersModal}
-            aria-hidden="true"
-          />
-
-          <div
-            role="dialog"
-            aria-labelledby="modal-title"
-            aria-modal="true"
-            className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-              bg-light dark:bg-dark rounded-lg shadow-xl 
-              w-[90%] max-w-[600px] p-6"
-          >
-            <div className="flex items-center mb-4">
-              <p
-                id="modal-title"
-                className="text-xl font-bold text-dark dark:text-light"
-              >
-                Select filters
-              </p>
-              <button
-                onClick={handleCloseFiltersModal}
-                className="absolute right-[-10px] top-[-10px] bg-light hover:bg-dark hover:text-light rounded-full w-[35px] h-[35px] flex items-center justify-center transition-all duration-200 text-xl dark:bg-dark dark:hover:bg-light dark:text-light dark:hover:text-dark"
-              >
-                <FontAwesomeIcon icon={faXmark} className="" />
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {/* Your modal content goes here */}
-            </div>
-          </div>
-        </>
+        <FiltersModal handleCloseFiltersModal={handleCloseFiltersModal} />
       )}
 
-      <div className="w-10/12 mx-auto mb-4">
-        <button
-          className="flex items-center gap-2 bg-light border-[1px] drop-shadow-md border-dark text-dark rounded-md px-2 py-1 hover:bg-dark hover:text-light transition-all duration-200 dark:bg-dark dark:text-light dark:border-light dark:hover:bg-light dark:hover:text-dark"
-          onClick={handleOpenFiltersModal}
-        >
-          <FontAwesomeIcon icon={faFilter} />
-          Filters
-        </button>
+      <div className="w-10/12 mx-auto mb-4 flex justify-between items-center">
+        <Dropmenu
+          options={["Date", "Amount", "Category"]}
+          placeholder="Sort by"
+          onSelect={() => {}}
+          value=""
+          width="[100px]"
+        />
+        <div>
+          <button
+            className="flex items-center gap-2 bg-light border-[1px] drop-shadow-md border-dark text-dark rounded-md px-2 py-1 hover:bg-dark hover:text-light transition-all duration-200 dark:bg-dark dark:text-light dark:border-light dark:hover:bg-light dark:hover:text-dark"
+            onClick={handleOpenFiltersModal}
+          >
+            <FontAwesomeIcon icon={faFilter} />
+            Filters
+          </button>
+        </div>
       </div>
       <IncomeTable
         incomeData={incomeData}
