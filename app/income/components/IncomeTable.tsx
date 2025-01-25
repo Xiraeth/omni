@@ -3,7 +3,6 @@ import IncomeCard from "./IncomeCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import GenericButton from "@/app/components/GenericButton";
 
 type FilterType = "all" | "category" | "date";
 
@@ -77,7 +76,7 @@ const IncomeTable = ({
         <FontAwesomeIcon icon={faFilter} />
         Filters
       </button>
-      <div className="md:text-lg text-sm text-shadow-sm w-full">
+      <div className="md:text-lg text-sm text-shadow-sm w-full flex gap-4 flex-col">
         {filteredIncomeData?.map((income) => {
           const date = new Date(income?.date);
           const formattedDate = date.toLocaleDateString("en-US", {
@@ -91,7 +90,7 @@ const IncomeTable = ({
               className="flex justify-between items-center gap-4"
             >
               <IncomeCard key={income?._id}>
-                <div className="md:text-xl text-basefont-bold">
+                <div className="md:text-xl text-basefont-bold md:w-1/4 w-1/3">
                   {income?.name}
                 </div>
                 <div>{income?.amount}&#8364;</div>
