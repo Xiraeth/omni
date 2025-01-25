@@ -23,4 +23,4 @@ export type IncomeDataType = {
 
 export type SortOrderType = "asc" | "desc";
 
-export type SortFieldType = "Category" | "Amount" | "Date";
+export type SortFieldType = "Category" | "Amount" | "Date" | "Name";
