@@ -3,18 +3,19 @@ import { type NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 /**
  * Deletes an income record by ID
  * @param request - The incoming request
- * @param props - Route parameters containing the income ID
+ * @param props - Route parameters containing the income ID as a Promise
  */
-export async function DELETE(request: NextRequest, { params }: Props) {
+export async function DELETE(request: NextRequest, props: Props) {
   try {
+    const params = await props.params;
     const { id } = params;
 
     const deletedIncome = await Income.findByIdAndDelete(id);
