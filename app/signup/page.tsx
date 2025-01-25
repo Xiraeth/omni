@@ -2,13 +2,11 @@
 
 import { useForm, Controller } from "react-hook-form";
 import "react-toastify/dist/ReactToastify.css";
-
 import Link from "next/link";
 import FormElement from "../components/FormElement";
 import { SignupFormData } from "../common/types";
 import { useRouter } from "next/navigation";
-import request from "../common/functions/request";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import ConnectWithGithub from "../components/ConnectWithGithub";
@@ -16,10 +14,19 @@ import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
 import GenericButton from "../components/GenericButton";
 import Input from "../components/Input";
+import axios from "axios";
+import { useUser } from "../context/UserContext";
 
 const Signup = () => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { session } = useUser();
+
+  useEffect(() => {
+    if (session) {
+      router.push("/");
+    }
+  }, [session]);
 
   const {
     control,
@@ -60,30 +67,43 @@ const Signup = () => {
 
     try {
       setIsSubmitting(true);
-      const response = await request({
-        data: { email, password, username },
-        url: `register`,
-        method: "POST",
+      const response = await axios.post("/api/register", {
+        email,
+        password,
+        username,
       });
 
-      if (response.error) {
-        setError("root", { message: response.error });
+      if (response.data.error) {
+        setError("root", { message: response.data.error });
         return;
       }
 
-      if (response.user) {
-        router.push("/login?userCreated=true");
+      if (response.data.user) {
+        sessionStorage.setItem("userCreated", "true");
+        router.push("/login");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       setIsSubmitting(false);
-      setError("root", {
-        message: "Server is not responding. Please try again later.",
-      });
+
+      const errorMessage =
+        axios.isAxiosError(error) && error.response?.data?.error
+          ? error.response.data.error
+          : "Server is not responding. Please try again later.";
+
+      setError("root", { message: errorMessage });
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (session) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen w-full">
+        <FontAwesomeIcon icon={faSpinner} className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center h-screen w-full transition-all duration-150">
@@ -110,7 +130,7 @@ const Signup = () => {
               },
             }}
             render={({ field }) => (
-              <FormElement errorMsg={errors?.username?.message}>
+              <FormElement errorMsg={errors?.username?.message} width="full">
                 <Input
                   type="text"
                   placeholder="Username"
@@ -133,7 +153,7 @@ const Signup = () => {
               },
             }}
             render={({ field }) => (
-              <FormElement errorMsg={errors?.email?.message}>
+              <FormElement errorMsg={errors?.email?.message} width="full">
                 <Input
                   type="email"
                   placeholder="Email"
@@ -156,7 +176,7 @@ const Signup = () => {
               },
             }}
             render={({ field }) => (
-              <FormElement errorMsg={errors?.password?.message}>
+              <FormElement errorMsg={errors?.password?.message} width="full">
                 <Input
                   type="password"
                   placeholder="Password"
@@ -177,7 +197,10 @@ const Signup = () => {
                 value === formValues.password || "Passwords do not match",
             }}
             render={({ field }) => (
-              <FormElement errorMsg={errors?.confirmPassword?.message}>
+              <FormElement
+                errorMsg={errors?.confirmPassword?.message}
+                width="full"
+              >
                 <Input
                   type="password"
                   placeholder="Confirm Password"

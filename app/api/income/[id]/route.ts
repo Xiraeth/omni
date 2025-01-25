@@ -28,7 +28,7 @@ export async function DELETE(request: NextRequest, props: Props) {
     }
 
     return NextResponse.json(
-      { message: "Income deleted successfully" },
+      { response: deletedIncome, message: "Income deleted successfully" },
       { status: 200 }
     );
   } catch (error) {

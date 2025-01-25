@@ -1,7 +1,7 @@
 import { IncomeDataType } from "@/app/types/income";
 import IncomeCard from "./IncomeCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter, faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 
 const IncomeTable = ({
@@ -29,12 +29,20 @@ const IncomeTable = ({
               className="flex justify-between items-center gap-4"
             >
               <IncomeCard key={income?._id}>
-                <div className="md:text-xl text-basefont-bold md:w-1/4 w-1/3">
-                  {income?.name}
+                <div className="flex gap-2 items-center">
+                  {" "}
+                  <div className="sm:text-xl text-base sm:font-bold">
+                    {income?.name},
+                  </div>
+                  <div className="">{income?.category}</div>
                 </div>
-                <div>{income?.amount}&#8364;</div>
-                <div>{formattedDate}</div>
-                <div>{income?.category}</div>
+                <div className="flex gap-2 items-center">
+                  {" "}
+                  <div>{formattedDate} -</div>
+                  <div className="text-green-600 sm:font-bold text-base sm:text-lg dark:text-green-500">
+                    {income?.amount}&#8364;
+                  </div>
+                </div>
               </IncomeCard>
 
               <FontAwesomeIcon

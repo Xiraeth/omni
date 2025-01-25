@@ -5,22 +5,22 @@ import OpenNavbarButton from "@/app/components/OpenNavbarButton";
 import { useUser } from "@/app/context/UserContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import NoSessionDiv from "@/app/components/NoSessionDiv";
-import request from "../common/functions/request";
-import { IncomeDataType } from "../types/income";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFilter,
-  faSpinner,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFilter, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import AddIncomeForm from "./components/AddIncomeForm";
 import IncomeTable from "./components/IncomeTable";
 import useCustomToast from "@/hooks/useCustomToast";
 import { changeUrlParams } from "../common/functions/changeParams";
+import FiltersModal from "./components/FiltersModal";
+import Dropmenu from "../components/Dropmenu";
+import axios from "axios";
+import { IncomeDataType } from "../types/income";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const IncomePage = () => {
   const router = useRouter();
   const { session } = useUser();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (!session) {
@@ -34,8 +34,14 @@ const IncomePage = () => {
     }
   }, [session]);
 
-  const [incomeData, setIncomeData] = useState<IncomeDataType[]>([]);
-  const [incomeDataLoading, setIncomeDataLoading] = useState<boolean>(false);
+  useEffect(() => {
+    if (sessionStorage.getItem("incomeDeleted") === "true") {
+      successToast();
+      sessionStorage.removeItem("incomeDeleted");
+    }
+  }, []);
+
+  // const [incomeData, setIncomeData] = useState<IncomeDataType[]>([]);
   const urlSearchParams = useSearchParams();
   const dateFrom = urlSearchParams.get("dateFrom");
   const dateTo = urlSearchParams.get("dateTo");
@@ -44,6 +50,14 @@ const IncomePage = () => {
     ...(dateTo && { dateTo }),
     ...(session?.user?.id && { userId: session.user.id }),
   }).toString()}`;
+
+  const successToast = useCustomToast({
+    message: "Income deleted successfully",
+  });
+
+  const errorToast = useCustomToast({
+    message: "Error deleting income",
+  });
 
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState<boolean>(false);
 
@@ -55,103 +69,73 @@ const IncomePage = () => {
     setIsFiltersModalOpen(false);
   };
 
-  useEffect(() => {
-    const fetchIncomeData = async () => {
-      setIncomeDataLoading(true);
-      const data = await request({
-        url: query,
-        data: {
-          userId: session?.user?.id,
-        },
-        method: "GET",
-      });
-
-      setIncomeData(data);
-      setIncomeDataLoading(false);
-    };
-
-    fetchIncomeData();
-  }, []);
-
-  const successToast = useCustomToast({
-    message: "Income deleted successfully",
+  const { data: incomeData, isLoading: incomeDataLoading } = useQuery({
+    queryKey: ["incomeData"],
+    queryFn: async () => {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/${query}`
+      );
+      return response.data;
+    },
   });
 
-  const errorToast = useCustomToast({
-    message: "Error deleting income",
+  const { mutate: deleteIncome } = useMutation({
+    mutationFn: async (id: string) => {
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/income/${id}`
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      successToast();
+
+      const deletedEntry = data?.response;
+
+      queryClient.setQueryData(["incomeData"], (oldData: IncomeDataType[]) => {
+        return oldData.filter((item) => item._id !== deletedEntry._id);
+      });
+    },
+    onError: () => {
+      errorToast();
+    },
   });
 
   const handleDeleteIncome = async (id: string) => {
-    const response = await request({
-      url: `income/${id}`,
-      method: "DELETE",
-    });
-
-    if (response.error) {
-      errorToast();
-      return;
-    }
-
-    successToast();
-    setTimeout(() => {
-      window.location.reload();
-    }, 1500);
+    deleteIncome(id);
   };
 
   return incomeDataLoading ? (
     <div className="w-screen h-screen overflow-x-hidden flex justify-center items-center">
-      <FontAwesomeIcon icon={faSpinner} className="animate-spin text-4xl" />
+      <FontAwesomeIcon
+        icon={faSpinner}
+        className="animate-spin w-8 h-8 dark:text-light"
+      />
     </div>
   ) : session ? (
     <div className="w-screen h-screen overflow-x-hidden">
       <OpenNavbarButton />
       <AddIncomeForm />
       {isFiltersModalOpen && (
-        <>
-          <div
-            className="fixed inset-0 bg-black/50 z-40 backdrop-blur-[2px]"
-            onClick={handleCloseFiltersModal}
-            aria-hidden="true"
-          />
-
-          <div
-            role="dialog"
-            aria-labelledby="modal-title"
-            aria-modal="true"
-            className="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-              bg-light dark:bg-dark rounded-lg shadow-xl 
-              w-[90%] max-w-[600px] p-6"
-          >
-            <div className="flex items-center mb-4">
-              <p
-                id="modal-title"
-                className="text-xl font-bold text-dark dark:text-light"
-              >
-                Select filters
-              </p>
-              <button
-                onClick={handleCloseFiltersModal}
-                className="absolute right-[-10px] top-[-10px] bg-light hover:bg-dark hover:text-light rounded-full w-[35px] h-[35px] flex items-center justify-center transition-all duration-200 text-xl dark:bg-dark dark:hover:bg-light dark:text-light dark:hover:text-dark"
-              >
-                <FontAwesomeIcon icon={faXmark} className="" />
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {/* Your modal content goes here */}
-            </div>
-          </div>
-        </>
+        <FiltersModal handleCloseFiltersModal={handleCloseFiltersModal} />
       )}
 
-      <div className="w-10/12 mx-auto mb-4">
-        <button
-          className="flex items-center gap-2 bg-light border-[1px] drop-shadow-md border-dark text-dark rounded-md px-2 py-1 hover:bg-dark hover:text-light transition-all duration-200 dark:bg-dark dark:text-light dark:border-light dark:hover:bg-light dark:hover:text-dark"
-          onClick={handleOpenFiltersModal}
-        >
-          <FontAwesomeIcon icon={faFilter} />
-          Filters
-        </button>
+      <div className="w-10/12 mx-auto mb-4 flex justify-between items-center">
+        <Dropmenu
+          options={["Date", "Amount", "Category"]}
+          placeholder="Sort by"
+          onSelect={() => {}}
+          value=""
+          width="[100px]"
+        />
+        <div>
+          <button
+            className="flex items-center gap-2 bg-light border-[1px] drop-shadow-md border-dark text-dark rounded-md px-2 py-1 hover:bg-dark hover:text-light transition-all duration-200 dark:bg-dark dark:text-light dark:border-light dark:hover:bg-light dark:hover:text-dark"
+            onClick={handleOpenFiltersModal}
+          >
+            <FontAwesomeIcon icon={faFilter} />
+            Filters
+          </button>
+        </div>
       </div>
       <IncomeTable
         incomeData={incomeData}

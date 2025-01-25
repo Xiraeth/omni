@@ -59,7 +59,7 @@ const Navbar = () => {
 
   return (
     <div
-      className={`fixed left-0 bottom-0 top-0 w-[150px] sm:w-[250px] pt-4
+      className={`fixed left-0 bottom-0 top-0 w-[200px] sm:w-[250px] pt-4
         ${isNavbarOpen ? "shadow-lg shadow-black" : "shadow-black shadow-sm"}
         text-dark dark:text-light bg-slate-300 dark:bg-slate-800 px-4 
         ${isNavbarOpen ? "translate-x-0" : "-translate-x-full"}
@@ -80,7 +80,7 @@ const Navbar = () => {
             }}
           />
         )}
-        <p className="text-base sm:text-xl text-dark dark:text-light font-bold drop-shadow-lg shadow-black w-2/3 text-wrap break-words font-montserrat mr-auto ">
+        <p className="text-lg sm:text-xl text-dark dark:text-light font-bold drop-shadow-lg shadow-black w-2/3 text-wrap break-words font-montserrat mr-auto ">
           {session?.user?.username ||
             session?.user?.name ||
             session?.user?.email}

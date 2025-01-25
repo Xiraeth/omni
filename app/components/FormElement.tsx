@@ -3,6 +3,7 @@ import { memo, ReactNode } from "react";
 interface FormElementProps {
   errorMsg?: string;
   children: ReactNode;
+  width?: string;
 }
 
 /**
@@ -12,9 +13,13 @@ interface FormElementProps {
  * @param {ReactNode} props.children - Form element(s) to wrap
  * @returns {JSX.Element} Wrapped form element with error handling
  */
-const FormElement = memo(({ errorMsg, children }: FormElementProps) => {
+const FormElement = memo(({ errorMsg, children, width }: FormElementProps) => {
   return (
-    <div className="flex flex-col gap-1 items-center">
+    <div
+      className={`flex flex-col gap-1 items-center ${
+        width ? `w-${width}` : ""
+      }`}
+    >
       {children}
       {errorMsg && (
         <span className="text-xs relative bottom-1 text-red-500 rounded-full flex items-center justify-center px-2">

@@ -1,20 +1,21 @@
 import { Controller } from "react-hook-form";
-import { IncomeFormDataType } from "@/app/types/income";
+import { IncomeDataType, IncomeFormDataType } from "@/app/types/income";
 import { useForm } from "react-hook-form";
 import FormElement from "@/app/components/FormElement";
 import NameInput from "./NameInput";
-import Dropdown from "@/app/components/Dropdown";
 import AmountInput from "./AmountInput";
 import DateInput from "./DateInput";
 import GenericButton from "@/app/components/GenericButton";
 import { useSession } from "next-auth/react";
-import request from "@/app/common/functions/request";
 import useCustomToast from "@/hooks/useCustomToast";
 import { INCOME_CATEGORIES } from "@/app/constants/constants";
+import Dropmenu from "@/app/components/Dropmenu";
+import axios from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const AddIncomeForm = () => {
   const { data: session } = useSession();
-
+  const queryClient = useQueryClient();
   const successToast = useCustomToast({
     message: "Income added successfully",
   });
@@ -35,30 +36,36 @@ const AddIncomeForm = () => {
     },
   });
 
+  const { mutate: createIncome } = useMutation({
+    mutationFn: async (data: IncomeFormDataType) => {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/income`,
+        data
+      );
+      if (response?.data?.error) {
+        throw new Error(response.data.error);
+      }
+      return response.data.income;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["incomeData"], (oldData: IncomeDataType[]) => {
+        return [...oldData, data];
+      });
+      successToast();
+    },
+    onError: (error: Error) => {
+      setError("root", { message: error.message });
+    },
+  });
+
   const onSubmit = async (data: IncomeFormDataType) => {
     const dataToSubmit = {
       ...data,
-      userId: session?.user?.id,
+      userId: session?.user?.id || "",
     };
 
     if (Object.keys(errors).length === 0) {
-      const response = await request({
-        url: "income",
-        data: dataToSubmit,
-        method: "POST",
-      });
-
-      if (response.error) {
-        setError("root", { message: response.error });
-        return;
-      }
-
-      if (response?.income) {
-        successToast();
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
-      }
+      createIncome(dataToSubmit);
     }
   };
 
@@ -95,7 +102,7 @@ const AddIncomeForm = () => {
           }}
           render={({ field: { onChange, value } }) => (
             <FormElement errorMsg={errors?.category?.message}>
-              <Dropdown
+              <Dropmenu
                 options={INCOME_CATEGORIES}
                 placeholder="Category"
                 value={value}
