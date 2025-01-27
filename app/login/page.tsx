@@ -94,6 +94,7 @@ const Login = () => {
       if (result?.ok) {
         setIsSubmitting(false);
         router.push("/");
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error submitting form:", error);
