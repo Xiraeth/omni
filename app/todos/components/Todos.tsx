@@ -4,7 +4,6 @@ const Todos = () => {
     month: "short",
     day: "2-digit",
   }).format(todaysDate);
-  console.log(formattedDate);
 
   return (
     <div className="w-full flex font-montserrat h-screen">
@@ -18,7 +17,7 @@ const Todos = () => {
       </div>
 
       <div className="rightPart w-[500px] bg-red-400 flex flex-col justify-center items-center">
-        <p className="text-xl font-bold">Calendar</p>
+        <p className="text-xl font-bold">{formattedDate}</p>
       </div>
     </div>
   );
