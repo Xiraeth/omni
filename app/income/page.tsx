@@ -10,9 +10,9 @@ import { faFilter, faSort, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import AddIncomeForm from "./components/AddIncomeForm";
 import IncomeTable from "./components/IncomeTable";
 import useCustomToast from "@/hooks/useCustomToast";
-import { changeUrlParams } from "../common/functions/changeParams";
+import { changeUrlParams } from "@/app/common/functions/changeParams";
 import FiltersModal from "./components/FiltersModal";
-import Dropmenu from "../components/Dropmenu";
+import Dropmenu from "@/app/components/Dropmenu";
 import axios from "axios";
 import {
   FiltersType,
@@ -21,7 +21,11 @@ import {
   SortOrderType,
 } from "../types/income";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { SORT_FIELDS, TOGGLED_CATEGORIES } from "../constants/constants";
+import {
+  INITIAL_FILTERS_DATA,
+  SORT_FIELDS,
+  INCOME_CATEGORIES_LOWERCASE,
+} from "@/app/constants/constants";
 import IncomeCard from "./components/IncomeCard";
 import { handleSort } from "./functions/handleSort";
 import { isIncomeInFilters } from "./functions/isIncomeInFilters";
@@ -77,14 +81,16 @@ const IncomePage = () => {
     },
   });
 
-  const filtersData = queryClient.getQueryData<FiltersType>([
-    "filtersData",
-  ]) || {
-    filterName: "",
-    dateFrom: "",
-    dateTo: "",
-    toggledCategories: TOGGLED_CATEGORIES,
-  };
+  const filtersData =
+    queryClient.getQueryData<FiltersType>(["filtersData"]) ||
+    INITIAL_FILTERS_DATA;
+
+  const areThereFilters = Object.values(filtersData).some((value) => {
+    if (Array.isArray(value)) {
+      return value?.length < INCOME_CATEGORIES_LOWERCASE?.length;
+    }
+    return value;
+  });
 
   const { mutate: deleteIncome } = useMutation({
     mutationFn: async (id: string) => {
@@ -179,7 +185,7 @@ const IncomePage = () => {
               </div>
             </div>
 
-            <div>
+            <div className="relative">
               <button
                 className="flex items-center gap-2 bg-light border-[1px] drop-shadow-md border-dark text-dark rounded-md px-2 py-1 hover:bg-dark hover:text-light transition-all duration-200 dark:bg-dark dark:text-light dark:border-light dark:hover:bg-light dark:hover:text-dark select-none"
                 onClick={handleOpenFiltersModal}
@@ -187,12 +193,15 @@ const IncomePage = () => {
                 <FontAwesomeIcon icon={faFilter} />
                 Filters
               </button>
+              {areThereFilters && (
+                <div className="absolute -top-[4px] -right-[2px] bg-red-500 size-[10px] rounded-full"></div>
+              )}
             </div>
           </div>
 
           <IncomeTable
             incomeData={incomeData}
-            filtersData={filtersData}
+            filtersData={filtersData as FiltersType}
             handleDeleteIncome={handleDeleteIncome}
           />
 

@@ -4,21 +4,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  TOGGLED_CATEGORIES,
-  TOGGLED_CATEGORIES_LABELS,
+  INCOME_CATEGORIES,
+  INCOME_CATEGORIES_LOWERCASE,
+  INITIAL_FILTERS_DATA,
 } from "@/app/constants/constants";
 import DateInput from "./DateInput";
 import GenericButton from "@/app/components/GenericButton";
 import FormElement from "@/app/components/FormElement";
 import { CategoriesType, FiltersType } from "@/app/types/income";
 import { checkValidityOfFilters } from "../functions/checkValidityOfFilters";
-
-const initialFiltersData = {
-  filterName: "",
-  dateFrom: "",
-  dateTo: "",
-  toggledCategories: TOGGLED_CATEGORIES,
-};
 
 const FiltersModal = ({
   handleCloseFiltersModal,
@@ -30,7 +24,7 @@ const FiltersModal = ({
     "filtersData",
   ]);
   const [filtersData, setFiltersData] = useState<FiltersType>(
-    filtersFromCache || initialFiltersData
+    filtersFromCache || INITIAL_FILTERS_DATA
   );
   const [dateError, setDateError] = useState<string>("");
 
@@ -61,8 +55,8 @@ const FiltersModal = ({
   };
 
   const handleClearFilters = () => {
-    setFiltersData(initialFiltersData);
-    queryClient.setQueryData(["filtersData"], initialFiltersData);
+    setFiltersData(INITIAL_FILTERS_DATA);
+    queryClient.removeQueries({ queryKey: ["filtersData"] });
     handleCloseFiltersModal();
   };
 
@@ -132,13 +126,13 @@ const FiltersModal = ({
             Toggle categories
           </p>
           <div className="flex flex-col gap-[1px]">
-            {TOGGLED_CATEGORIES.map((category, index) => (
+            {INCOME_CATEGORIES_LOWERCASE.map((category, index) => (
               <div
                 key={category}
                 className="flex items-center justify-between gap-2 mt-2"
               >
                 <p className="text-dark dark:text-light font-roboto">
-                  {TOGGLED_CATEGORIES_LABELS[index]}
+                  {INCOME_CATEGORIES[index]}
                 </p>
                 <Checkbox
                   checked={
@@ -182,13 +176,13 @@ const FiltersModal = ({
           <FormElement errorMsg={dateError}>
             <GenericButton
               text="Save"
-              height={32}
+              height="md"
               onClick={handleSaveFilters}
             />
 
             <GenericButton
               text="Clear"
-              height={32}
+              height="md"
               onClick={handleClearFilters}
             />
           </FormElement>
