@@ -44,6 +44,10 @@ const Navbar = () => {
     // router.push("/expenses");
   };
 
+  const handleTodosClick = () => {
+    router.push("/todos");
+  };
+
   const closeNavbar = () => {
     setIsDropdownOpen(false);
     changeUrlParams({ params: "isNavbarOpen", value: null });
@@ -145,7 +149,11 @@ const Navbar = () => {
               />
             </div>
           </div>
-          <NavbarButton text="Todos" onClick={() => {}} icon={faListCheck} />
+          <NavbarButton
+            text="Todos"
+            onClick={handleTodosClick}
+            icon={faListCheck}
+          />
         </div>
         <div className="flex flex-col gap-2 pb-2">
           <div className="sm:hidden block">
