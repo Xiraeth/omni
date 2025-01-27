@@ -20,13 +20,13 @@ import { useUser } from "../context/UserContext";
 const Signup = () => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { session } = useUser();
+  const { user } = useUser();
 
   useEffect(() => {
-    if (session) {
+    if (user) {
       router.push("/");
     }
-  }, [session]);
+  }, [user]);
 
   const {
     control,
@@ -97,7 +97,7 @@ const Signup = () => {
     }
   };
 
-  if (session) {
+  if (user) {
     return (
       <div className="flex flex-col items-center justify-center h-screen w-full">
         <FontAwesomeIcon icon={faSpinner} className="w-8 h-8 animate-spin" />

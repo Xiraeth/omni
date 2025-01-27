@@ -1,14 +1,7 @@
 import mongoose, { Schema } from "mongoose";
+import { UserType } from "@/app/common/types";
 
-interface User {
-  email: string;
-  password: string;
-  username: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const userSchema = new Schema<User>({
+const userSchema = new Schema<UserType>({
   email: {
     type: String,
     required: true,
@@ -38,6 +31,7 @@ userSchema.pre("save", function (next) {
   next();
 });
 
-const User = mongoose.models.User || mongoose.model<User>("User", userSchema);
+const User =
+  mongoose.models.User || mongoose.model<UserType>("User", userSchema);
 
 export default User;

@@ -32,23 +32,23 @@ import { isIncomeInFilters } from "./functions/isIncomeInFilters";
 
 const IncomePage = () => {
   const router = useRouter();
-  const { session } = useUser();
+  const { user } = useUser();
   const queryClient = useQueryClient();
 
   useEffect(() => {
     // Redirect to login if user is not logged in
-    if (!session) {
+    if (!user) {
       router.push("/login");
     }
 
     // Set userId in URL params
-    if (session) {
-      changeUrlParams({ params: "userId", value: session.user.id });
+    if (user) {
+      changeUrlParams({ params: "userId", value: user.id });
     }
-  }, [session]);
+  }, [user]);
 
   const query = `income?${new URLSearchParams({
-    ...(session?.user?.id && { userId: session.user.id }),
+    ...(user?.id && { userId: user.id }),
   }).toString()}`;
 
   const successToast = useCustomToast({
@@ -156,7 +156,7 @@ const IncomePage = () => {
         className="animate-spin w-8 h-8 dark:text-light"
       />
     </div>
-  ) : session ? (
+  ) : user ? (
     <div className="w-screen h-screen overflow-x-hidden pb-8">
       <OpenNavbarButton />
       <AddIncomeForm />

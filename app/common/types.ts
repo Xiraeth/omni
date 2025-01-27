@@ -34,3 +34,14 @@ export interface SignupFormData {
   confirmPassword: string;
   username: string;
 }
+
+export interface UserType {
+  id: string;
+  email?: string | null;
+  username?: string | null;
+  password?: string | null;
+  name?: string | null;
+  image?: string | null;
+  createdAt?: Date;
+  updatedAt?: Date;
+}

@@ -14,7 +14,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "@/app/context/UserContext";
 
 const AddIncomeForm = () => {
-  const { session } = useUser();
+  const { user } = useUser();
   const queryClient = useQueryClient();
   const successToast = useCustomToast({
     message: "Income added successfully",
@@ -66,7 +66,7 @@ const AddIncomeForm = () => {
   const onSubmit = async (data: IncomeFormDataType) => {
     const dataToSubmit = {
       ...data,
-      userId: session?.user?.id || "",
+      userId: user?.id || "",
     };
 
     if (Object.keys(errors).length === 0) {
