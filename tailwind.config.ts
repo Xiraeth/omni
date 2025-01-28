@@ -26,6 +26,10 @@ export default {
         buttonBorderDark: "var(--button-border-dark)",
         buttonBorderDarkHover: "var(--button-border-dark-hover)",
         buttonBgDarkFocus: "var(--button-bg-dark-focus)",
+        todoCategoriesLight: "var(--todo-categories-light)",
+        todoCategoriesDark: "var(--todo-categories-dark)",
+        todoCalendarLight: "var(--todo-calendar-light)",
+        todoCalendarDark: "var(--todo-calendar-dark)",
         text: {
           light: "var(--text-light)",
           dark: "var(--text-dark)",

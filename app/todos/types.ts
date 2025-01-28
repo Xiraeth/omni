@@ -3,7 +3,7 @@ import { UserType } from "@/app/common/types";
 export type TodoType = {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   completed: boolean;
   dateFor: Date;
   createdAt: Date;
@@ -15,8 +15,9 @@ export type TodoType = {
 export type TodoCategoryType = {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   createdAt: Date;
   updatedAt?: Date;
-  user: UserType;
+  user?: UserType;
+  userId: string;
 };

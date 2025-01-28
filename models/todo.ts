@@ -3,12 +3,12 @@ import { TodoType } from "@/app/todos/types";
 
 const todoSchema = new Schema<TodoType>({
   title: { type: String, required: true, minlength: 1, maxlength: 50 },
-  description: { type: String, required: true, minlength: 1, maxlength: 255 },
+  description: { type: String, required: false, minlength: 1, maxlength: 255 },
   completed: { type: Boolean, required: true },
   dateFor: { type: Date, required: true },
-  category: { type: Schema.Types.ObjectId, ref: "TodoCategory" },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
+  category: { type: Schema.Types.ObjectId, ref: "TodoCategory" },
   user: { type: Schema.Types.ObjectId, ref: "User" },
 });
 

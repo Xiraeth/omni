@@ -3,7 +3,7 @@ import { TodoCategoryType } from "@/app/todos/types";
 
 const todoCategorySchema = new Schema<TodoCategoryType>({
   name: { type: String, required: true },
-  description: { type: String, required: true },
+  description: { type: String, required: false },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   user: { type: Schema.Types.ObjectId, ref: "User" },
