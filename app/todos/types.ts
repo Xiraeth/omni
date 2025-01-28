@@ -21,3 +21,14 @@ export type TodoCategoryType = {
   user?: UserType;
   userId: string;
 };
+
+export type TodoFormDataType = {
+  name: string;
+  description?: string;
+  userId: string;
+};
+
+export type TodoFormDataReturnType = {
+  message: string;
+  category: TodoCategoryType;
+};

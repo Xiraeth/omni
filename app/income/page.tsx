@@ -19,7 +19,7 @@ import {
   IncomeDataType,
   SortFieldType,
   SortOrderType,
-} from "../types/income";
+} from "./types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   INITIAL_FILTERS_DATA,
@@ -75,7 +75,7 @@ const IncomePage = () => {
     queryKey: ["incomeData"],
     queryFn: async () => {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/${query}`
+        `${process.env.NEXT_PUBLIC_API_URL}/${query}`
       );
       return response.data;
     },
@@ -95,7 +95,7 @@ const IncomePage = () => {
   const { mutate: deleteIncome } = useMutation({
     mutationFn: async (id: string) => {
       const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/income/${id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/income/${id}`
       );
       return response.data;
     },

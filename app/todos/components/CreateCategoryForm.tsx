@@ -1,24 +1,79 @@
 import { Controller, useForm } from "react-hook-form";
-import { TodoCategoryType } from "../types";
+import {
+  TodoCategoryType,
+  TodoFormDataReturnType,
+  TodoFormDataType,
+} from "../types";
 import FormElement from "@/app/components/FormElement";
+import { useUser } from "@/app/context/UserContext";
+import axios from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useCustomToast from "@/hooks/useCustomToast";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const CreateCategoryForm = ({
   onCancelClick,
 }: {
   onCancelClick: () => void;
 }) => {
+  const { user } = useUser();
+  const queryClient = useQueryClient();
+  const successToast = useCustomToast({
+    type: "success",
+    message: "Category created",
+  });
+
+  const errorToast = useCustomToast({
+    type: "error",
+  });
+
   const {
     control,
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TodoCategoryType>({ mode: "onSubmit" });
+  } = useForm<TodoFormDataType>({ mode: "onSubmit" });
 
-  const onSubmit = (data: TodoCategoryType) => {
-    console.log(data);
+  const { mutate: createCategory, isPending } = useMutation({
+    mutationFn: async (data: TodoFormDataType) => {
+      const response = await axios.post(`/api/todoCategory`, data);
+
+      if (response?.data?.error) {
+        throw new Error(response.data.error);
+      }
+
+      return response.data;
+    },
+    onSuccess: (data: TodoFormDataReturnType) => {
+      queryClient?.setQueryData(
+        ["todoCategories"],
+        (oldData: TodoCategoryType[] | undefined) => {
+          return [...(oldData || []), data.category];
+        }
+      );
+      onCancelClick();
+      successToast();
+    },
+    onError: (error: Error) => {
+      errorToast(error.message);
+    },
+  });
+
+  const onSubmit = (data: TodoFormDataType) => {
+    const dataToSend = {
+      name: data.name,
+      description: data.description,
+      userId: user?.id || "",
+    };
+    createCategory(dataToSend);
   };
 
-  return (
+  return isPending ? (
+    <div className="w-screen h-screen flex items-center justify-center">
+      <FontAwesomeIcon icon={faSpinner} className="animate-spin size-24" />
+    </div>
+  ) : (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="mt-16 flex flex-col gap-4 w-full text-sm px-16"

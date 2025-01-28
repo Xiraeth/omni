@@ -11,7 +11,7 @@ import {
 import DateInput from "./DateInput";
 import GenericButton from "@/app/components/GenericButton";
 import FormElement from "@/app/components/FormElement";
-import { CategoriesType, FiltersType } from "@/app/types/income";
+import { CategoriesType, FiltersType } from "../types";
 import { checkValidityOfFilters } from "../functions/checkValidityOfFilters";
 
 const FiltersModal = ({
