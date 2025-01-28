@@ -74,9 +74,7 @@ const IncomePage = () => {
   const { data: incomeData, isLoading: incomeDataLoading } = useQuery({
     queryKey: ["incomeData"],
     queryFn: async () => {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/${query}`
-      );
+      const response = await axios.get(`/api/${query}`);
       return response.data;
     },
   });

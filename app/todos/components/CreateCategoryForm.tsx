@@ -37,7 +37,7 @@ const CreateCategoryForm = ({
 
   const { mutate: createCategory, isPending } = useMutation({
     mutationFn: async (data: TodoFormDataType) => {
-      const response = await axios.post(`/api/todoCategory`, data);
+      const response = await axios.post(`/api/addTodoCategory`, data);
 
       if (response?.data?.error) {
         throw new Error(response.data.error);
@@ -46,7 +46,7 @@ const CreateCategoryForm = ({
       return response.data;
     },
     onSuccess: (data: TodoFormDataReturnType) => {
-      queryClient?.setQueryData(
+      queryClient.setQueryData(
         ["todoCategories"],
         (oldData: TodoCategoryType[] | undefined) => {
           return [...(oldData || []), data.category];
@@ -71,19 +71,22 @@ const CreateCategoryForm = ({
 
   return isPending ? (
     <div className="w-screen h-screen flex items-center justify-center">
-      <FontAwesomeIcon icon={faSpinner} className="animate-spin size-24" />
+      <FontAwesomeIcon
+        icon={faSpinner}
+        className="animate-spin size-8 text-dark dark:text-light"
+      />
     </div>
   ) : (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mt-16 flex flex-col gap-4 w-full text-sm px-16"
+      className="flex flex-col gap-4 w-full text-sm items-center"
     >
       <Controller
         control={control}
         name="name"
         rules={{ required: "Name is required" }}
         render={({ field: { onChange, value } }) => (
-          <div className="flex xl:flex-row flex-col xl:items-center justify-between w-full xl:gap-2">
+          <div className="flex flex-col xl:items-center">
             <label htmlFor="name" className="text-center xl:text-start">
               Name
             </label>
@@ -94,7 +97,7 @@ const CreateCategoryForm = ({
                 id="name"
                 value={value || ""}
                 onChange={(e) => onChange(e.target.value)}
-                className="px-4 py-2 border-[1px] border-black/15 rounded-md outline-none bg-white/10 hover:bg-white/20 focus:border-black/25 focus:bg-white/35 transition-all duration-150 shadow-sm dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/20 dark:focus:border-white/25 dark:focus:bg-white/35"
+                className="px-4 py-2 border-[1px] border-black/15 rounded-md outline-none bg-white/10 hover:bg-white/20 focus:border-black/25 focus:bg-white/35 transition-all duration-150 shadow-sm dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/20 dark:focus:border-white/25 dark:focus:bg-white/35 w-11/12 xl:w-full"
                 autoComplete="off"
               />
             </FormElement>
@@ -106,30 +109,26 @@ const CreateCategoryForm = ({
         control={control}
         name="description"
         render={({ field: { onChange, value } }) => (
-          <FormElement errorMsg={errors?.description?.message}>
-            <div className="flex xl:flex-row flex-col xl:items-center justify-between w-full xl:gap-2">
-              <label
-                htmlFor="description"
-                className="mt-4 xl:mt-2 text-center xl:text-start"
-              >
-                Description
-              </label>
-              <FormElement errorMsg={errors?.description?.message}>
-                <input
-                  {...register("description")}
-                  id="description"
-                  value={value || ""}
-                  onChange={(e) => onChange(e.target.value)}
-                  className="px-4 py-2 border-[1px] border-black/15 rounded-md outline-none bg-white/10 hover:bg-white/20 focus:border-black/25 focus:bg-white/35 transition-all duration-150 shadow-sm dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/20 dark:focus:border-white/25 dark:focus:bg-white/35"
-                  autoComplete="off"
-                />
-              </FormElement>
-            </div>
-          </FormElement>
+          <div className="flex flex-col xl:items-center">
+            <label htmlFor="description" className="text-center xl:text-start">
+              Description
+            </label>
+
+            <FormElement errorMsg={errors?.description?.message}>
+              <input
+                {...register("description")}
+                id="description"
+                value={value || ""}
+                onChange={(e) => onChange(e.target.value)}
+                className="px-4 py-2 border-[1px] border-black/15 rounded-md outline-none bg-white/10 hover:bg-white/20 focus:border-black/25 focus:bg-white/35 transition-all duration-150 shadow-sm dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/20 dark:focus:border-white/25 dark:focus:bg-white/35 w-11/12 xl:w-full"
+                autoComplete="off"
+              />
+            </FormElement>
+          </div>
         )}
       />
 
-      <div className="flex justify-center w-full gap-4 mt-4 text-xs">
+      <div className="flex flex-col lg:flex-row justify-center w-full gap-4 mt-4 text-xs">
         <button
           onClick={onCancelClick}
           type="reset"

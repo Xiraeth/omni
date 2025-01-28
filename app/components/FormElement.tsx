@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { memo, ReactNode } from "react";
 
 interface FormElementProps {
@@ -10,15 +11,17 @@ interface FormElementProps {
  * A wrapper component for form elements that handles error display
  * @param {Object} props - Component props
  * @param {string} [props.errorMsg] - Error message to display
+ * @param {string} [props.width] - Width of the form element
  * @param {ReactNode} props.children - Form element(s) to wrap
  * @returns {JSX.Element} Wrapped form element with error handling
  */
 const FormElement = memo(({ errorMsg, children, width }: FormElementProps) => {
   return (
     <div
-      className={`flex flex-col gap-1 items-center ${
-        width ? `w-${width}` : ""
-      }`}
+      className={clsx(
+        "flex flex-col gap-1 items-center",
+        width && `w-${width}`
+      )}
     >
       {children}
       {errorMsg && (
