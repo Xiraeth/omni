@@ -11,6 +11,7 @@ import { TodoCategoryType } from "../types";
 const Todos = () => {
   const { user } = useUser();
   const queryClient = useQueryClient();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const [isCreateCategoryOpen, setIsCreateCategoryOpen] = useState(false);
   const todaysDate = new Date();
