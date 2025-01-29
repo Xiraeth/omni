@@ -11,6 +11,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useCustomToast from "@/hooks/useCustomToast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import ButtonOuttline from "@/app/components/ButtonOuttline";
 
 const CreateCategoryForm = ({
   onCancelClick,
@@ -100,7 +101,7 @@ const CreateCategoryForm = ({
                 id="name"
                 value={value || ""}
                 onChange={(e) => onChange(e.target.value)}
-                className="px-4 py-2 border-[1px] border-black/15 rounded-md outline-none bg-white/10 hover:bg-white/20 focus:border-black/25 focus:bg-white/35 transition-all duration-150 shadow-sm dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/20 dark:focus:border-white/25 dark:focus:bg-white/35 w-11/12 xl:w-full"
+                className="px-4 py-2 border-[1px] border-black/15 rounded-md outline-none bg-white/10 hover:bg-white/20 focus:border-black/25 focus:bg-white/35 transition-all duration-150 shadow-sm dark:border-white/15 dark:bg-black/20 dark:hover:bg-black/30 dark:focus:border-white/25 dark:focus:bg-black/30 w-11/12 xl:w-full"
                 autoComplete="off"
               />
             </FormElement>
@@ -123,7 +124,7 @@ const CreateCategoryForm = ({
                 id="description"
                 value={value || ""}
                 onChange={(e) => onChange(e.target.value)}
-                className="px-4 py-2 border-[1px] border-black/15 rounded-md outline-none bg-white/10 hover:bg-white/20 focus:border-black/25 focus:bg-white/35 transition-all duration-150 shadow-sm dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/20 dark:focus:border-white/25 dark:focus:bg-white/35 w-11/12 xl:w-full"
+                className="px-4 py-2 border-[1px] border-black/15 rounded-md outline-none bg-white/10 hover:bg-white/20 focus:border-black/25 focus:bg-white/35 transition-all duration-150 shadow-sm dark:border-white/15 dark:bg-black/20 dark:hover:bg-black/30 dark:focus:border-white/25 dark:focus:bg-black/30 w-11/12 xl:w-full"
                 autoComplete="off"
               />
             </FormElement>
@@ -132,19 +133,8 @@ const CreateCategoryForm = ({
       />
 
       <div className="flex flex-col lg:flex-row justify-center w-full gap-4 mt-4 text-xs">
-        <button
-          onClick={onCancelClick}
-          type="reset"
-          className="px-4 py-2 bg-transparent border-[1px] border-dark rounded-md hover:bg-dark hover:text-white dark:border-white/30 dark:hover:bg-light dark:hover:text-dark transition-colors duration-150"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-transparent border-[1px] border-dark rounded-md hover:bg-dark hover:text-white dark:border-white/30 dark:hover:bg-light dark:hover:text-dark transition-colors duration-150"
-        >
-          Create
-        </button>
+        <ButtonOuttline text="Cancel" onClick={onCancelClick} />
+        <ButtonOuttline text="Create" type="submit" />
       </div>
     </form>
   );
