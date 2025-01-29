@@ -37,7 +37,10 @@ const CreateCategoryForm = ({
 
   const { mutate: createCategory, isPending } = useMutation({
     mutationFn: async (data: TodoFormDataType) => {
-      const response = await axios.post(`/api/addTodoCategory`, data);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/addTodoCategory`,
+        data
+      );
 
       if (response?.data?.error) {
         throw new Error(response.data.error);

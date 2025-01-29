@@ -67,11 +67,14 @@ const Signup = () => {
 
     try {
       setIsSubmitting(true);
-      const response = await axios.post("/api/register", {
-        email,
-        password,
-        username,
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/register`,
+        {
+          email,
+          password,
+          username,
+        }
+      );
 
       if (response.data.error) {
         setError("root", { message: response.data.error });

@@ -19,7 +19,7 @@ const Todos = () => {
     day: "2-digit",
   }).format(todaysDate);
 
-  const query = `/api/todoCategories?id=${user?.id}`;
+  const query = `${process.env.NEXT_PUBLIC_API_URL}/todoCategories?id=${user?.id}`;
 
   const { data: todoCategories, isLoading: todoCategoriesLoading } = useQuery({
     queryKey: ["todoCategories"],
