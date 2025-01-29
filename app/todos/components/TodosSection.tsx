@@ -66,10 +66,10 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
       </div>
 
       {/* placeholder for list of todos */}
-      <div className="flex flex-col gap-2 w-8/12">
+      <div className="flex flex-col gap-4 w-8/12">
         {todos.map((todo) => {
           return (
-            <div key={todo._id} className="p-2 bg-white/10 rounded-sm w-full">
+            <div key={todo._id} className="p-2 bg-white/10 rounded-md w-full">
               <p className="text-base font-roboto font-bold">{todo.title}</p>
               <p className="text-sm font-geistSans">{todo.description}</p>
             </div>

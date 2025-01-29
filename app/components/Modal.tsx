@@ -29,7 +29,7 @@ const Modal = ({
       <div className="absolute inset-0 z-30 flex items-center justify-center">
         <div
           className={clsx(
-            "bg-white relative dark:bg-black/20 p-8 rounded-md flex flex-col items-center justify-center gap-4 text-dark dark:text-light",
+            "bg-white/50 relative dark:bg-black/50 p-8 rounded-md flex flex-col items-center justify-center gap-4 text-dark dark:text-light",
             width,
             height
           )}
