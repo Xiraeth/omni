@@ -4,19 +4,21 @@ import Dropmenu from "@/app/components/Dropmenu";
 import { useState } from "react";
 import { SORT_BY_OPTIONS } from "../constants";
 import AddTodoModal from "./AddTodoModal";
+import { useTodos } from "../context/TodosProvider";
 
 const TodosSection = ({ todos }: { todos: TodoType[] }) => {
   const { day, dayOfWeekShort } = getDateInfo(new Date());
   const [sortBy, setSortBy] = useState<TodoSortByType>("time");
   const [isAddTodoOpen, setIsAddTodoOpen] = useState(false);
 
+  const { categories } = useTodos();
+
   return (
     <div className="centerPart pt-6 grow flex flex-col items-center">
       {isAddTodoOpen && (
         <AddTodoModal
-          isOpen={isAddTodoOpen}
           onClose={() => setIsAddTodoOpen(false)}
-          onAddTodo={() => console.log("add todo")}
+          todoCategories={categories}
         />
       )}
       <div className="text-xl w-8/12 mx-auto text-center font-bold flex items-center justify-center gap-6 border-b-[1px] border-black/15 dark:border-white/15 pb-8 mb-8">

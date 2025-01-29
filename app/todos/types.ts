@@ -10,7 +10,8 @@ export type TodoType = {
   description?: string;
   completed: boolean;
   priority: TodoPriorityType;
-  dateFor: Date;
+  dateFor: string;
+  timeFor?: string;
   createdAt: Date;
   updatedAt?: Date;
   category: TodoCategoryType;
@@ -36,4 +37,14 @@ export type TodoFormDataType = {
 export type TodoFormDataReturnType = {
   message: string;
   category: TodoCategoryType;
+};
+
+export type AddTodoFormDataType = {
+  title: string;
+  description?: string;
+  dateFor: string;
+  timeFor?: string;
+  priority: TodoPriorityType;
+  category: string;
+  userId: string;
 };

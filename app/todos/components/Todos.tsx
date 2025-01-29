@@ -7,9 +7,12 @@ import { TodoCategoryType, TodoType } from "../types";
 import CategoriesSection from "./CategoriesSection";
 import TodosSection from "./TodosSection";
 import CalendarSection from "./CalendarSection";
+import { useTodos } from "../context/TodosProvider";
+import { useEffect } from "react";
 
 const Todos = () => {
   const { user } = useUser();
+  const { setCategories } = useTodos();
 
   const categoriesQuery = `${process.env.NEXT_PUBLIC_API_URL}/todoCategories?id=${user?.id}`;
   const todosQuery = `${process.env.NEXT_PUBLIC_API_URL}/todos?id=${user?.id}`;
@@ -31,6 +34,12 @@ const Todos = () => {
       return response.data;
     },
   });
+
+  useEffect(() => {
+    if (todoCategories) {
+      setCategories(todoCategories);
+    }
+  }, [todoCategories]);
 
   return todoCategoriesLoading || todosLoading ? (
     <div className="w-full flex justify-center items-center h-screen">

@@ -17,15 +17,13 @@ interface FormElementProps {
  */
 const FormElement = memo(({ errorMsg, children, width }: FormElementProps) => {
   return (
-    <div
-      className={clsx(
-        "flex flex-col gap-1 items-center",
-        width && `w-${width}`
-      )}
-    >
+    <div className={clsx("flex flex-col gap-1 items-center", width)}>
       {children}
       {errorMsg && (
-        <span className="text-xs relative bottom-1 text-center text-red-600 font-bold rounded-full flex items-center justify-center px-2">
+        <span
+          className="text-xs relative bottom-1 text-center text-red-600 font-bold rounded-full flex 
+        items-center justify-center px-2"
+        >
           {errorMsg}
         </span>
       )}

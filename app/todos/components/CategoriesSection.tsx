@@ -8,8 +8,6 @@ import useCustomToast from "@/hooks/useCustomToast";
 import { useTodos } from "../context/TodosProvider";
 import Modal from "@/app/components/Modal";
 import CreateCategoryModal from "./CreateCategoryModal";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const CategoriesSection = ({
   todoCategories,
@@ -30,7 +28,7 @@ const CategoriesSection = ({
     type: "success",
   });
 
-  const { mutate: deleteTodoCategoryMutation, isPending } = useMutation({
+  const { mutate: deleteTodoCategoryMutation } = useMutation({
     mutationFn: async (categoryId: string) => {
       const response = await axios.delete(
         `${process.env.NEXT_PUBLIC_API_URL}/deleteTodoCategory`,

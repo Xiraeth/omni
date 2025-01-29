@@ -75,7 +75,7 @@ const Navbar = () => {
         ${isNavbarOpen ? "shadow-lg shadow-black" : "shadow-black shadow-sm"}
         text-dark dark:text-light bg-slate-300 dark:bg-slate-800 px-4 
         ${isNavbarOpen ? "translate-x-0" : "-translate-x-full"}
-        transition-[color, background-color, box-shadow, transform] duration-200 z-50`}
+        transition-[color, background-color, box-shadow, transform] duration-200 z-[100]`}
     >
       <div className="flex items-center border-b-[1px] border-dark pb-2">
         {user?.image && (
