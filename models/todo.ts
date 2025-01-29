@@ -5,6 +5,11 @@ const todoSchema = new Schema<TodoType>({
   title: { type: String, required: true, minlength: 1, maxlength: 50 },
   description: { type: String, required: false, minlength: 1, maxlength: 255 },
   completed: { type: Boolean, required: true },
+  priority: {
+    type: String,
+    required: true,
+    enum: ["low", "medium", "high"],
+  },
   dateFor: { type: Date, required: true },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },

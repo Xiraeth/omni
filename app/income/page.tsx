@@ -168,17 +168,16 @@ const IncomePage = () => {
       {(incomeData?.length || filtersData?.toggledCategories?.length) && (
         <>
           <div className="w-10/12 mx-auto mb-4 flex justify-between items-center">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               <Dropmenu
                 options={SORT_FIELDS}
                 placeholder="Sort by"
                 onSelect={handleSortSelection}
-                width="[100px]"
                 value={sortField}
               />
 
               <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-dark dark:text-light bg-buttonBgLight dark:bg-buttonBgDark border-[1px] dark:border-buttonBorderDark  hover:border-buttonBorderLightHover dark:hover:border-buttonBorderDarkHover transition-all duration-200 cursor-pointer active:bg-buttonBgLightFocus dark:active:bg-buttonBgDarkFocus drop-shadow-md"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-dark dark:text-light bg-buttonBgLight dark:bg-buttonBgDark border-[1px] dark:border-buttonBorderDark hover:border-buttonBorderLightHover dark:hover:border-buttonBorderDarkHover transition-all duration-200 cursor-pointer active:bg-buttonBgLightFocus dark:active:bg-buttonBgDarkFocus drop-shadow-md"
                 onClick={handleSortOrder}
               >
                 <FontAwesomeIcon icon={faSort} />

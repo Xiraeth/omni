@@ -1,10 +1,15 @@
 import { UserType } from "@/app/common/types";
 
+export type TodoSortByType = "time" | "priority";
+
+export type TodoPriorityType = "low" | "medium" | "high";
+
 export type TodoType = {
   _id: string;
   title: string;
   description?: string;
   completed: boolean;
+  priority: TodoPriorityType;
   dateFor: Date;
   createdAt: Date;
   updatedAt?: Date;
