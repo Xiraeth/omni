@@ -133,7 +133,7 @@ const Signup = () => {
               },
             }}
             render={({ field }) => (
-              <FormElement errorMsg={errors?.username?.message} width="full">
+              <FormElement errorMsg={errors?.username?.message} width="w-full">
                 <Input
                   type="text"
                   placeholder="Username"
@@ -156,7 +156,7 @@ const Signup = () => {
               },
             }}
             render={({ field }) => (
-              <FormElement errorMsg={errors?.email?.message} width="full">
+              <FormElement errorMsg={errors?.email?.message} width="w-full">
                 <Input
                   type="email"
                   placeholder="Email"
@@ -179,7 +179,7 @@ const Signup = () => {
               },
             }}
             render={({ field }) => (
-              <FormElement errorMsg={errors?.password?.message} width="full">
+              <FormElement errorMsg={errors?.password?.message} width="w-full">
                 <Input
                   type="password"
                   placeholder="Password"
@@ -202,7 +202,7 @@ const Signup = () => {
             render={({ field }) => (
               <FormElement
                 errorMsg={errors?.confirmPassword?.message}
-                width="full"
+                width="w-full"
               >
                 <Input
                   type="password"

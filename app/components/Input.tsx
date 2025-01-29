@@ -34,7 +34,7 @@ const Input = forwardRef<HTMLInputElement, FormElementPropsType>(
     const { inputClasses, labelClasses } = useMemo(
       () => ({
         inputClasses: clsx(
-          "outline-none w-full py-2 px-4 rounded-md transition-all duration-150 border-2  dark:text-white",
+          "outline-none w-full py-2 px-4 rounded-md transition-all duration-150 border-2 dark:text-white",
           {
             "border-blue-400": state.isFocused && !isInvalid,
             "border-slate-300": !state.isFocused,
