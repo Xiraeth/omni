@@ -19,17 +19,28 @@ const Todos = () => {
     day: "2-digit",
   }).format(todaysDate);
 
-  const query = `${process.env.NEXT_PUBLIC_API_URL}/todoCategories?id=${user?.id}`;
+  const categoriesQuery = `${process.env.NEXT_PUBLIC_API_URL}/todoCategories?id=${user?.id}`;
+  const todosQuery = `${process.env.NEXT_PUBLIC_API_URL}/todos?id=${user?.id}`;
 
   const { data: todoCategories, isLoading: todoCategoriesLoading } = useQuery({
     queryKey: ["todoCategories"],
     queryFn: async () => {
-      const response = await axios.get(query);
+      const response = await axios.get(categoriesQuery);
       return response.data;
     },
   });
 
-  return todoCategoriesLoading ? (
+  const { data: todos, isLoading: todosLoading } = useQuery({
+    queryKey: ["todos"],
+    queryFn: async () => {
+      const response = await axios.get(todosQuery);
+      return response.data;
+    },
+  });
+
+  console.log(todos);
+
+  return todoCategoriesLoading || todosLoading ? (
     <div className="w-full flex justify-center items-center h-screen">
       <FontAwesomeIcon
         icon={faSpinner}
