@@ -25,7 +25,7 @@ import { useTheme } from "../context/ThemeContext";
 
 const Navbar = () => {
   const router = useRouter();
-  const { session } = useUser();
+  const { user } = useUser();
   const { theme, toggleTheme } = useTheme();
   const searchParams = useSearchParams();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -42,6 +42,10 @@ const Navbar = () => {
 
   const handleExpensesClick = () => {
     // router.push("/expenses");
+  };
+
+  const handleTodosClick = () => {
+    router.push("/todos");
   };
 
   const closeNavbar = () => {
@@ -61,7 +65,7 @@ const Navbar = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  if (!session) {
+  if (!user) {
     return null;
   }
 
@@ -71,13 +75,13 @@ const Navbar = () => {
         ${isNavbarOpen ? "shadow-lg shadow-black" : "shadow-black shadow-sm"}
         text-dark dark:text-light bg-slate-300 dark:bg-slate-800 px-4 
         ${isNavbarOpen ? "translate-x-0" : "-translate-x-full"}
-        transition-[color, background-color, box-shadow, transform] duration-200 z-50`}
+        transition-[color, background-color, box-shadow, transform] duration-200 z-[100]`}
     >
       <div className="flex items-center border-b-[1px] border-dark pb-2">
-        {session?.user?.image && (
+        {user?.image && (
           <Image
-            src={session?.user?.image || "/default-avatar.png"}
-            alt={`${session?.user?.username || "User"}'s Avatar`}
+            src={user?.image || "/default-avatar.png"}
+            alt={`${user?.username || "User"}'s Avatar`}
             width={32}
             height={32}
             className="rounded-full mr-2"
@@ -89,9 +93,7 @@ const Navbar = () => {
           />
         )}
         <p className="text-lg sm:text-xl text-dark dark:text-light font-bold drop-shadow-lg shadow-black w-2/3 text-wrap break-words font-montserrat mr-auto ">
-          {session?.user?.username ||
-            session?.user?.name ||
-            session?.user?.email}
+          {user?.username || user?.name || user?.email}
         </p>
         <div
           className="w-8 h-8 flex items-center justify-center text-dark hover:bg-slate-200 rounded-full transition-all duration-200 cursor-pointer active:bg-slate-300 drop-shadow-lg shadow-black dark:text-light dark:hover:bg-slate-500 dark:active:bg-slate-400"
@@ -145,7 +147,11 @@ const Navbar = () => {
               />
             </div>
           </div>
-          <NavbarButton text="Todos" onClick={() => {}} icon={faListCheck} />
+          <NavbarButton
+            text="Todos"
+            onClick={handleTodosClick}
+            icon={faListCheck}
+          />
         </div>
         <div className="flex flex-col gap-2 pb-2">
           <div className="sm:hidden block">

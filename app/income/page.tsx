@@ -19,7 +19,7 @@ import {
   IncomeDataType,
   SortFieldType,
   SortOrderType,
-} from "../types/income";
+} from "./types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   INITIAL_FILTERS_DATA,
@@ -32,23 +32,23 @@ import { isIncomeInFilters } from "./functions/isIncomeInFilters";
 
 const IncomePage = () => {
   const router = useRouter();
-  const { session } = useUser();
+  const { user } = useUser();
   const queryClient = useQueryClient();
 
   useEffect(() => {
     // Redirect to login if user is not logged in
-    if (!session) {
+    if (!user) {
       router.push("/login");
     }
 
     // Set userId in URL params
-    if (session) {
-      changeUrlParams({ params: "userId", value: session.user.id });
+    if (user) {
+      changeUrlParams({ params: "userId", value: user.id });
     }
-  }, [session]);
+  }, [user]);
 
   const query = `income?${new URLSearchParams({
-    ...(session?.user?.id && { userId: session.user.id }),
+    ...(user?.id && { userId: user.id }),
   }).toString()}`;
 
   const successToast = useCustomToast({
@@ -75,7 +75,7 @@ const IncomePage = () => {
     queryKey: ["incomeData"],
     queryFn: async () => {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/${query}`
+        `${process.env.NEXT_PUBLIC_API_URL}/${query}`
       );
       return response.data;
     },
@@ -95,7 +95,7 @@ const IncomePage = () => {
   const { mutate: deleteIncome } = useMutation({
     mutationFn: async (id: string) => {
       const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/income/${id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/income/${id}`
       );
       return response.data;
     },
@@ -156,7 +156,7 @@ const IncomePage = () => {
         className="animate-spin w-8 h-8 dark:text-light"
       />
     </div>
-  ) : session ? (
+  ) : user ? (
     <div className="w-screen h-screen overflow-x-hidden pb-8">
       <OpenNavbarButton />
       <AddIncomeForm />
@@ -168,17 +168,16 @@ const IncomePage = () => {
       {(incomeData?.length || filtersData?.toggledCategories?.length) && (
         <>
           <div className="w-10/12 mx-auto mb-4 flex justify-between items-center">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               <Dropmenu
                 options={SORT_FIELDS}
                 placeholder="Sort by"
                 onSelect={handleSortSelection}
-                width="[100px]"
                 value={sortField}
               />
 
               <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-dark dark:text-light bg-buttonBgLight dark:bg-buttonBgDark border-[1px] dark:border-buttonBorderDark  hover:border-buttonBorderLightHover dark:hover:border-buttonBorderDarkHover transition-all duration-200 cursor-pointer active:bg-buttonBgLightFocus dark:active:bg-buttonBgDarkFocus drop-shadow-md"
+                className="w-10 h-10 rounded-full flex items-center justify-center text-dark dark:text-light bg-buttonBgLight dark:bg-buttonBgDark border-[1px] dark:border-buttonBorderDark hover:border-buttonBorderLightHover dark:hover:border-buttonBorderDarkHover transition-all duration-200 cursor-pointer active:bg-buttonBgLightFocus dark:active:bg-buttonBgDarkFocus drop-shadow-md"
                 onClick={handleSortOrder}
               >
                 <FontAwesomeIcon icon={faSort} />

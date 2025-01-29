@@ -1,22 +1,25 @@
 "use client";
 
-import { Session } from "next-auth";
 import { createContext, useContext, ReactNode } from "react";
+import { UserType } from "@/app/common/types";
+import { Session } from "next-auth";
 
-interface UserContextType {
+type UserContextType = {
+  user: UserType | null;
+};
+
+type UserProviderProps = {
   session: Session | null;
-}
+  children: ReactNode;
+};
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-interface UserProviderProps {
-  session: Session | null;
-  children: ReactNode;
-}
-
 export function UserProvider({ session, children }: UserProviderProps) {
+  const user = session?.user ?? null;
+
   return (
-    <UserContext.Provider value={{ session }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
   );
 }
 

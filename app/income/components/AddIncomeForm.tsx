@@ -1,5 +1,5 @@
 import { Controller } from "react-hook-form";
-import { IncomeDataType, IncomeFormDataType } from "@/app/types/income";
+import { IncomeDataType, IncomeFormDataType } from "../types";
 import { useForm } from "react-hook-form";
 import FormElement from "@/app/components/FormElement";
 import NameInput from "./NameInput";
@@ -14,7 +14,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "@/app/context/UserContext";
 
 const AddIncomeForm = () => {
-  const { session } = useUser();
+  const { user } = useUser();
   const queryClient = useQueryClient();
   const successToast = useCustomToast({
     message: "Income added successfully",
@@ -40,7 +40,7 @@ const AddIncomeForm = () => {
   const { mutate: createIncome } = useMutation({
     mutationFn: async (data: IncomeFormDataType) => {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/income`,
+        `${process.env.NEXT_PUBLIC_API_URL}/income`,
         data
       );
       if (response?.data?.error) {
@@ -66,7 +66,7 @@ const AddIncomeForm = () => {
   const onSubmit = async (data: IncomeFormDataType) => {
     const dataToSubmit = {
       ...data,
-      userId: session?.user?.id || "",
+      userId: user?.id || "",
     };
 
     if (Object.keys(errors).length === 0) {

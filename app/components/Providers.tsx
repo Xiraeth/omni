@@ -7,10 +7,10 @@ import { Session } from "next-auth";
 import QueryProvider from "../context/QueryProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-interface ProvidersProps {
+type ProvidersProps = {
   children: React.ReactNode;
   session: Session | null;
-}
+};
 
 export default function Providers({ children, session }: ProvidersProps) {
   return (
