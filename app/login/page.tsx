@@ -20,14 +20,14 @@ import { useUser } from "../context/UserContext";
 const Login = () => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { session } = useUser();
+  const { user } = useUser();
 
   useEffect(() => {
-    if (session) {
+    if (user) {
       router.push("/");
       return;
     }
-  }, [session]);
+  }, [user]);
 
   const customToast = useCustomToast({
     message: "User created successfully",
@@ -106,7 +106,7 @@ const Login = () => {
     }
   };
 
-  if (session) {
+  if (user) {
     return (
       <div className="flex flex-col items-center justify-center h-screen w-full">
         <FontAwesomeIcon icon={faSpinner} className="w-8 h-8 animate-spin" />

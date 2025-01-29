@@ -10,7 +10,7 @@ import { formatTimeWithSeconds } from "./common/functions/formatTime";
 
 // the dashboard page if user is logged in, otherwise the landing/home page
 export default function Home() {
-  const { session } = useUser();
+  const { user } = useUser();
   const isNavbarOpen = useNavbar();
 
   const [currentTime, setCurrentTime] = useState<string>("");
@@ -34,14 +34,14 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (!session) {
+    if (!user) {
       changeUrlParams({ params: "isNavbarOpen", value: null });
     }
-  }, [session]);
+  }, [user]);
 
   return (
     <>
-      {!session ? (
+      {!user ? (
         <div className="italic select-none flex flex-col items-center justify-center h-screen w-fit gap-8 transition-all duration-200 mx-auto text-text-dark dark:text-text-light relative z-10">
           <p className="text-6xl font-bold font-montserrat drop-shadow-lg shadow-black text-center">
             Omni

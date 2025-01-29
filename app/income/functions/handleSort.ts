@@ -1,5 +1,5 @@
-import { IncomeDataType } from "@/app/types/income";
-import { SortFieldType, SortOrderType } from "@/app/types/income";
+import { IncomeDataType, SortOrderType } from "../types";
+import { SortFieldType } from "../types";
 
 export const handleSort = (
   data: IncomeDataType[],

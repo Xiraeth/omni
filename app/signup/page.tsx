@@ -20,13 +20,13 @@ import { useUser } from "../context/UserContext";
 const Signup = () => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { session } = useUser();
+  const { user } = useUser();
 
   useEffect(() => {
-    if (session) {
+    if (user) {
       router.push("/");
     }
-  }, [session]);
+  }, [user]);
 
   const {
     control,
@@ -67,11 +67,14 @@ const Signup = () => {
 
     try {
       setIsSubmitting(true);
-      const response = await axios.post("/api/register", {
-        email,
-        password,
-        username,
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/register`,
+        {
+          email,
+          password,
+          username,
+        }
+      );
 
       if (response.data.error) {
         setError("root", { message: response.data.error });
@@ -97,7 +100,7 @@ const Signup = () => {
     }
   };
 
-  if (session) {
+  if (user) {
     return (
       <div className="flex flex-col items-center justify-center h-screen w-full">
         <FontAwesomeIcon icon={faSpinner} className="w-8 h-8 animate-spin" />

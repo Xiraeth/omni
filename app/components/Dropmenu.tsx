@@ -9,6 +9,8 @@ type DropmenuPropsType = {
   onSelect: (option: string) => void;
   value: string;
   width?: string;
+  className?: string;
+  height?: string;
 };
 
 const Dropmenu = ({
@@ -16,6 +18,8 @@ const Dropmenu = ({
   onSelect,
   placeholder,
   value,
+  className,
+  height,
   width = "full",
 }: DropmenuPropsType) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +55,10 @@ const Dropmenu = ({
   };
 
   return (
-    <div className={`relative w-${width}`} ref={dropdownRef}>
+    <div
+      className={clsx("relative", width ? width : "w-full")}
+      ref={dropdownRef}
+    >
       <div
         className={clsx(
           "font-lato drop-shadow-md border-[1px] rounded-md cursor-pointer transition-all duration-200 min-w-32 w-full md:max-w-72 text-dark dark:text-light",
@@ -64,7 +71,12 @@ const Dropmenu = ({
         )}
         onClick={handleToggleDropdown}
       >
-        <div className="h-[48px] flex items-center justify-between px-4">
+        <div
+          className={clsx(
+            "flex items-center justify-between px-4",
+            height ? height : "h-[46px]"
+          )}
+        >
           <span>
             {selectedOption?.charAt(0).toUpperCase() +
               selectedOption?.slice(1) || placeholder}
@@ -78,7 +90,12 @@ const Dropmenu = ({
       </div>
 
       {isOpen && (
-        <div className="absolute top-[52px] left-0 w-full z-50">
+        <div
+          className={clsx(
+            "absolute left-0 w-full z-50",
+            height ? height : "top-[52px]"
+          )}
+        >
           <div
             className={clsx(
               "bg-white dark:bg-slate-900 border-[1px] border-slate-400/80 dark:border-slate-600 rounded-md overflow-hidden"

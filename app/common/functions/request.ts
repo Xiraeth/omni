@@ -9,7 +9,7 @@
 const httpRequest = async <T>({
   data,
   url,
-  baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
+  baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000",
   method = "POST",
 }: {
   data?: T;

@@ -21,19 +21,22 @@ type ToastPropsType = {
   transition?: typeof Slide | typeof Zoom | typeof Flip | typeof Bounce;
 };
 
+// example usage: const successToast = useCustomToast({ type: "success", message: "Category created" });
+// successToast();
+
 const useCustomToast = (toastProps: ToastPropsType) => {
   const { theme } = useTheme();
 
-  const customToast = () => {
-    toast[toastProps.type || "success"](toastProps.message, {
+  const customToast = (message?: string) => {
+    toast[toastProps.type || "success"](message || toastProps.message, {
       position: toastProps.position || "top-right",
-      autoClose: toastProps.autoClose || 2000,
+      autoClose: toastProps.autoClose || 5000,
       hideProgressBar: toastProps.hideProgressBar || false,
       pauseOnHover: toastProps.pauseOnHover || false,
       pauseOnFocusLoss: toastProps.pauseOnFocusLoss || false,
       draggable: toastProps.draggable || false,
       closeOnClick: toastProps.closeOnClick || false,
-      closeButton: toastProps.closeButton || false,
+      closeButton: toastProps.closeButton || true,
       transition: toastProps.transition || Slide,
       theme,
     });

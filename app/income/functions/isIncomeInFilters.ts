@@ -1,6 +1,4 @@
-import { CategoriesType, FiltersType } from "@/app/types/income";
-
-import { IncomeDataType } from "@/app/types/income";
+import { CategoriesType, FiltersType, IncomeDataType } from "../types";
 
 export const isIncomeInFilters = (
   income: IncomeDataType,
