@@ -1,4 +1,4 @@
-import { CategoriesType, FiltersType } from "../types/income";
+import { CategoriesType, FiltersType } from "../income/types";
 
 export const PUBLIC_ROUTES = ["/login", "/signup", "/"];
 
