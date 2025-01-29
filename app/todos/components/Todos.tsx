@@ -6,7 +6,7 @@ import axios from "axios";
 import { useUser } from "@/app/context/UserContext";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TodoCategoryType } from "../types";
+import { TodoCategoryType, TodoType } from "../types";
 
 const Todos = () => {
   const { user } = useUser();
@@ -23,7 +23,9 @@ const Todos = () => {
   const categoriesQuery = `${process.env.NEXT_PUBLIC_API_URL}/todoCategories?id=${user?.id}`;
   const todosQuery = `${process.env.NEXT_PUBLIC_API_URL}/todos?id=${user?.id}`;
 
-  const { data: todoCategories, isLoading: todoCategoriesLoading } = useQuery({
+  const { data: todoCategories, isLoading: todoCategoriesLoading } = useQuery<
+    TodoCategoryType[]
+  >({
     queryKey: ["todoCategories"],
     queryFn: async () => {
       const response = await axios.get(categoriesQuery);
@@ -31,7 +33,7 @@ const Todos = () => {
     },
   });
 
-  const { data: todos, isLoading: todosLoading } = useQuery({
+  const { data: todos, isLoading: todosLoading } = useQuery<TodoType[]>({
     queryKey: ["todos"],
     queryFn: async () => {
       const response = await axios.get(todosQuery);
