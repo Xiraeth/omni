@@ -10,7 +10,7 @@ import { useUser } from "@/app/context/UserContext";
 import useCustomToast from "@/hooks/useCustomToast";
 import { useTodos } from "../context/TodosProvider";
 
-const Categories = ({
+const CategoriesSection = ({
   todoCategories,
 }: {
   todoCategories: TodoCategoryType[];
@@ -115,4 +115,4 @@ const Categories = ({
   );
 };
 
-export default Categories;
+export default CategoriesSection;

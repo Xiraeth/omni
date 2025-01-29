@@ -4,8 +4,8 @@ import { useUser } from "@/app/context/UserContext";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TodoCategoryType, TodoType } from "../types";
-import Categories from "./Categories";
-import { useTodos } from "../context/TodosProvider";
+import CategoriesSection from "./CategoriesSection";
+import TodosSection from "./TodosSection";
 
 const Todos = () => {
   const { user } = useUser();
@@ -18,9 +18,6 @@ const Todos = () => {
   const categoriesQuery = `${process.env.NEXT_PUBLIC_API_URL}/todoCategories?id=${user?.id}`;
   const todosQuery = `${process.env.NEXT_PUBLIC_API_URL}/todos?id=${user?.id}`;
 
-  const { selectedCategory } = useTodos();
-  console.log(selectedCategory);
-
   const { data: todoCategories, isLoading: todoCategoriesLoading } = useQuery<
     TodoCategoryType[]
   >({
@@ -31,7 +28,7 @@ const Todos = () => {
     },
   });
 
-  const { isLoading: todosLoading } = useQuery<TodoType[]>({
+  const { data: todos, isLoading: todosLoading } = useQuery<TodoType[]>({
     queryKey: ["todos"],
     queryFn: async () => {
       const response = await axios.get(todosQuery);
@@ -48,10 +45,9 @@ const Todos = () => {
     </div>
   ) : (
     <div className="w-full flex font-montserrat h-screen text-dark dark:text-light">
-      <Categories todoCategories={todoCategories || []} />
-      <div className="centerPart pt-6 grow flex flex-col items-center">
-        <p className="text-xl font-bold">Display and add todos</p>
-      </div>
+      <CategoriesSection todoCategories={todoCategories || []} />
+
+      <TodosSection todos={todos || []} />
 
       <div className="rightPart pt-6 w-[300px] lg:w-[400px] xl:w-[500px] bg-slate-400/20 dark:bg-black/30 flex flex-col items-center">
         <p className="text-xl font-bold">{formattedDate}</p>
