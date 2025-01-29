@@ -140,7 +140,7 @@ const Login = () => {
               },
             }}
             render={({ field }) => (
-              <FormElement errorMsg={errors?.email?.message} width="full">
+              <FormElement errorMsg={errors?.email?.message} width="w-full">
                 <Input
                   type="email"
                   placeholder="Email"
@@ -159,7 +159,7 @@ const Login = () => {
               required: "Password is required",
             }}
             render={({ field }) => (
-              <FormElement errorMsg={errors?.password?.message} width="full">
+              <FormElement errorMsg={errors?.password?.message} width="w-full">
                 <Input
                   type="password"
                   placeholder="Password"
