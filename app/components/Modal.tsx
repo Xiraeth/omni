@@ -2,6 +2,7 @@ import clsx from "clsx";
 import ButtonOuttline from "./ButtonOuttline";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
+import Loader from "./Loader";
 
 const Modal = ({
   onConfirm,
@@ -11,6 +12,7 @@ const Modal = ({
   children,
   width,
   height,
+  isPending,
 }: {
   onConfirm?: () => void;
   onCancel?: () => void;
@@ -19,6 +21,7 @@ const Modal = ({
   children?: React.ReactNode;
   width?: string; // w-1/2
   height?: string; // h-1/2
+  isPending?: boolean;
 }) => {
   return (
     <>
@@ -43,7 +46,9 @@ const Modal = ({
             </div>
           )}
 
-          {children ? (
+          {isPending ? (
+            <Loader />
+          ) : children ? (
             children
           ) : (
             <>
