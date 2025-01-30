@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { TodoType } from "@/app/todos/types";
+import { TodoType } from "@/app/todos/lib/types";
 
 const todoSchema = new Schema<TodoType>({
   title: { type: String, required: true, minlength: 1, maxlength: 50 },

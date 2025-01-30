@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { TodoCategoryType, TodoType } from "@/app/todos/types";
+import { TodoCategoryType, TodoType } from "@/app/todos/lib/types";
 
 const initialTodosContext: {
   todos: TodoType[];

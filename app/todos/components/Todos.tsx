@@ -3,7 +3,7 @@ import axios from "axios";
 import { useUser } from "@/app/context/UserContext";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TodoCategoryType, TodoType } from "../types";
+import { TodoCategoryType, TodoType } from "../lib/types";
 import CategoriesSection from "./CategoriesSection";
 import TodosSection from "./TodosSection";
 import CalendarSection from "./CalendarSection";
