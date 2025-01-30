@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { TodoType, UpdateTodoData, UpdateTodoReturnType } from "../types";
+import {
+  DeleteTodoDataType,
+  DeleteTodoReturnType,
+  TodoType,
+  UpdateTodoDataType,
+  UpdateTodoReturnType,
+} from "../types";
 import clsx from "clsx";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -9,19 +15,31 @@ import {
   getDateInfo,
   getTimeInfo,
 } from "@/app/common/functions/getTemporalInfo";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useUser } from "@/app/context/UserContext";
 
 const TodoCard = ({ todos }: { todos: TodoType[] }) => {
+  const { user } = useUser();
   const [hoveredTodoId, setHoveredTodoId] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
-  const successToast = useCustomToast({ message: "Todo updated" });
-  const errorToast = useCustomToast({
+  const updateSuccessToast = useCustomToast({ message: "Todo updated" });
+  const updateErrorToast = useCustomToast({
     message: "Failed to update todo",
+    type: "error",
+  });
+  const deleteSuccessToast = useCustomToast({
+    message: "Todo deleted",
+    type: "success",
+  });
+  const deleteErrorToast = useCustomToast({
+    message: "Failed to delete todo",
     type: "error",
   });
 
   const toggleCompletedMutation = useMutation({
-    mutationFn: async ({ data }: { data: UpdateTodoData }) => {
+    mutationFn: async ({ data }: { data: UpdateTodoDataType }) => {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/updateTodo`,
         { ...data }
@@ -38,12 +56,39 @@ const TodoCard = ({ todos }: { todos: TodoType[] }) => {
           return todo;
         });
       });
-      successToast();
+      updateSuccessToast();
     },
     onError: (error: any) => {
-      errorToast(error.message);
+      updateErrorToast(error.message);
     },
   });
+
+  const deleteTodoMutation = useMutation({
+    mutationFn: async ({ data }: { data: DeleteTodoDataType }) => {
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/deleteTodo`,
+        { data }
+      );
+      return response.data;
+    },
+    onSuccess: (response: DeleteTodoReturnType) => {
+      queryClient.setQueryData(["todos"], (oldData: TodoType[]) => {
+        return oldData.filter((todo) => todo._id !== response.todo._id);
+      });
+      deleteSuccessToast();
+    },
+    onError: (error: any) => {
+      deleteErrorToast(error.message);
+    },
+  });
+
+  const deleteTodo = (todoId: string) => {
+    const dataToSubmit = {
+      todoId,
+      userId: user?.id || "",
+    };
+    deleteTodoMutation.mutate({ data: dataToSubmit });
+  };
 
   const todaysTodos = todos.filter((todo) => {
     const { DDMMYYYY: todoDDMMYYYY } = getDateInfo(new Date(todo?.dateFor));
@@ -62,7 +107,7 @@ const TodoCard = ({ todos }: { todos: TodoType[] }) => {
           <div
             key={todo._id}
             className={clsx(
-              "px-4 py-2 border-[1px] border-black/20 shadow-md bg-white/20 rounded-md w-full flex gap-4",
+              "px-4 py-2 border-[1px] border-black/20 dark:border-white/20 dark:bg-black/10 shadow-md bg-white/20 rounded-md w-full flex gap-4 text-dark dark:text-light",
               hoveredTodoId === todo._id && "line-through",
               todo.completed && "line-through"
             )}
@@ -91,11 +136,28 @@ const TodoCard = ({ todos }: { todos: TodoType[] }) => {
             </div>
             <div className="w-full flex justify-between">
               <div>
-                <p className="text-base font-roboto font-bold">{todo.title}</p>
+                <div className="flex items-center gap-4">
+                  <p className="text-base font-roboto font-bold">
+                    {todo.title}
+                  </p>
+                  <FontAwesomeIcon
+                    icon={faPen}
+                    className="flex justify-center items-center text-sm cursor-pointer"
+                    onClick={() => {}}
+                  />
+
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    className="flex justify-center items-center text-sm cursor-pointer text-red-500"
+                    onClick={() => {
+                      deleteTodo(todo._id);
+                    }}
+                  />
+                </div>
                 <p className="text-sm font-geistSans">{todo.description}</p>
               </div>
 
-              <div className="flex flex-col items-end">
+              <div className="flex flex-col items-end justify-end italic opacity-70">
                 <p className="text-sm font-geistSans">{todoDDMMYYYY}</p>
                 <p className="text-sm font-geistSans">{todoHHMMSS}</p>
               </div>

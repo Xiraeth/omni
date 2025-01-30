@@ -17,8 +17,8 @@ const Modal = ({
   header?: string;
   text?: string;
   children?: React.ReactNode;
-  width?: string;
-  height?: string;
+  width?: string; // w-1/2
+  height?: string; // h-1/2
 }) => {
   return (
     <>
@@ -29,7 +29,7 @@ const Modal = ({
       <div className="absolute inset-0 z-30 flex items-center justify-center">
         <div
           className={clsx(
-            "bg-white/50 relative dark:bg-black/50 p-8 rounded-md flex flex-col items-center justify-center gap-4 text-dark dark:text-light",
+            "bg-white/50 relative dark:bg-black/50 p-8 rounded-lg flex flex-col items-center justify-center gap-4 text-dark dark:text-light transition-all duration-150",
             width,
             height
           )}

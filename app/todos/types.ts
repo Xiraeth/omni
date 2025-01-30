@@ -49,7 +49,11 @@ export type AddTodoFormDataType = {
   userId: string;
 };
 
-export type UpdateTodoData = {
+export type AddTodoReturnType = {
+  todo: TodoType;
+};
+
+export type UpdateTodoDataType = {
   todoId: string;
   completed?: boolean;
   title?: string;
@@ -60,6 +64,16 @@ export type UpdateTodoData = {
 };
 
 export type UpdateTodoReturnType = {
+  message: string;
+  todo: TodoType;
+};
+
+export type DeleteTodoDataType = {
+  todoId: string;
+  userId: string;
+};
+
+export type DeleteTodoReturnType = {
   message: string;
   todo: TodoType;
 };
