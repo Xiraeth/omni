@@ -1,8 +1,7 @@
 import dbConnect from "@/lib/connectToDb";
 import Todo from "@/models/todo";
-import { NextRequest } from "next/server";
-
-import { NextResponse } from "next/server";
+import "@/models/todoCategory";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   await dbConnect();

@@ -15,6 +15,7 @@ import { useUser } from "@/app/context/UserContext";
 import AddTodoModal from "./UpsertTodoModal";
 import { TodoCategoryType } from "../lib/types";
 import TodoCard from "./TodoCard";
+import Loader from "@/app/components/Loader";
 
 const TodosList = ({
   todos,
@@ -30,17 +31,17 @@ const TodosList = ({
   const [initialValues, setInitialValues] =
     useState<UpsertTodoFormDataType | null>(null);
 
-  const updateSuccessToast = useCustomToast({ message: "Todo updated" });
+  const updateSuccessToast = useCustomToast({ message: "Task updated" });
   const updateErrorToast = useCustomToast({
-    message: "Failed to update todo",
+    message: "Failed to update task",
     type: "error",
   });
   const deleteSuccessToast = useCustomToast({
-    message: "Todo deleted",
+    message: "Task deleted",
     type: "success",
   });
   const deleteErrorToast = useCustomToast({
-    message: "Failed to delete todo",
+    message: "Failed to delete task",
     type: "error",
   });
 
@@ -102,7 +103,12 @@ const TodosList = ({
     return todoDDMMYYYY === todaysDDMMYYYY;
   });
 
-  return (
+  const isAnyMutationPending =
+    toggleCompletedMutation.isPending || deleteTodoMutation.isPending;
+
+  return isAnyMutationPending ? (
+    <Loader />
+  ) : (
     <div className="flex flex-col gap-4 w-8/12">
       {isEditTodoOpen && (
         <AddTodoModal

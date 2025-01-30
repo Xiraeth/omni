@@ -32,7 +32,7 @@ const useCustomToast = (toastProps: ToastPropsType) => {
       position: toastProps.position || "top-right",
       autoClose: toastProps.autoClose || 5000,
       hideProgressBar: toastProps.hideProgressBar || false,
-      pauseOnHover: toastProps.pauseOnHover || false,
+      pauseOnHover: toastProps.pauseOnHover || true,
       pauseOnFocusLoss: toastProps.pauseOnFocusLoss || false,
       draggable: toastProps.draggable || false,
       closeOnClick: toastProps.closeOnClick || false,

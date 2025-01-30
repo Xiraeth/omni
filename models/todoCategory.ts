@@ -6,7 +6,7 @@ const todoCategorySchema = new Schema<TodoCategoryType>({
   description: { type: String, required: false },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
-  user: { type: Schema.Types.ObjectId, ref: "User" },
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 todoCategorySchema.pre("save", function (next) {
