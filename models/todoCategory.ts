@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { TodoCategoryType } from "@/app/todos/types";
+import { TodoCategoryType } from "@/app/todos/lib/types";
 
 const todoCategorySchema = new Schema<TodoCategoryType>({
   name: { type: String, required: true },

@@ -7,8 +7,8 @@ import {
   TodoCategoryType,
   TodoPriorityType,
   TodoType,
-} from "../types";
-import { PRIORITY_OPTIONS } from "../constants";
+} from "../lib/types";
+import { PRIORITY_OPTIONS } from "../lib/constants";
 import FormElement from "@/app/components/FormElement";
 import { useForm } from "react-hook-form";
 import { useState } from "react";

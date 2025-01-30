@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useState } from "react";
-import { TodoCategoryType } from "../types";
+import { TodoCategoryType } from "../lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useUser } from "@/app/context/UserContext";

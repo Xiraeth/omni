@@ -1,18 +1,20 @@
 import { getDateInfo } from "@/app/common/functions/getTemporalInfo";
-import { TodoSortByType, TodoType } from "../types";
+import { TodoSortByType, TodoType } from "../lib/types";
 import Dropmenu from "@/app/components/Dropmenu";
 import { useState } from "react";
-import { SORT_BY_OPTIONS } from "../constants";
+import { SORT_BY_OPTIONS } from "../lib/constants";
 import AddTodoModal from "./UpsertTodoModal";
 import { useTodos } from "../context/TodosProvider";
 import TasksList from "./TodosList";
+import { faSort } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const TodosSection = ({ todos }: { todos: TodoType[] }) => {
   const { day: todaysDay, dayOfWeekShort: todaysDayOfWeekShort } = getDateInfo(
     new Date()
   );
 
-  const [sortBy, setSortBy] = useState<TodoSortByType>("time");
+  const [sortBy, setSortBy] = useState<TodoSortByType>(null);
   const [isAddTodoOpen, setIsAddTodoOpen] = useState(false);
 
   const { categories } = useTodos();
@@ -49,7 +51,7 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
       </div>
 
       {/* input button for adding a new todo and sorting button */}
-      <div className="w-8/12 flex items-center gap-4 mb-4">
+      <div className="w-8/12 flex items-center gap-4 mb-4 justify-between">
         <button
           className="bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white px-4 py-1 rounded-md text-sm flex gap-1 items-center drop-shadow-lg transition-colors duration-200 h-[36px]"
           onClick={() => setIsAddTodoOpen(true)}
@@ -58,15 +60,25 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
           New task
         </button>
 
-        <Dropmenu
-          options={SORT_BY_OPTIONS}
-          placeholder={sortBy}
-          onSelect={(option) => {
-            setSortBy(option as TodoSortByType);
-          }}
-          value={sortBy}
-          height="h-[36px]"
-        />
+        <div className="flex gap-4">
+          <Dropmenu
+            options={SORT_BY_OPTIONS}
+            placeholder="Sort by"
+            onSelect={(option) => {
+              setSortBy(option as TodoSortByType);
+            }}
+            value={sortBy || ""}
+            width="w-28"
+            height="h-[36px]"
+          />
+
+          <div
+            className="w-10 h-10 rounded-full flex items-center justify-center text-dark dark:text-light bg-buttonBgLight dark:bg-buttonBgDark border-[1px] dark:border-buttonBorderDark hover:border-buttonBorderLightHover dark:hover:border-buttonBorderDarkHover transition-all duration-200 cursor-pointer active:bg-buttonBgLightFocus dark:active:bg-buttonBgDarkFocus drop-shadow-md"
+            onClick={() => {}}
+          >
+            <FontAwesomeIcon icon={faSort} />
+          </div>
+        </div>
       </div>
 
       {/* list of todos */}

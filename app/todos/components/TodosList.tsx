@@ -7,7 +7,7 @@ import {
   TodoType,
   UpdateCheckedTodoDataType,
   UpdateCheckedTodoReturnType,
-} from "../types";
+} from "../lib/types";
 import clsx from "clsx";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -21,9 +21,10 @@ import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useUser } from "@/app/context/UserContext";
 import AddTodoModal from "./UpsertTodoModal";
-import { TodoCategoryType } from "../types";
+import { TodoCategoryType } from "../lib/types";
+import { getPriorityColor } from "../lib/functions";
 
-const TasksList = ({
+const TodosList = ({
   todos,
   categories,
 }: {
@@ -126,9 +127,12 @@ const TasksList = ({
           <div
             key={todo._id}
             className={clsx(
-              "px-4 py-2 border-[1px] border-black/20 dark:border-white/20 dark:bg-black/10 shadow-md bg-white/20 rounded-md w-full flex gap-4 text-dark dark:text-light",
+              "px-4 py-2 shadow-md rounded-md w-full flex gap-4 text-dark dark:text-light",
               hoveredTodoId === todo._id && "line-through",
-              todo.completed && "line-through"
+              todo.completed &&
+                "line-through bg-gray-300/50 dark:bg-gray-700/50 opacity-90",
+              !todo.completed &&
+                "border-black/20 dark:border-white/10 dark:bg-black/20 bg-white/20 border-[1px]"
             )}
           >
             <div
@@ -185,11 +189,26 @@ const TasksList = ({
                   />
                 </div>
                 <p className="text-sm font-geistSans">{todo.description}</p>
+                <p
+                  className={clsx(
+                    "text-sm font-geistSans",
+                    getPriorityColor(todo.priority)
+                  )}
+                >
+                  {todo.priority?.slice(0, 1).toUpperCase() +
+                    todo.priority?.slice(1)}{" "}
+                  priority
+                </p>
               </div>
 
-              <div className="flex flex-col items-end justify-end italic opacity-70">
-                <p className="text-sm font-geistSans">{todoDDMMYYYY}</p>
-                <p className="text-sm font-geistSans">{todoHHMMSS}</p>
+              <div className="flex flex-col items-end justify-end">
+                <p className="font-geistSans">{todo.category.name}</p>
+                <p className="text-sm font-geistSans opacity-70 italic">
+                  {todoDDMMYYYY}
+                </p>
+                <p className="text-sm font-geistSans opacity-70 italic">
+                  {todoHHMMSS}
+                </p>
               </div>
             </div>
           </div>
@@ -199,4 +218,4 @@ const TasksList = ({
   );
 };
 
-export default TasksList;
+export default TodosList;

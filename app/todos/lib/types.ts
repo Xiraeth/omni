@@ -1,6 +1,6 @@
 import { UserType } from "@/app/common/types";
 
-export type TodoSortByType = "time" | "priority";
+export type TodoSortByType = "time" | "priority" | null;
 
 export type TodoPriorityType = "low" | "medium" | "high";
 
