@@ -5,8 +5,16 @@ import TodoCategory from "@/models/todoCategory";
 
 export async function POST(req: NextRequest) {
   await dbConnect();
-  const { title, description, dateFor, timeFor, priority, category, userId } =
-    await req.json();
+  const {
+    _id,
+    title,
+    description,
+    dateFor,
+    timeFor,
+    priority,
+    category,
+    userId,
+  } = await req.json();
 
   if (!userId) {
     return NextResponse.json({ error: "User ID is required" }, { status: 400 });
@@ -40,7 +48,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Category not found" }, { status: 400 });
   }
 
-  const todo = await Todo.create({
+  const todoData = {
     title,
     description,
     dateFor,
@@ -49,7 +57,25 @@ export async function POST(req: NextRequest) {
     priority: priority.toLowerCase(),
     category: categoryId,
     user: userId,
-  });
+  };
+
+  let todo;
+  if (_id) {
+    // Update existing todo and populate category
+    todo = await Todo.findByIdAndUpdate(
+      _id,
+      todoData,
+      { new: true } // Returns the updated document
+    ).populate("category");
+
+    if (!todo) {
+      return NextResponse.json({ error: "Todo not found" }, { status: 404 });
+    }
+  } else {
+    // Create new todo and populate category
+    todo = await Todo.create(todoData);
+    todo = await todo.populate("category");
+  }
 
   return NextResponse.json({ todo });
 }

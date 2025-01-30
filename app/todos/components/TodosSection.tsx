@@ -3,9 +3,9 @@ import { TodoSortByType, TodoType } from "../types";
 import Dropmenu from "@/app/components/Dropmenu";
 import { useState } from "react";
 import { SORT_BY_OPTIONS } from "../constants";
-import AddTodoModal from "./AddTodoModal";
+import AddTodoModal from "./UpsertTodoModal";
 import { useTodos } from "../context/TodosProvider";
-import TodosList from "./TodosList";
+import TasksList from "./TodosList";
 
 const TodosSection = ({ todos }: { todos: TodoType[] }) => {
   const { day: todaysDay, dayOfWeekShort: todaysDayOfWeekShort } = getDateInfo(
@@ -70,7 +70,7 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
       </div>
 
       {/* list of todos */}
-      <TodosList todos={todos} />
+      <TasksList todos={todos} categories={categories} />
     </div>
   );
 };

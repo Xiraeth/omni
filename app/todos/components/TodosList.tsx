@@ -1,10 +1,12 @@
 import { useState } from "react";
 import {
+  UpsertTodoFormDataType,
   DeleteTodoDataType,
   DeleteTodoReturnType,
+  TodoPriorityType,
   TodoType,
-  UpdateTodoDataType,
-  UpdateTodoReturnType,
+  UpdateCheckedTodoDataType,
+  UpdateCheckedTodoReturnType,
 } from "../types";
 import clsx from "clsx";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -18,11 +20,22 @@ import {
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useUser } from "@/app/context/UserContext";
+import AddTodoModal from "./UpsertTodoModal";
+import { TodoCategoryType } from "../types";
 
-const TodoCard = ({ todos }: { todos: TodoType[] }) => {
+const TasksList = ({
+  todos,
+  categories,
+}: {
+  todos: TodoType[];
+  categories: TodoCategoryType[];
+}) => {
   const { user } = useUser();
   const [hoveredTodoId, setHoveredTodoId] = useState<string | null>(null);
   const queryClient = useQueryClient();
+  const [isEditTodoOpen, setIsEditTodoOpen] = useState(false);
+  const [initialValues, setInitialValues] =
+    useState<UpsertTodoFormDataType | null>(null);
 
   const updateSuccessToast = useCustomToast({ message: "Todo updated" });
   const updateErrorToast = useCustomToast({
@@ -39,14 +52,14 @@ const TodoCard = ({ todos }: { todos: TodoType[] }) => {
   });
 
   const toggleCompletedMutation = useMutation({
-    mutationFn: async ({ data }: { data: UpdateTodoDataType }) => {
+    mutationFn: async ({ data }: { data: UpdateCheckedTodoDataType }) => {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/updateTodo`,
         { ...data }
       );
       return response.data;
     },
-    onSuccess: (response: UpdateTodoReturnType) => {
+    onSuccess: (response: UpdateCheckedTodoReturnType) => {
       queryClient.setQueryData(["todos"], (oldData: TodoType[]) => {
         console.log(response);
         return oldData.map((todo) => {
@@ -98,9 +111,15 @@ const TodoCard = ({ todos }: { todos: TodoType[] }) => {
 
   return (
     <div className="flex flex-col gap-4 w-8/12">
+      {isEditTodoOpen && (
+        <AddTodoModal
+          onClose={() => setIsEditTodoOpen(false)}
+          todoCategories={categories}
+          initialValues={initialValues as UpsertTodoFormDataType}
+        />
+      )}
       {todaysTodos.map((todo) => {
         const { DDMMYYYY: todoDDMMYYYY } = getDateInfo(new Date(todo?.dateFor));
-
         const todoHHMMSS = getTimeInfo(todo?.timeFor || "");
 
         return (
@@ -143,7 +162,18 @@ const TodoCard = ({ todos }: { todos: TodoType[] }) => {
                   <FontAwesomeIcon
                     icon={faPen}
                     className="flex justify-center items-center text-sm cursor-pointer"
-                    onClick={() => {}}
+                    onClick={() => {
+                      setInitialValues({
+                        _id: todo._id,
+                        title: todo.title,
+                        description: todo.description,
+                        dateFor: todo.dateFor,
+                        timeFor: todo.timeFor,
+                        priority: todo.priority as TodoPriorityType,
+                        category: todo.category.name,
+                      });
+                      setIsEditTodoOpen(true);
+                    }}
                   />
 
                   <FontAwesomeIcon
@@ -169,4 +199,4 @@ const TodoCard = ({ todos }: { todos: TodoType[] }) => {
   );
 };
 
-export default TodoCard;
+export default TasksList;

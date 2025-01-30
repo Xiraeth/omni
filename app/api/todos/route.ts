@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const todos = await Todo.find({ user: id });
+  const todos = await Todo.find({ user: id }).populate("category", "name");
 
   return NextResponse.json(todos);
 }
