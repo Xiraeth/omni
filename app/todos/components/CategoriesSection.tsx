@@ -105,7 +105,10 @@ const CategoriesSection = ({
                 {category.name}
               </p>
               <p
-                onClick={() => setIsDeleteCategoryOpen(true)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsDeleteCategoryOpen(true);
+                }}
                 className="text-xl text-dark dark:text-light hover:text-red-500 cursor-pointer dark:hover:text-red-500 font-bold font-montserrat transition-colors duration-200 select-none"
               >
                 x

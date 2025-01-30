@@ -16,6 +16,7 @@ type DateInfoType = {
   yearShort: string;
   DDMMYYYY: string;
   MMDDYYYY: string;
+  HHMMSS: string;
 };
 
 export const getDateInfo = (date: Date): DateInfoType => {
@@ -30,6 +31,9 @@ export const getDateInfo = (date: Date): DateInfoType => {
 
   const DDMMYYYY = `${addZero(day)}/${addZero(monthIndex + 1)}/${year}`;
   const MMDDYYYY = `${addZero(monthIndex + 1)}/${addZero(day)}/${year}`;
+  const HHMMSS = `${addZero(date.getHours())}:${addZero(
+    date.getMinutes()
+  )}:${addZero(date.getSeconds())}`;
 
   return {
     day,
@@ -41,5 +45,16 @@ export const getDateInfo = (date: Date): DateInfoType => {
     yearShort,
     DDMMYYYY,
     MMDDYYYY,
+    HHMMSS,
   };
+};
+
+export const getTimeInfo = (time: string): string => {
+  if (!time) return "";
+  console.log(time);
+
+  const hours = time.slice(0, 2);
+  const minutes = time.slice(3, 5);
+  const seconds = time.slice(6, 8);
+  return `${hours}:${minutes}${seconds ? `:${seconds}` : ""}`;
 };
