@@ -51,7 +51,6 @@ export const getDateInfo = (date: Date): DateInfoType => {
 
 export const getTimeInfo = (time: string): string => {
   if (!time) return "";
-  console.log(time);
 
   const hours = time.slice(0, 2);
   const minutes = time.slice(3, 5);

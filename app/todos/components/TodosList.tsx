@@ -1,28 +1,34 @@
 import { useState } from "react";
 import {
+  UpsertTodoFormDataType,
   DeleteTodoDataType,
   DeleteTodoReturnType,
   TodoType,
-  UpdateTodoDataType,
-  UpdateTodoReturnType,
-} from "../types";
-import clsx from "clsx";
-import { Checkbox } from "@/components/ui/checkbox";
+  UpdateCheckedTodoDataType,
+  UpdateCheckedTodoReturnType,
+} from "../lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import useCustomToast from "@/hooks/useCustomToast";
-import {
-  getDateInfo,
-  getTimeInfo,
-} from "@/app/common/functions/getTemporalInfo";
-import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getDateInfo } from "@/app/common/functions/getTemporalInfo";
 import { useUser } from "@/app/context/UserContext";
+import AddTodoModal from "./UpsertTodoModal";
+import { TodoCategoryType } from "../lib/types";
+import TodoCard from "./TodoCard";
 
-const TodoCard = ({ todos }: { todos: TodoType[] }) => {
+const TodosList = ({
+  todos,
+  categories,
+}: {
+  todos: TodoType[];
+  categories: TodoCategoryType[];
+}) => {
   const { user } = useUser();
   const [hoveredTodoId, setHoveredTodoId] = useState<string | null>(null);
   const queryClient = useQueryClient();
+  const [isEditTodoOpen, setIsEditTodoOpen] = useState(false);
+  const [initialValues, setInitialValues] =
+    useState<UpsertTodoFormDataType | null>(null);
 
   const updateSuccessToast = useCustomToast({ message: "Todo updated" });
   const updateErrorToast = useCustomToast({
@@ -39,14 +45,14 @@ const TodoCard = ({ todos }: { todos: TodoType[] }) => {
   });
 
   const toggleCompletedMutation = useMutation({
-    mutationFn: async ({ data }: { data: UpdateTodoDataType }) => {
+    mutationFn: async ({ data }: { data: UpdateCheckedTodoDataType }) => {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/updateTodo`,
         { ...data }
       );
       return response.data;
     },
-    onSuccess: (response: UpdateTodoReturnType) => {
+    onSuccess: (response: UpdateCheckedTodoReturnType) => {
       queryClient.setQueryData(["todos"], (oldData: TodoType[]) => {
         console.log(response);
         return oldData.map((todo) => {
@@ -98,75 +104,27 @@ const TodoCard = ({ todos }: { todos: TodoType[] }) => {
 
   return (
     <div className="flex flex-col gap-4 w-8/12">
-      {todaysTodos.map((todo) => {
-        const { DDMMYYYY: todoDDMMYYYY } = getDateInfo(new Date(todo?.dateFor));
-
-        const todoHHMMSS = getTimeInfo(todo?.timeFor || "");
-
-        return (
-          <div
-            key={todo._id}
-            className={clsx(
-              "px-4 py-2 border-[1px] border-black/20 dark:border-white/20 dark:bg-black/10 shadow-md bg-white/20 rounded-md w-full flex gap-4 text-dark dark:text-light",
-              hoveredTodoId === todo._id && "line-through",
-              todo.completed && "line-through"
-            )}
-          >
-            <div
-              onPointerEnter={() => {
-                setHoveredTodoId(todo._id);
-              }}
-              onPointerLeave={() => {
-                setHoveredTodoId(null);
-              }}
-              className="h-[16px] pt-[2px]"
-            >
-              <Checkbox
-                checked={todo.completed}
-                onCheckedChange={(checked) => {
-                  console.log(checked);
-                  toggleCompletedMutation.mutate({
-                    data: {
-                      todoId: todo._id,
-                      completed: checked as boolean,
-                    },
-                  });
-                }}
-              />
-            </div>
-            <div className="w-full flex justify-between">
-              <div>
-                <div className="flex items-center gap-4">
-                  <p className="text-base font-roboto font-bold">
-                    {todo.title}
-                  </p>
-                  <FontAwesomeIcon
-                    icon={faPen}
-                    className="flex justify-center items-center text-sm cursor-pointer"
-                    onClick={() => {}}
-                  />
-
-                  <FontAwesomeIcon
-                    icon={faTrash}
-                    className="flex justify-center items-center text-sm cursor-pointer text-red-500"
-                    onClick={() => {
-                      deleteTodo(todo._id);
-                    }}
-                  />
-                </div>
-                <p className="text-sm font-geistSans">{todo.description}</p>
-              </div>
-
-              <div className="flex flex-col items-end justify-end italic opacity-70">
-                <p className="text-sm font-geistSans">{todoDDMMYYYY}</p>
-                <p className="text-sm font-geistSans">{todoHHMMSS}</p>
-              </div>
-            </div>
-          </div>
-        );
-      })}
+      {isEditTodoOpen && (
+        <AddTodoModal
+          onClose={() => setIsEditTodoOpen(false)}
+          todoCategories={categories}
+          initialValues={initialValues as UpsertTodoFormDataType}
+        />
+      )}
+      {todaysTodos.map((todo) => (
+        <TodoCard
+          key={todo._id}
+          todo={todo}
+          hoveredTodoId={hoveredTodoId}
+          setHoveredTodoId={setHoveredTodoId}
+          toggleCompletedMutation={toggleCompletedMutation}
+          setInitialValues={setInitialValues}
+          setIsEditTodoOpen={setIsEditTodoOpen}
+          deleteTodo={deleteTodo}
+        />
+      ))}
     </div>
   );
 };
 
-export default TodoCard;
+export default TodosList;

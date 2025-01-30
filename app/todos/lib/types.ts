@@ -1,6 +1,6 @@
 import { UserType } from "@/app/common/types";
 
-export type TodoSortByType = "time" | "priority";
+export type TodoSortByType = "time" | "priority" | null;
 
 export type TodoPriorityType = "low" | "medium" | "high";
 
@@ -14,7 +14,10 @@ export type TodoType = {
   timeFor?: string;
   createdAt: Date;
   updatedAt?: Date;
-  category: TodoCategoryType;
+  category: {
+    _id: string;
+    name: string;
+  };
   user: UserType;
 };
 
@@ -39,21 +42,21 @@ export type TodoFormDataReturnType = {
   category: TodoCategoryType;
 };
 
-export type AddTodoFormDataType = {
+export type UpsertTodoFormDataType = {
+  _id?: string;
   title: string;
   description?: string;
   dateFor: string;
   timeFor?: string;
   priority: TodoPriorityType;
   category: string;
-  userId: string;
 };
 
-export type AddTodoReturnType = {
+export type UpsertTodoReturnType = {
   todo: TodoType;
 };
 
-export type UpdateTodoDataType = {
+export type UpdateCheckedTodoDataType = {
   todoId: string;
   completed?: boolean;
   title?: string;
@@ -63,7 +66,7 @@ export type UpdateTodoDataType = {
   priority?: string;
 };
 
-export type UpdateTodoReturnType = {
+export type UpdateCheckedTodoReturnType = {
   message: string;
   todo: TodoType;
 };

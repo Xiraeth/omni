@@ -3,7 +3,7 @@ import {
   TodoCategoryType,
   TodoFormDataReturnType,
   TodoFormDataType,
-} from "../types";
+} from "../lib/types";
 import FormElement from "@/app/components/FormElement";
 import { useUser } from "@/app/context/UserContext";
 import axios from "axios";

@@ -56,24 +56,25 @@ const Dropmenu = ({
 
   return (
     <div
-      className={clsx("relative", width ? width : "w-full")}
+      className={clsx("relative", width ? width : "w-fit")}
       ref={dropdownRef}
     >
       <div
         className={clsx(
-          "font-lato drop-shadow-md border-[1px] rounded-md cursor-pointer transition-all duration-200 min-w-32 w-full md:max-w-72 text-dark dark:text-light",
+          "font-lato drop-shadow-md border-[1px] rounded-md cursor-pointer transition-all duration-200 md:max-w-72 text-dark dark:text-light",
           {
             "dark:border-amber-400 dark:hover:border-amber-400 border-sky-400 hover:border-sky-400 dark:bg-buttonBgDarkFocus bg-buttonBgLightFocus":
               isOpen,
             "hover:border-buttonBorderLightHover dark:border-slate-600 dark:hover:border-slate-500 dark:bg-buttonBgDark bg-buttonBgLight":
               !isOpen,
-          }
+          },
+          width ? width : "w-fit"
         )}
         onClick={handleToggleDropdown}
       >
         <div
           className={clsx(
-            "flex items-center justify-between px-4",
+            "flex items-center justify-between px-4 gap-2",
             height ? height : "h-[46px]"
           )}
         >
@@ -93,7 +94,7 @@ const Dropmenu = ({
         <div
           className={clsx(
             "absolute left-0 w-full z-50",
-            height ? height : "top-[52px]"
+            height ? height : "top-[50px]"
           )}
         >
           <div
