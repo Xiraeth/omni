@@ -8,7 +8,6 @@ const CreateCategoryModal = ({
 }) => {
   return (
     <Modal width="w-[350px]" height="h-[330px]" onCancel={onCancelClick}>
-      <p className="text-xl font-bold">Add new category</p>
       <CreateCategoryForm onCancelClick={onCancelClick} />
     </Modal>
   );

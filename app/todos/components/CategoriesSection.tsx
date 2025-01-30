@@ -20,6 +20,7 @@ const CategoriesSection = ({
     useState<boolean>(false);
   const [isCreateCategoryOpen, setIsCreateCategoryOpen] =
     useState<boolean>(false);
+  const [deleteCategoryId, setDeleteCategoryId] = useState<string>("");
 
   const { selectedCategory, setSelectedCategory } = useTodos();
 
@@ -28,30 +29,38 @@ const CategoriesSection = ({
     type: "success",
   });
 
-  const { mutate: deleteTodoCategoryMutation } = useMutation({
-    mutationFn: async (categoryId: string) => {
-      const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/deleteTodoCategory`,
-        { data: { categoryId, userId: user?.id } }
-      );
-      return response.data;
-    },
-    onSuccess: (data: TodoCategoryType) => {
-      setIsDeleteCategoryOpen(false);
-      deleteSuccessToast();
-      queryClient?.setQueryData(
-        ["todoCategories"],
-        (oldData: TodoCategoryType[]) => {
-          return oldData.filter(
-            (category: TodoCategoryType) => category._id !== data._id
-          );
-        }
-      );
-    },
+  const deleteErrorToast = useCustomToast({
+    type: "error",
   });
 
-  const handleDeleteTodoCategory = (categoryId: string) => {
-    deleteTodoCategoryMutation(categoryId);
+  const { mutate: deleteTodoCategoryMutation, isPending: isDeleteInProgress } =
+    useMutation({
+      mutationFn: async (categoryId: string) => {
+        const response = await axios.delete(
+          `${process.env.NEXT_PUBLIC_API_URL}/deleteTodoCategory`,
+          { data: { categoryId, userId: user?.id } }
+        );
+        return response.data;
+      },
+      onSuccess: (data: TodoCategoryType) => {
+        setIsDeleteCategoryOpen(false);
+        deleteSuccessToast();
+        queryClient?.setQueryData(
+          ["todoCategories"],
+          (oldData: TodoCategoryType[]) => {
+            return oldData.filter(
+              (category: TodoCategoryType) => category._id !== data._id
+            );
+          }
+        );
+      },
+      onError: (error: Error) => {
+        deleteErrorToast(error.message);
+      },
+    });
+
+  const handleDeleteTodoCategory = (id: string) => {
+    deleteTodoCategoryMutation(id);
   };
 
   const handleCategoryClick = (category: TodoCategoryType) => {
@@ -70,12 +79,17 @@ const CategoriesSection = ({
     >
       {isDeleteCategoryOpen && (
         <Modal
-          onConfirm={() =>
-            handleDeleteTodoCategory(selectedCategory?._id || "")
-          }
+          width="w-[350px]"
+          height="h-[250px]"
+          onConfirm={() => handleDeleteTodoCategory(deleteCategoryId)}
+          isPending={isDeleteInProgress}
           onCancel={() => setIsDeleteCategoryOpen(false)}
-          header="Delete Category"
-          text="Are you sure you want to delete this category?"
+          header={isDeleteInProgress ? "" : "Delete Category"}
+          text={
+            isDeleteInProgress
+              ? ""
+              : "Are you sure you want to delete this category?"
+          }
         />
       )}
 
@@ -107,6 +121,7 @@ const CategoriesSection = ({
               <p
                 onClick={(e) => {
                   e.stopPropagation();
+                  setDeleteCategoryId(category._id);
                   setIsDeleteCategoryOpen(true);
                 }}
                 className="text-xl text-dark dark:text-light hover:text-red-500 cursor-pointer dark:hover:text-red-500 font-bold font-montserrat transition-colors duration-200 select-none"
