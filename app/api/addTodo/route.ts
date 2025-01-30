@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     dateFor,
     timeFor,
     completed: false,
-    priority,
+    priority: priority.toLowerCase(),
     category: categoryId,
     user: userId,
   });

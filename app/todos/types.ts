@@ -48,3 +48,18 @@ export type AddTodoFormDataType = {
   category: string;
   userId: string;
 };
+
+export type UpdateTodoData = {
+  todoId: string;
+  completed?: boolean;
+  title?: string;
+  description?: string;
+  dateFor?: string;
+  timeFor?: string;
+  priority?: string;
+};
+
+export type UpdateTodoReturnType = {
+  message: string;
+  todo: TodoType;
+};
