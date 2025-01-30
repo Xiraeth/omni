@@ -32,8 +32,13 @@ const UpsertTodoModalForm = ({
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedPriority, setSelectedPriority] = useState<string | null>(null);
 
-  const successToast = useCustomToast({
-    message: "Todo added successfully",
+  const taskAddedSuccessToast = useCustomToast({
+    message: "Task added successfully",
+    type: "success",
+  });
+
+  const taskUpdatedSuccessToast = useCustomToast({
+    message: "Task updated successfully",
     type: "success",
   });
 
@@ -72,7 +77,11 @@ const UpsertTodoModalForm = ({
         }
         return [...oldData, data.todo];
       });
-      successToast();
+      if (initialValues?._id) {
+        taskUpdatedSuccessToast();
+      } else {
+        taskAddedSuccessToast();
+      }
       onClose();
     },
     onError: (error: any) => {
