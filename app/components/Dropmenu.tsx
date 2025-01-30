@@ -9,7 +9,6 @@ type DropmenuPropsType = {
   onSelect: (option: string) => void;
   value: string;
   width?: string;
-  className?: string;
   height?: string;
 };
 
@@ -18,7 +17,6 @@ const Dropmenu = ({
   onSelect,
   placeholder,
   value,
-  className,
   height,
   width = "full",
 }: DropmenuPropsType) => {
