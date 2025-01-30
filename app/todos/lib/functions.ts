@@ -1,4 +1,4 @@
-import { TodoSortByType, TodoType } from "./types";
+// import { TodoSortByType, TodoType } from "./types";
 
 export const getPriorityColor = (priority: string) => {
   if (priority?.toLowerCase() === "high") return "text-red-500";
