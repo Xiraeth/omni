@@ -67,6 +67,7 @@ const CategoriesSection = ({
         } else {
           deleteErrorToast("Error deleting category");
         }
+        setIsDeleteCategoryOpen(false);
       },
     });
 
