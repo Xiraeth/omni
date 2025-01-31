@@ -118,7 +118,7 @@ const TodosList = ({
       )}
       {todaysTodos.map((todo) => (
         <TodoCard
-          key={todo._id}
+          key={todo?._id}
           todo={todo}
           hoveredTodoId={hoveredTodoId}
           setHoveredTodoId={setHoveredTodoId}

@@ -1,14 +1,19 @@
 import Modal from "@/app/components/Modal";
-import CreateCategoryForm from "./CreateCategoryForm";
-
+import CategoryForm from "./CategoryForm";
+import { TodoCategoryType } from "../lib/types";
 const CreateCategoryModal = ({
   onCancelClick,
+  initialValues,
 }: {
   onCancelClick: () => void;
+  initialValues?: TodoCategoryType;
 }) => {
   return (
     <Modal width="w-[350px]" height="h-[330px]" onCancel={onCancelClick}>
-      <CreateCategoryForm onCancelClick={onCancelClick} />
+      <CategoryForm
+        onCancelClick={onCancelClick}
+        initialValues={initialValues}
+      />
     </Modal>
   );
 };
