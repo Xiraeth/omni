@@ -1,5 +1,5 @@
 import { getDateInfo } from "@/app/common/functions/getTemporalInfo";
-import { TodoSortByType, TodoType } from "../lib/types";
+import { TodoSortByType, TodoSortOrderType, TodoType } from "../lib/types";
 import Dropmenu from "@/app/components/Dropmenu";
 import { useState } from "react";
 import { SORT_BY_OPTIONS } from "../lib/constants";
@@ -8,6 +8,7 @@ import { useTodos } from "../context/TodosProvider";
 import TasksList from "./TodosList";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { handleTodoSort } from "../lib/functions";
 
 const TodosSection = ({ todos }: { todos: TodoType[] }) => {
   const { day: todaysDay, dayOfWeekShort: todaysDayOfWeekShort } = getDateInfo(
@@ -15,15 +16,25 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
   );
 
   const [sortBy, setSortBy] = useState<TodoSortByType>(null);
+  const [sortOrder, setSortOrder] = useState<TodoSortOrderType>("asc");
   const [isAddTodoOpen, setIsAddTodoOpen] = useState(false);
 
-  const { categories } = useTodos();
+  const { categories, selectedCategory } = useTodos();
 
   const numberOfTasksForToday = todos.filter((todo) => {
     const { DDMMYYYY: todoDDMMYYYY } = getDateInfo(new Date(todo?.dateFor));
     const { DDMMYYYY: todaysDDMMYYYY } = getDateInfo(new Date());
     return todoDDMMYYYY === todaysDDMMYYYY;
   }).length;
+
+  const sortedTodos = handleTodoSort(todos, sortBy || "time", sortOrder);
+
+  const filteredTodosBasedOnCategory = sortedTodos.filter(
+    (todo) => todo?.category?._id === selectedCategory?._id
+  );
+
+  const isCategoryEmpty =
+    selectedCategory && filteredTodosBasedOnCategory.length === 0;
 
   return (
     <div className="centerPart pt-6 grow flex flex-col items-center">
@@ -74,7 +85,11 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
 
           <div
             className="w-10 h-10 rounded-full flex items-center justify-center text-dark dark:text-light bg-buttonBgLight dark:bg-buttonBgDark border-[1px] dark:border-buttonBorderDark hover:border-buttonBorderLightHover dark:hover:border-buttonBorderDarkHover transition-all duration-200 cursor-pointer active:bg-buttonBgLightFocus dark:active:bg-buttonBgDarkFocus drop-shadow-md"
-            onClick={() => {}}
+            onClick={() =>
+              setSortOrder((sortOrder) =>
+                sortOrder === "asc" ? "desc" : "asc"
+              )
+            }
           >
             <FontAwesomeIcon icon={faSort} />
           </div>
@@ -82,7 +97,16 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
       </div>
 
       {/* list of todos */}
-      <TasksList todos={todos} categories={categories} />
+      <TasksList
+        todos={
+          isCategoryEmpty
+            ? []
+            : filteredTodosBasedOnCategory?.length > 0
+            ? filteredTodosBasedOnCategory
+            : todos
+        }
+        categories={categories}
+      />
     </div>
   );
 };

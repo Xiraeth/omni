@@ -12,10 +12,10 @@ import axios from "axios";
 import useCustomToast from "@/hooks/useCustomToast";
 import { getDateInfo } from "@/app/common/functions/getTemporalInfo";
 import { useUser } from "@/app/context/UserContext";
-import AddTodoModal from "./UpsertTodoModal";
 import { TodoCategoryType } from "../lib/types";
 import TodoCard from "./TodoCard";
-import Loader from "@/app/components/Loader";
+import UpsertTodoModal from "./UpsertTodoModal";
+import OpacityLoader from "@/app/components/OpacityLoader";
 
 const TodosList = ({
   todos,
@@ -55,7 +55,6 @@ const TodosList = ({
     },
     onSuccess: (response: UpdateCheckedTodoReturnType) => {
       queryClient.setQueryData(["todos"], (oldData: TodoType[]) => {
-        console.log(response);
         return oldData.map((todo) => {
           if (todo._id === response.todo._id) {
             return { ...todo, completed: response.todo.completed };
@@ -107,11 +106,11 @@ const TodosList = ({
     toggleCompletedMutation.isPending || deleteTodoMutation.isPending;
 
   return isAnyMutationPending ? (
-    <Loader />
+    <OpacityLoader />
   ) : (
     <div className="flex flex-col gap-4 w-8/12">
       {isEditTodoOpen && (
-        <AddTodoModal
+        <UpsertTodoModal
           onClose={() => setIsEditTodoOpen(false)}
           todoCategories={categories}
           initialValues={initialValues as UpsertTodoFormDataType}
@@ -119,7 +118,7 @@ const TodosList = ({
       )}
       {todaysTodos.map((todo) => (
         <TodoCard
-          key={todo._id}
+          key={todo?._id}
           todo={todo}
           hoveredTodoId={hoveredTodoId}
           setHoveredTodoId={setHoveredTodoId}
