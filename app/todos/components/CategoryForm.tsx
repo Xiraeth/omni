@@ -12,16 +12,22 @@ import useCustomToast from "@/hooks/useCustomToast";
 import ButtonOuttline from "@/app/components/ButtonOuttline";
 import Loader from "@/app/components/Loader";
 
-const CreateCategoryForm = ({
+const CategoryForm = ({
   onCancelClick,
+  initialValues,
 }: {
   onCancelClick: () => void;
+  initialValues?: TodoCategoryType;
 }) => {
+  console.log(initialValues);
   const { user } = useUser();
   const queryClient = useQueryClient();
+  const successMessage = initialValues
+    ? "Category updated"
+    : "Category created";
   const successToast = useCustomToast({
     type: "success",
-    message: "Category created",
+    message: successMessage,
   });
 
   const errorToast = useCustomToast({
@@ -33,16 +39,20 @@ const CreateCategoryForm = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TodoFormDataType>({ mode: "onSubmit" });
+  } = useForm<TodoFormDataType>({
+    defaultValues: initialValues || { name: "", description: "" },
+    mode: "onSubmit",
+  });
 
-  const { mutate: createCategory, isPending } = useMutation({
+  // Create mutation
+  const { mutate: createCategory, isPending: isCreating } = useMutation({
     mutationFn: async (data: TodoFormDataType) => {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/addTodoCategory`,
+        `${process.env.NEXT_PUBLIC_API_URL}/upsertTodoCategory`,
         data
       );
 
-      if (response?.data?.error) {
+      if (response.data.error) {
         throw new Error(response.data.error);
       }
 
@@ -63,21 +73,58 @@ const CreateCategoryForm = ({
     },
   });
 
+  // Update mutation
+  const { mutate: updateCategory, isPending: isUpdating } = useMutation({
+    mutationFn: async (data: TodoFormDataType) => {
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/upsertTodoCategory`,
+        data
+      );
+
+      if (response.data.error) {
+        throw new Error(response.data.error);
+      }
+
+      return response.data;
+    },
+    onSuccess: (data: TodoFormDataReturnType) => {
+      queryClient.setQueryData(
+        ["todoCategories"],
+        (oldData: TodoCategoryType[] | undefined) => {
+          if (!oldData) return [data.category];
+          return oldData.map((category) =>
+            category._id === data.category._id ? data.category : category
+          );
+        }
+      );
+      onCancelClick();
+      successToast();
+    },
+    onError: (error: Error) => {
+      errorToast(error.message);
+    },
+  });
+
   const onSubmit = (data: TodoFormDataType) => {
     const dataToSend = {
-      name: data.name,
-      description: data.description,
+      ...data,
       userId: user?.id || "",
+      categoryId: initialValues?._id, // Include id for updates
     };
-    createCategory(dataToSend);
+
+    if (initialValues) {
+      updateCategory(dataToSend);
+    } else {
+      createCategory(dataToSend);
+    }
   };
 
-  return isPending ? (
+  return isCreating || isUpdating ? (
     <Loader />
   ) : (
     <div className="w-full">
       <p className="text-xl font-bold text-center flex justify-center mb-4">
-        Add new category
+        {initialValues ? "Edit category" : "Add new category"}
       </p>
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -138,11 +185,14 @@ const CreateCategoryForm = ({
 
         <div className="flex flex-col lg:flex-row justify-center w-full gap-4 mt-4 text-xs">
           <ButtonOuttline text="Cancel" onClick={onCancelClick} />
-          <ButtonOuttline text="Create" type="submit" />
+          <ButtonOuttline
+            text={initialValues ? "Update" : "Create"}
+            type="submit"
+          />
         </div>
       </form>
     </div>
   );
 };
 
-export default CreateCategoryForm;
+export default CategoryForm;

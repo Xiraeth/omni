@@ -22,7 +22,10 @@ const CategoriesSection = ({
     useState<boolean>(false);
   const [isCreateCategoryOpen, setIsCreateCategoryOpen] =
     useState<boolean>(false);
+
   const [deleteCategoryId, setDeleteCategoryId] = useState<string>("");
+  const [clickedCategoryToEdit, setClickedCategoryToEdit] =
+    useState<TodoCategoryType | null>(null);
 
   const { selectedCategory, setSelectedCategory } = useTodos();
 
@@ -95,9 +98,13 @@ const CategoriesSection = ({
         />
       )}
 
-      {isCreateCategoryOpen && (
+      {(isCreateCategoryOpen || clickedCategoryToEdit) && (
         <CreateCategoryModal
-          onCancelClick={() => setIsCreateCategoryOpen(false)}
+          onCancelClick={() => {
+            setIsCreateCategoryOpen(false);
+            setClickedCategoryToEdit(null);
+          }}
+          initialValues={clickedCategoryToEdit || undefined}
         />
       )}
       <div className="w-full flex flex-col">
@@ -125,6 +132,8 @@ const CategoriesSection = ({
                 <FontAwesomeIcon
                   icon={faEdit}
                   onClick={(e) => {
+                    setClickedCategoryToEdit(category);
+                    setIsCreateCategoryOpen(true);
                     e.stopPropagation();
                   }}
                   className="text-sm text-dark dark:text-light hover:text-indigo-500 cursor-pointer dark:hover:text-blue-600 font-bold font-montserrat transition-colors duration-200 select-none"
