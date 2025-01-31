@@ -1,5 +1,6 @@
 import dbConnect from "@/lib/connectToDb";
 import TodoCategory from "@/models/todoCategory";
+import Todo from "@/models/todo";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(request: NextRequest) {
@@ -16,6 +17,19 @@ export async function DELETE(request: NextRequest) {
 
   if (!userId) {
     return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+  }
+
+  // Check for existing todos with this category
+  const existingTodos = await Todo.find({ category: categoryId });
+
+  if (existingTodos.length > 0) {
+    return NextResponse.json(
+      {
+        error:
+          "Cannot delete category that has existing todos. Please delete or reassign todos first.",
+      },
+      { status: 400 }
+    );
   }
 
   const todoCategory = await TodoCategory.findByIdAndDelete(categoryId);

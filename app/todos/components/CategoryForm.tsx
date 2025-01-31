@@ -25,6 +25,7 @@ const CategoryForm = ({
   const successMessage = initialValues
     ? "Category updated"
     : "Category created";
+
   const successToast = useCustomToast({
     type: "success",
     message: successMessage,

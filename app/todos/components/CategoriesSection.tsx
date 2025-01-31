@@ -60,7 +60,13 @@ const CategoriesSection = ({
         );
       },
       onError: (error: Error) => {
-        deleteErrorToast(error.message);
+        if (axios.isAxiosError(error)) {
+          deleteErrorToast(
+            error.response?.data?.error || "Error deleting category"
+          );
+        } else {
+          deleteErrorToast("Error deleting category");
+        }
       },
     });
 
