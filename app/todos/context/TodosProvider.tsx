@@ -8,6 +8,8 @@ const initialTodosContext: {
   setCategories: (categories: TodoCategoryType[]) => void;
   selectedCategory: TodoCategoryType | null;
   setSelectedCategory: (category: TodoCategoryType | null) => void;
+  selectedDate: Date;
+  setSelectedDate: (date: Date) => void;
 } = {
   todos: [],
   setTodos: () => {},
@@ -15,6 +17,8 @@ const initialTodosContext: {
   setCategories: () => {},
   selectedCategory: null,
   setSelectedCategory: () => {},
+  selectedDate: new Date(),
+  setSelectedDate: () => {},
 };
 
 const TodosContext = createContext(initialTodosContext);
@@ -22,6 +26,7 @@ const TodosContext = createContext(initialTodosContext);
 const TodosProvider = ({ children }: { children: React.ReactNode }) => {
   const [todos, setTodos] = useState<TodoType[]>([]);
   const [categories, setCategories] = useState<TodoCategoryType[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedCategory, setSelectedCategory] =
     useState<TodoCategoryType | null>(null);
 
@@ -34,6 +39,8 @@ const TodosProvider = ({ children }: { children: React.ReactNode }) => {
         setCategories,
         selectedCategory,
         setSelectedCategory,
+        selectedDate,
+        setSelectedDate,
       }}
     >
       {children}
@@ -41,11 +48,11 @@ const TodosProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const useTodos = () => {
+export const useTodosContext = () => {
   const context = useContext(TodosContext);
 
   if (!context) {
-    throw new Error("useTodos must be used within a TodosProvider");
+    throw new Error("useTodosContext must be used within a TodosProvider");
   }
   return context;
 };

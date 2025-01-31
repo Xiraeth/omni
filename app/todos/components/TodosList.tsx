@@ -10,7 +10,6 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import useCustomToast from "@/hooks/useCustomToast";
-import { getDateInfo } from "@/app/common/functions/getTemporalInfo";
 import { useUser } from "@/app/context/UserContext";
 import { TodoCategoryType } from "../lib/types";
 import TodoCard from "./TodoCard";
@@ -96,12 +95,6 @@ const TodosList = ({
     deleteTodoMutation.mutate({ data: dataToSubmit });
   };
 
-  const todaysTodos = todos.filter((todo) => {
-    const { DDMMYYYY: todoDDMMYYYY } = getDateInfo(new Date(todo?.dateFor));
-    const { DDMMYYYY: todaysDDMMYYYY } = getDateInfo(new Date());
-    return todoDDMMYYYY === todaysDDMMYYYY;
-  });
-
   const isAnyMutationPending =
     toggleCompletedMutation.isPending || deleteTodoMutation.isPending;
 
@@ -116,7 +109,7 @@ const TodosList = ({
           initialValues={initialValues as UpsertTodoFormDataType}
         />
       )}
-      {todaysTodos.map((todo) => (
+      {todos.map((todo) => (
         <TodoCard
           key={todo?._id}
           todo={todo}
