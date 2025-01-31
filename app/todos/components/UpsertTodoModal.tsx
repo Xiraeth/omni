@@ -1,4 +1,4 @@
-import ButtonOuttline from "@/app/components/ButtonOuttline";
+import ButtonOuttlined from "@/app/components/ButtonOuttlined";
 import Dropmenu from "@/app/components/Dropmenu";
 import Modal from "@/app/components/Modal";
 import {
@@ -213,7 +213,7 @@ const UpsertTodoModalForm = ({
                 />
               </FormElement>
             </div>
-            <ButtonOuttline
+            <ButtonOuttlined
               text={initialValues?._id ? "Update" : "Add"}
               type="submit"
             />

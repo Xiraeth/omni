@@ -4,8 +4,8 @@ import Dropmenu from "@/app/components/Dropmenu";
 import { useState } from "react";
 import { SORT_BY_OPTIONS } from "../lib/constants";
 import AddTodoModal from "./UpsertTodoModal";
-import { useTodos } from "../context/TodosProvider";
-import TasksList from "./TodosList";
+import { useTodosContext } from "../context/TodosProvider";
+import TodosList from "./TodosList";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { handleTodoSort } from "../lib/functions";
@@ -19,7 +19,7 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
   const [sortOrder, setSortOrder] = useState<TodoSortOrderType>("asc");
   const [isAddTodoOpen, setIsAddTodoOpen] = useState(false);
 
-  const { categories, selectedCategory } = useTodos();
+  const { categories, selectedCategory, selectedDate } = useTodosContext();
 
   const numberOfTasksForToday = todos.filter((todo) => {
     const { DDMMYYYY: todoDDMMYYYY } = getDateInfo(new Date(todo?.dateFor));
@@ -29,12 +29,21 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
 
   const sortedTodos = handleTodoSort(todos, sortBy || "time", sortOrder);
 
-  const filteredTodosBasedOnCategory = sortedTodos.filter(
-    (todo) => todo?.category?._id === selectedCategory?._id
-  );
+  const filteredTodos = sortedTodos
+    .filter((todo) => {
+      const { DDMMYYYY: todoDDMMYYYY } = getDateInfo(new Date(todo?.dateFor));
+      const { DDMMYYYY: selectedDateDDMMYYYY } = getDateInfo(selectedDate);
+      return todoDDMMYYYY === selectedDateDDMMYYYY;
+    })
+    ?.filter((todo) => {
+      if (selectedCategory) {
+        return todo?.category?._id === selectedCategory?._id;
+      }
+      return true;
+    });
 
   const isCategoryEmpty =
-    selectedCategory && filteredTodosBasedOnCategory.length === 0;
+    Boolean(selectedCategory) && filteredTodos?.length === 0;
 
   return (
     <div className="centerPart pt-6 grow flex flex-col items-center">
@@ -97,14 +106,8 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
       </div>
 
       {/* list of todos */}
-      <TasksList
-        todos={
-          isCategoryEmpty
-            ? []
-            : filteredTodosBasedOnCategory?.length > 0
-            ? filteredTodosBasedOnCategory
-            : todos
-        }
+      <TodosList
+        todos={isCategoryEmpty ? [] : filteredTodos}
         categories={categories}
       />
     </div>

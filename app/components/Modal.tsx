@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import ButtonOuttline from "./ButtonOuttline";
+import ButtonOuttlined from "./ButtonOuttlined";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
 import Loader from "./Loader";
@@ -55,12 +55,12 @@ const Modal = ({
               <h1 className="text-2xl font-bold text-red-500">{header}</h1>
               <p className="text-sm">{text}</p>
               <div className="flex justify-center gap-2 w-full">
-                <ButtonOuttline
+                <ButtonOuttlined
                   text="Yes"
                   onClick={onConfirm}
                   className="w-1/3"
                 />
-                <ButtonOuttline
+                <ButtonOuttlined
                   text="No"
                   onClick={onCancel}
                   className="w-1/3"
