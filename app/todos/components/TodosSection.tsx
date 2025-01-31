@@ -19,7 +19,7 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
   const [sortOrder, setSortOrder] = useState<TodoSortOrderType>("asc");
   const [isAddTodoOpen, setIsAddTodoOpen] = useState(false);
 
-  const { categories } = useTodos();
+  const { categories, selectedCategory } = useTodos();
 
   const numberOfTasksForToday = todos.filter((todo) => {
     const { DDMMYYYY: todoDDMMYYYY } = getDateInfo(new Date(todo?.dateFor));
@@ -28,6 +28,13 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
   }).length;
 
   const sortedTodos = handleTodoSort(todos, sortBy, sortOrder);
+
+  const filteredTodosBasedOnCategory = sortedTodos.filter(
+    (todo) => todo?.category?._id === selectedCategory?._id
+  );
+
+  const isCategoryEmpty =
+    selectedCategory && filteredTodosBasedOnCategory.length === 0;
 
   return (
     <div className="centerPart pt-6 grow flex flex-col items-center">
@@ -90,7 +97,16 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
       </div>
 
       {/* list of todos */}
-      <TasksList todos={sortedTodos} categories={categories} />
+      <TasksList
+        todos={
+          isCategoryEmpty
+            ? []
+            : filteredTodosBasedOnCategory?.length > 0
+            ? filteredTodosBasedOnCategory
+            : todos
+        }
+        categories={categories}
+      />
     </div>
   );
 };
