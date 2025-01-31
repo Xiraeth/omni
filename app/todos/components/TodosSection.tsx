@@ -27,7 +27,7 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
     return todoDDMMYYYY === todaysDDMMYYYY;
   }).length;
 
-  const sortedTodos = handleTodoSort(todos, sortBy, sortOrder);
+  const sortedTodos = handleTodoSort(todos, sortBy || "time", sortOrder);
 
   const filteredTodosBasedOnCategory = sortedTodos.filter(
     (todo) => todo?.category?._id === selectedCategory?._id
