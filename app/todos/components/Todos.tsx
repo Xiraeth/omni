@@ -1,14 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useUser } from "@/app/context/UserContext";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TodoCategoryType, TodoType } from "../lib/types";
 import CategoriesSection from "./CategoriesSection";
 import TodosSection from "./TodosSection";
 import CalendarSection from "./CalendarSection";
 import { useTodos } from "../context/TodosProvider";
 import { useEffect } from "react";
+import Loader from "@/app/components/Loader";
 
 const Todos = () => {
   const { user } = useUser();
@@ -42,12 +41,7 @@ const Todos = () => {
   }, [todoCategories]);
 
   return todoCategoriesLoading || todosLoading ? (
-    <div className="w-full flex justify-center items-center h-screen">
-      <FontAwesomeIcon
-        icon={faSpinner}
-        className="animate-spin size-8 text-dark dark:text-light"
-      />
-    </div>
+    <Loader />
   ) : (
     <div className="w-full flex font-montserrat h-screen text-dark dark:text-light">
       <CategoriesSection todoCategories={todoCategories || []} />

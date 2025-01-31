@@ -14,8 +14,8 @@ import { getDateInfo } from "@/app/common/functions/getTemporalInfo";
 import { useUser } from "@/app/context/UserContext";
 import { TodoCategoryType } from "../lib/types";
 import TodoCard from "./TodoCard";
-import Loader from "@/app/components/Loader";
 import UpsertTodoModal from "./UpsertTodoModal";
+import OpacityLoader from "@/app/components/OpacityLoader";
 
 const TodosList = ({
   todos,
@@ -106,7 +106,7 @@ const TodosList = ({
     toggleCompletedMutation.isPending || deleteTodoMutation.isPending;
 
   return isAnyMutationPending ? (
-    <Loader />
+    <OpacityLoader />
   ) : (
     <div className="flex flex-col gap-4 w-8/12">
       {isEditTodoOpen && (

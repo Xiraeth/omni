@@ -4,6 +4,8 @@ export type TodoSortByType = "time" | "priority" | null;
 
 export type TodoPriorityType = "low" | "medium" | "high";
 
+export type TodoSortOrderType = "asc" | "desc";
+
 export type TodoType = {
   _id: string;
   title: string;

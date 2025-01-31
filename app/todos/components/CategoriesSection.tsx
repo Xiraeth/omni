@@ -8,6 +8,8 @@ import useCustomToast from "@/hooks/useCustomToast";
 import { useTodos } from "../context/TodosProvider";
 import Modal from "@/app/components/Modal";
 import CreateCategoryModal from "./CreateCategoryModal";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const CategoriesSection = ({
   todoCategories,
@@ -118,16 +120,26 @@ const CategoriesSection = ({
               <p className="font-montserrat text-lg select-none">
                 {category.name}
               </p>
-              <p
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setDeleteCategoryId(category._id);
-                  setIsDeleteCategoryOpen(true);
-                }}
-                className="text-xl text-dark dark:text-light hover:text-red-500 cursor-pointer dark:hover:text-red-500 font-bold font-montserrat transition-colors duration-200 select-none"
-              >
-                x
-              </p>
+
+              <div className="flex gap-2">
+                <FontAwesomeIcon
+                  icon={faEdit}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  className="text-sm text-dark dark:text-light hover:text-indigo-500 cursor-pointer dark:hover:text-blue-600 font-bold font-montserrat transition-colors duration-200 select-none"
+                />
+
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setDeleteCategoryId(category._id);
+                    setIsDeleteCategoryOpen(true);
+                  }}
+                  className="text-sm text-dark dark:text-light hover:text-red-500 cursor-pointer dark:hover:text-red-500 font-bold font-montserrat transition-colors duration-200 select-none"
+                />
+              </div>
             </div>
           ))}
         </div>
