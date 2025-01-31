@@ -5,13 +5,13 @@ import { TodoCategoryType, TodoType } from "../lib/types";
 import CategoriesSection from "./CategoriesSection";
 import TodosSection from "./TodosSection";
 import CalendarSection from "./CalendarSection";
-import { useTodos } from "../context/TodosProvider";
+import { useTodosContext } from "../context/TodosProvider";
 import { useEffect } from "react";
 import Loader from "@/app/components/Loader";
 
 const Todos = () => {
   const { user } = useUser();
-  const { setCategories } = useTodos();
+  const { setCategories } = useTodosContext();
 
   const categoriesQuery = `${process.env.NEXT_PUBLIC_API_URL}/todoCategories?id=${user?.id}`;
   const todosQuery = `${process.env.NEXT_PUBLIC_API_URL}/todos?id=${user?.id}`;

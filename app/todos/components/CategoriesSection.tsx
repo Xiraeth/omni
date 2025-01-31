@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useUser } from "@/app/context/UserContext";
 import useCustomToast from "@/hooks/useCustomToast";
-import { useTodos } from "../context/TodosProvider";
+import { useTodosContext } from "../context/TodosProvider";
 import Modal from "@/app/components/Modal";
 import CreateCategoryModal from "./CreateCategoryModal";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -27,7 +27,7 @@ const CategoriesSection = ({
   const [clickedCategoryToEdit, setClickedCategoryToEdit] =
     useState<TodoCategoryType | null>(null);
 
-  const { selectedCategory, setSelectedCategory } = useTodos();
+  const { selectedCategory, setSelectedCategory } = useTodosContext();
 
   const deleteSuccessToast = useCustomToast({
     message: "Category deleted successfully",

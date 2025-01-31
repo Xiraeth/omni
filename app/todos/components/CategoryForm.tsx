@@ -9,7 +9,7 @@ import { useUser } from "@/app/context/UserContext";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useCustomToast from "@/hooks/useCustomToast";
-import ButtonOuttline from "@/app/components/ButtonOuttline";
+import ButtonOuttlined from "@/app/components/ButtonOuttlined";
 import Loader from "@/app/components/Loader";
 
 const CategoryForm = ({
@@ -185,8 +185,8 @@ const CategoryForm = ({
         />
 
         <div className="flex flex-col lg:flex-row justify-center w-full gap-4 mt-4 text-xs">
-          <ButtonOuttline text="Cancel" onClick={onCancelClick} />
-          <ButtonOuttline
+          <ButtonOuttlined text="Cancel" onClick={onCancelClick} />
+          <ButtonOuttlined
             text={initialValues ? "Update" : "Create"}
             type="submit"
           />
