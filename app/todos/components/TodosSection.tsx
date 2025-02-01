@@ -19,6 +19,7 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
   const [sortOrder, setSortOrder] = useState<TodoSortOrderType>("asc");
   const [isAddTodoOpen, setIsAddTodoOpen] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
 
   const { categories, selectedCategory, selectedDate, setSelectedDate } =
     useTodosContext();
@@ -155,7 +156,7 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
                 setSortBy(option as TodoSortByType);
               }}
               value={sortBy || ""}
-              width="w-20 lg:w-28"
+              width="w-fit lg:w-28"
               height="h-[30px] lg:h-[36px]"
               className="text-xs lg:text-sm"
             />

@@ -54,6 +54,13 @@ const Dropmenu = ({
     setIsFocused(!isFocused);
   };
 
+  const computeDropdownPosition = () => {
+    if (height) {
+      return `top-[${50 - parseInt(height) + 10}px]`;
+    }
+    return "top-[40px] lg:top-[50px]";
+  };
+
   return (
     <div
       className={clsx("relative", width ? width : "w-fit")}
@@ -75,18 +82,18 @@ const Dropmenu = ({
       >
         <div
           className={clsx(
-            "flex items-center justify-center lg:justify-between gap-2 lg:gap-0 px-2",
+            "flex items-center justify-betwen lg:justify-between gap-4 px-2",
             height ? height : "h-[38px] lg:h-[46px]"
           )}
         >
-          <span>
+          <span className="ml-auto text-sm lg:text-base">
             {selectedOption?.charAt(0).toUpperCase() +
               selectedOption?.slice(1) || placeholder}
           </span>
           {isOpen ? (
-            <FontAwesomeIcon icon={faChevronUp} className="text-xs" />
+            <FontAwesomeIcon icon={faChevronUp} className="text-xs ml-auto" />
           ) : (
-            <FontAwesomeIcon icon={faChevronDown} className="text-xs" />
+            <FontAwesomeIcon icon={faChevronDown} className="text-xs ml-auto" />
           )}
         </div>
       </div>
@@ -95,7 +102,7 @@ const Dropmenu = ({
         <div
           className={clsx(
             "absolute left-0 w-full z-50 text-xs lg:text-sm",
-            height ? height : "top-[50px]"
+            computeDropdownPosition()
           )}
         >
           <div
