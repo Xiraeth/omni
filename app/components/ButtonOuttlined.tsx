@@ -8,6 +8,7 @@ const ButtonOuttlined = ({
   className,
   hasPadding = true,
   variant = "default",
+  icon,
 }: {
   text: string;
   onClick?: () => void;
@@ -15,6 +16,7 @@ const ButtonOuttlined = ({
   className?: string;
   hasPadding?: boolean;
   variant?: ButtonVariantsType;
+  icon?: React.ReactNode;
 }) => {
   return (
     <button
@@ -34,6 +36,7 @@ const ButtonOuttlined = ({
           "border-red-600 dark:border-red-400 hover:bg-red-600 text-red-600 dark:text-red-400 hover:text-white dark:hover:bg-red-400 dark:hover:text-dark"
       )}
     >
+      {icon ? icon : null}
       {text}
     </button>
   );

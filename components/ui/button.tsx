@@ -10,13 +10,21 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-slate-900 text-slate-50 shadow hover:bg-slate-900/90 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50/90",
-        destructive:
-          "bg-red-500 text-slate-50 shadow-sm hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90",
+          "border-[1px] dark:border-slate-600 bg-buttonBgLight dark:bg-buttonBgDark text-dark dark:text-light shadow-md hover:border-buttonBorderLightHover dark:hover:border-slate-500 transition-all duration-200",
         outline:
-          "border border-slate-200 bg-white shadow-sm hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50",
-        secondary:
-          "bg-slate-100 text-slate-900 shadow-sm hover:bg-slate-100/80 dark:bg-slate-800 dark:text-slate-50 dark:hover:bg-slate-800/80",
+          "border border-dark bg-transparent shadow-md hover:bg-dark hover:text-white dark:border-white/30 dark:hover:bg-light dark:hover:text-dark",
+        success:
+          "bg-green-500 text-white dark:bg-green-400 dark:text-dark border border-green-500 dark:border-green-400 shadow-md hover:bg-green-600 dark:hover:bg-green-500 transition-all duration-200",
+        successOutlined:
+          "border border-green-500 bg-transparent shadow-md hover:bg-green-500 hover:text-white dark:border-green-400 dark:hover:bg-green-400 dark:hover:text-dark",
+        warning:
+          "bg-yellow-500 text-white dark:bg-yellow-400 dark:text-dark border border-yellow-500 dark:border-yellow-400 shadow-md hover:bg-yellow-600 dark:hover:bg-yellow-500 transition-all duration-200",
+        warningOutlined:
+          "border border-yellow-500 bg-transparent shadow-md hover:bg-yellow-500 hover:text-white dark:border-yellow-400 dark:hover:bg-yellow-400 dark:hover:text-dark",
+        danger:
+          "bg-red-600 text-white dark:bg-red-400 dark:text-dark border border-red-600 dark:border-red-400 shadow-md hover:bg-red-700 dark:hover:bg-red-500 transition-all duration-200",
+        dangerOutlined:
+          "border border-red-600 bg-transparent shadow-md hover:bg-red-600 text-red-600 hover:text-white dark:border-red-400 dark:text-red-400 dark:hover:bg-red-400 dark:hover:text-dark",
         ghost:
           "hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-50",
         link: "text-slate-900 underline-offset-4 hover:underline dark:text-slate-50",
