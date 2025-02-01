@@ -2,7 +2,7 @@ import clsx from "clsx";
 import ButtonOuttlined from "./ButtonOuttlined";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark";
-import Loader from "./Loader";
+import CustomLoader from "./CustomLoader";
 
 const Modal = ({
   onConfirm,
@@ -47,7 +47,7 @@ const Modal = ({
           )}
 
           {isPending ? (
-            <Loader />
+            <CustomLoader />
           ) : children ? (
             children
           ) : (

@@ -82,7 +82,7 @@ const Dropmenu = ({
       >
         <div
           className={clsx(
-            "flex items-center justify-betwen lg:justify-between gap-4 px-2",
+            "flex items-center justify-betwen lg:justify-between gap-4 px-4",
             height ? height : "h-[38px] lg:h-[46px]"
           )}
         >
@@ -117,7 +117,7 @@ const Dropmenu = ({
               return (
                 <div
                   className={clsx(
-                    "cursor-pointer px-4 py-2 hover:bg-slate-200/80 dark:hover:bg-slate-800 text-dark dark:text-light transition-all duration-200",
+                    "cursor-pointer px-4 py-2 truncate hover:bg-slate-200/80 dark:hover:bg-slate-800 text-dark dark:text-light transition-all duration-200",
                     {
                       "rounded-t-md": isFirst,
                       "rounded-b-md": isLast,

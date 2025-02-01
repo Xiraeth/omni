@@ -22,6 +22,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useTheme } from "../context/ThemeContext";
+import CustomLoader from "./CustomLoader";
 
 const Navbar = () => {
   const router = useRouter();
@@ -30,27 +31,40 @@ const Navbar = () => {
   const searchParams = useSearchParams();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const isNavbarOpen = searchParams.get("isNavbarOpen") === "true";
-
-  const handleDashboardClick = () => {
-    setIsDropdownOpen(false);
-    router.push("/");
-  };
-
-  const handleIncomeClick = () => {
-    router.push("/income");
-  };
-
-  const handleExpensesClick = () => {
-    // router.push("/expenses");
-  };
-
-  const handleTodosClick = () => {
-    router.push("/todos");
-  };
+  const [isLoading, setIsLoading] = useState(false);
 
   const closeNavbar = () => {
     setIsDropdownOpen(false);
     changeUrlParams({ params: "isNavbarOpen", value: null });
+    setIsLoading(false);
+  };
+
+  const handleDashboardClick = () => {
+    setIsDropdownOpen(false);
+    closeNavbar();
+    router.push("/");
+    setIsLoading(false);
+  };
+
+  const handleIncomeClick = () => {
+    setIsLoading(true);
+    closeNavbar();
+    router.push("/income");
+    setIsLoading(false);
+  };
+
+  const handleExpensesClick = () => {
+    setIsLoading(true);
+    closeNavbar();
+    router.push("/expenses");
+    setIsLoading(false);
+  };
+
+  const handleTodosClick = () => {
+    setIsLoading(true);
+    closeNavbar();
+    router.push("/todos");
+    setIsLoading(false);
   };
 
   const handleThemeChange = () => {
@@ -58,7 +72,10 @@ const Navbar = () => {
   };
 
   const handleLogout = async () => {
+    setIsLoading(true);
+    closeNavbar();
     await signOut();
+    setIsLoading(false);
   };
 
   const toggleDropdown = () => {
@@ -69,7 +86,9 @@ const Navbar = () => {
     return null;
   }
 
-  return (
+  return isLoading ? (
+    <CustomLoader />
+  ) : (
     <div
       className={`fixed left-0 bottom-0 top-0 w-[200px] sm:w-[250px] pt-4
         ${isNavbarOpen ? "shadow-lg shadow-black" : "shadow-black shadow-sm"}

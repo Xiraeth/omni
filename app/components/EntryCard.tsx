@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-const IncomeCard = ({
+const EntryCard = ({
   children,
   hasBorder = false,
 }: {
@@ -22,4 +22,4 @@ const IncomeCard = ({
   );
 };
 
-export default IncomeCard;
+export default EntryCard;

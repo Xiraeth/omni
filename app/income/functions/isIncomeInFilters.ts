@@ -1,8 +1,12 @@
-import { CategoriesType, FiltersType, IncomeDataType } from "../types";
+import {
+  IncomeCategoriesType,
+  IncomeFiltersType,
+  IncomeDataType,
+} from "../types";
 
 export const isIncomeInFilters = (
   income: IncomeDataType,
-  filters: FiltersType
+  filters: IncomeFiltersType
 ) => {
   const date = new Date(income?.date);
 
@@ -15,7 +19,7 @@ export const isIncomeInFilters = (
     : true;
 
   const isInCategory = filters?.toggledCategories?.includes(
-    income?.category?.toLowerCase() as CategoriesType
+    income?.category?.toLowerCase() as IncomeCategoriesType
   );
 
   const isInName =

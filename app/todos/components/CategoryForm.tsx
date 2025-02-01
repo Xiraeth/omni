@@ -10,7 +10,7 @@ import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useCustomToast from "@/hooks/useCustomToast";
 import ButtonOuttlined from "@/app/components/ButtonOuttlined";
-import Loader from "@/app/components/Loader";
+import CustomLoader from "@/app/components/CustomLoader";
 
 const CategoryForm = ({
   onCancelClick,
@@ -121,7 +121,7 @@ const CategoryForm = ({
   };
 
   return isCreating || isUpdating ? (
-    <Loader />
+    <CustomLoader />
   ) : (
     <div className="w-full">
       <p className="text-xl font-bold text-center flex justify-center mb-4">

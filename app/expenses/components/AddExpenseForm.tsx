@@ -1,23 +1,27 @@
 import { Controller } from "react-hook-form";
-import { IncomeDataType, IncomeFormDataType } from "../types";
 import { useForm } from "react-hook-form";
 import FormElement from "@/app/components/FormElement";
-import NameInput from "../../components/NameInput";
-import AmountInput from "../../components/AmountInput";
-import DateInput from "../../components/DateInput";
+import NameInput from "@/app/components/NameInput";
+import AmountInput from "@/app/components/AmountInput";
+import DateInput from "@/app/components/DateInput";
 import GenericButton from "@/app/components/GenericButton";
 import useCustomToast from "@/hooks/useCustomToast";
-import { INCOME_CATEGORIES } from "@/app/constants/constants";
+import { EXPENSES_CATEGORIES } from "@/app/constants/constants";
 import Dropmenu from "@/app/components/Dropmenu";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "@/app/context/UserContext";
+import { ExpensesDataType, ExpensesFormDataType } from "../types";
 
-const AddIncomeForm = () => {
+const AddExpenseForm = ({
+  setIsAddExpenseLoading,
+}: {
+  setIsAddExpenseLoading: (isLoading: boolean) => void;
+}) => {
   const { user } = useUser();
   const queryClient = useQueryClient();
   const successToast = useCustomToast({
-    message: "Income added successfully",
+    message: "Expense added successfully",
   });
 
   const {
@@ -26,7 +30,7 @@ const AddIncomeForm = () => {
     formState: { errors },
     setError,
     setValue,
-  } = useForm<IncomeFormDataType>({
+  } = useForm<ExpensesFormDataType>({
     mode: "onSubmit",
     defaultValues: {
       name: "",
@@ -37,40 +41,46 @@ const AddIncomeForm = () => {
     },
   });
 
-  const { mutate: createIncome } = useMutation({
-    mutationFn: async (data: IncomeFormDataType) => {
+  const { mutate: createExpense } = useMutation({
+    mutationFn: async (data: ExpensesFormDataType) => {
+      setIsAddExpenseLoading(true);
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/income`,
+        `${process.env.NEXT_PUBLIC_API_URL}/expenses`,
         data
       );
       if (response?.data?.error) {
         throw new Error(response.data.error);
       }
-      return response.data.income;
+      return response.data.expense;
     },
     onSuccess: (data) => {
       setValue("name", "");
       setValue("amount", "");
       setValue("date", "");
       setValue("category", undefined);
-      queryClient.setQueryData(["incomeData"], (oldData: IncomeDataType[]) => {
-        return [...oldData, data];
-      });
+      queryClient.setQueryData(
+        ["expensesData"],
+        (oldData: ExpensesDataType[]) => {
+          return [...oldData, data];
+        }
+      );
       successToast();
+      setIsAddExpenseLoading(false);
     },
     onError: (error: Error) => {
       setError("root", { message: error.message });
+      setIsAddExpenseLoading(false);
     },
   });
 
-  const onSubmit = async (data: IncomeFormDataType) => {
+  const onSubmit = async (data: ExpensesFormDataType) => {
     const dataToSubmit = {
       ...data,
       userId: user?.id || "",
     };
 
     if (Object.keys(errors).length === 0) {
-      createIncome(dataToSubmit);
+      createExpense(dataToSubmit);
     }
   };
 
@@ -108,10 +118,10 @@ const AddIncomeForm = () => {
           render={({ field: { onChange, value } }) => (
             <FormElement errorMsg={errors?.category?.message}>
               <Dropmenu
-                options={INCOME_CATEGORIES}
+                options={EXPENSES_CATEGORIES}
                 placeholder="Category"
                 value={value || ""}
-                width="w-full"
+                width="w-full min-w-[130px]"
                 onSelect={(option) => onChange(option)}
               />
             </FormElement>
@@ -149,10 +159,10 @@ const AddIncomeForm = () => {
             </FormElement>
           )}
         />
-        <GenericButton text="Add income" width="md" />
+        <GenericButton text="Add expense" width="md" />
       </div>
     </form>
   );
 };
 
-export default AddIncomeForm;
+export default AddExpenseForm;
