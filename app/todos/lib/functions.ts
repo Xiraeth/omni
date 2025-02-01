@@ -8,13 +8,23 @@ const priorityOrder = {
   low: 3,
 };
 
-export const getPriorityColor = (priority: string) => {
-  if (priority?.toLowerCase() === "high") return "text-red-500";
+export const getPriorityColor = (priority: string, hasBreakpoints = false) => {
+  if (priority?.toLowerCase() === "high")
+    return hasBreakpoints
+      ? "text-red-600 dark:text-red-400 md:text-inherit dark:md:text-inherit"
+      : "text-red-600 dark:text-red-400";
   if (priority?.toLowerCase() === "medium")
-    return "text-amber-600 dark:text-amber-400";
-  if (priority?.toLowerCase() === "low") return "text-blue-500";
+    return hasBreakpoints
+      ? "text-amber-600 dark:text-amber-400 md:text-inherit dark:md:text-inherit"
+      : "text-amber-600 dark:text-amber-400";
+  if (priority?.toLowerCase() === "low")
+    return hasBreakpoints
+      ? "text-blue-600 dark:text-blue-400 md:text-inherit dark:md:text-inherit"
+      : "text-blue-600 dark:text-blue-400";
 
-  return "text-gray-500";
+  return hasBreakpoints
+    ? "text-gray-600 dark:text-gray-400 md:text-inherit dark:md:text-inherit"
+    : "text-gray-600 dark:text-gray-400";
 };
 
 export const handleTodoSort = (
