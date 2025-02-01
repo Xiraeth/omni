@@ -12,7 +12,7 @@ const CalendarSection = () => {
   const [month, setMonth] = useState<Date>(new Date(currentDate));
 
   return (
-    <div className="rightPart pt-14 lg:pt-6 w-[300px] lg:w-[400px] xl:w-[500px] bg-slate-400/20 dark:bg-black/30 flex flex-col items-center gap-14">
+    <div className="rightPart pt-6 w-[300px] lg:w-[400px] xl:w-[500px] bg-slate-400/20 dark:bg-black/30 hidden md:flex flex-col items-center gap-14">
       <p className="w-11/12 lg:w-7/12 text-center font-bold text-base lg:text-lg">
         Pick a date to filter your todos for that specific day
       </p>

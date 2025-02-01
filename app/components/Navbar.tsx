@@ -154,7 +154,7 @@ const Navbar = () => {
           />
         </div>
         <div className="flex flex-col gap-2 pb-2">
-          <div className="sm:hidden block">
+          <div>
             <NavbarButton
               text="Toggle theme"
               onClick={handleThemeChange}
