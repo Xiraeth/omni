@@ -10,6 +10,7 @@ type DropmenuPropsType = {
   value: string;
   width?: string;
   height?: string;
+  className?: string;
 };
 
 const Dropmenu = ({
@@ -19,6 +20,7 @@ const Dropmenu = ({
   value,
   height,
   width = "full",
+  className,
 }: DropmenuPropsType) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string>(value);
@@ -66,13 +68,14 @@ const Dropmenu = ({
             "hover:border-buttonBorderLightHover dark:border-slate-600 dark:hover:border-slate-500 dark:bg-buttonBgDark bg-buttonBgLight":
               !isOpen,
           },
-          width ? width : "w-fit"
+          width ? width : "w-fit",
+          className
         )}
         onClick={handleToggleDropdown}
       >
         <div
           className={clsx(
-            "flex items-center justify-between px-4 gap-2",
+            "flex items-center justify-center lg:justify-between gap-2 lg:gap-0 px-2",
             height ? height : "h-[46px]"
           )}
         >
@@ -81,9 +84,9 @@ const Dropmenu = ({
               selectedOption?.slice(1) || placeholder}
           </span>
           {isOpen ? (
-            <FontAwesomeIcon icon={faChevronUp} width={20} height={20} />
+            <FontAwesomeIcon icon={faChevronUp} className="text-xs" />
           ) : (
-            <FontAwesomeIcon icon={faChevronDown} width={20} height={20} />
+            <FontAwesomeIcon icon={faChevronDown} className="text-xs" />
           )}
         </div>
       </div>
@@ -91,7 +94,7 @@ const Dropmenu = ({
       {isOpen && (
         <div
           className={clsx(
-            "absolute left-0 w-full z-50",
+            "absolute left-0 w-full z-50 text-xs lg:text-sm",
             height ? height : "top-[50px]"
           )}
         >

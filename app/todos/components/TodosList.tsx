@@ -101,7 +101,7 @@ const TodosList = ({
   return isAnyMutationPending ? (
     <OpacityLoader />
   ) : (
-    <div className="flex flex-col gap-4 w-8/12">
+    <div className="flex flex-col gap-4 w-11/12 2xl:w-8/12">
       {isEditTodoOpen && (
         <UpsertTodoModal
           onClose={() => setIsEditTodoOpen(false)}
