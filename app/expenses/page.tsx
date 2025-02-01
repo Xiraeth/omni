@@ -213,14 +213,14 @@ const ExpensesPage = () => {
             handleDeleteExpense={handleDeleteExpense}
           />
 
-          {/* total amount of money earned */}
+          {/* total amount of money spent */}
           {expensesTotalAmount ? (
             <div className="w-10/12 mx-auto mt-12">
               <EntryCard hasBorder={true}>
                 <div className="flex gap-2 items-center">
                   {" "}
                   <div className="sm:text-xl text-base sm:font-bold">
-                    Total amount of money earned
+                    Total amount of money spent
                   </div>
                 </div>
                 <div className="flex gap-2 items-center">
