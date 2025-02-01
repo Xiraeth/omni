@@ -13,7 +13,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "@/app/context/UserContext";
 import { ExpensesDataType, ExpensesFormDataType } from "../types";
 
-const AddExpenseForm = () => {
+const AddExpenseForm = ({
+  setIsAddExpenseLoading,
+}: {
+  setIsAddExpenseLoading: (isLoading: boolean) => void;
+}) => {
   const { user } = useUser();
   const queryClient = useQueryClient();
   const successToast = useCustomToast({
@@ -39,6 +43,7 @@ const AddExpenseForm = () => {
 
   const { mutate: createExpense } = useMutation({
     mutationFn: async (data: ExpensesFormDataType) => {
+      setIsAddExpenseLoading(true);
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/expenses`,
         data
@@ -60,9 +65,11 @@ const AddExpenseForm = () => {
         }
       );
       successToast();
+      setIsAddExpenseLoading(false);
     },
     onError: (error: Error) => {
       setError("root", { message: error.message });
+      setIsAddExpenseLoading(false);
     },
   });
 
@@ -114,7 +121,7 @@ const AddExpenseForm = () => {
                 options={EXPENSES_CATEGORIES}
                 placeholder="Category"
                 value={value || ""}
-                width="w-full"
+                width="w-full min-w-[130px]"
                 onSelect={(option) => onChange(option)}
               />
             </FormElement>

@@ -16,6 +16,7 @@ import ConnectWithGithub from "../components/ConnectWithGithub";
 import Input from "../components/Input";
 import useCustomToast from "@/hooks/useCustomToast";
 import { useUser } from "../context/UserContext";
+import CustomLoader from "../components/CustomLoader";
 
 const Login = () => {
   const router = useRouter();
@@ -107,11 +108,7 @@ const Login = () => {
   };
 
   if (user) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen w-full">
-        <FontAwesomeIcon icon={faSpinner} className="w-8 h-8 animate-spin" />
-      </div>
-    );
+    return <CustomLoader />;
   }
 
   return (

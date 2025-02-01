@@ -6,7 +6,7 @@ import { useUser } from "@/app/context/UserContext";
 import { useRouter } from "next/navigation";
 import NoSessionDiv from "@/app/components/NoSessionDiv";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter, faSort, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faFilter, faSort } from "@fortawesome/free-solid-svg-icons";
 import AddExpenseForm from "./components/AddExpenseForm";
 import ExpensesTable from "./components/ExpensesTable";
 import useCustomToast from "@/hooks/useCustomToast";
@@ -29,11 +29,14 @@ import {
 import EntryCard from "@/app/components/EntryCard";
 import { handleSortExpenses } from "../common/functions/handleSort";
 import { isExpenseInFilters } from "./functions/isExpenseInFilters";
+import CustomLoader from "../components/CustomLoader";
 
 const ExpensesPage = () => {
   const router = useRouter();
   const { user } = useUser();
   const queryClient = useQueryClient();
+  const [isAddExpenseLoading, setIsAddExpenseLoading] =
+    useState<boolean>(false);
 
   useEffect(() => {
     // Redirect to login if user is not logged in
@@ -92,7 +95,7 @@ const ExpensesPage = () => {
     return value;
   });
 
-  const { mutate: deleteExpense } = useMutation({
+  const { mutate: deleteExpense, isPending: isDeletingExpense } = useMutation({
     mutationFn: async (id: string) => {
       const response = await axios.delete(
         `${process.env.NEXT_PUBLIC_API_URL}/expenses/${id}`
@@ -158,23 +161,21 @@ const ExpensesPage = () => {
     );
   };
 
-  return expensesDataLoading ? (
-    <div className="w-screen h-screen overflow-x-hidden flex justify-center items-center">
-      <FontAwesomeIcon
-        icon={faSpinner}
-        className="animate-spin w-8 h-8 dark:text-light"
-      />
-    </div>
+  const isAnythingLoading =
+    expensesDataLoading || isDeletingExpense || isAddExpenseLoading;
+
+  return isAnythingLoading ? (
+    <CustomLoader />
   ) : user ? (
     <div className="w-screen h-screen overflow-x-hidden pb-8">
       <OpenNavbarButton />
-      <AddExpenseForm />
+
+      <AddExpenseForm setIsAddExpenseLoading={setIsAddExpenseLoading} />
       {isFiltersModalOpen && (
         <FiltersModal handleCloseFiltersModal={handleCloseFiltersModal} />
       )}
 
-      {/* filter and sorting */}
-      {(expensesData?.length || areThereFilters) && (
+      {expensesData?.length || areThereFilters ? (
         <>
           <div className="w-10/12 mx-auto mb-4 flex justify-between items-center">
             <div className="flex items-center gap-4">
@@ -213,12 +214,10 @@ const ExpensesPage = () => {
             handleDeleteExpense={handleDeleteExpense}
           />
 
-          {/* total amount of money spent */}
           {expensesTotalAmount ? (
             <div className="w-10/12 mx-auto mt-12">
               <EntryCard hasBorder={true}>
                 <div className="flex gap-2 items-center">
-                  {" "}
                   <div className="sm:text-xl text-base sm:font-bold">
                     Total amount of money spent
                   </div>
@@ -232,7 +231,7 @@ const ExpensesPage = () => {
             </div>
           ) : null}
         </>
-      )}
+      ) : null}
     </div>
   ) : (
     <NoSessionDiv />

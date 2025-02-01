@@ -1,19 +1,23 @@
 "use client";
 
-import LinkButton from "./components/LinkButton";
 import { useUser } from "./context/UserContext";
 import { changeUrlParams } from "./common/functions/changeParams";
 import { useEffect, useState } from "react";
 import OpenNavbarButton from "./components/OpenNavbarButton";
 import { useNavbar } from "../hooks/useNavbar";
 import { formatTimeWithSeconds } from "./common/functions/formatTime";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import CustomLoader from "./components/CustomLoader";
 
 // the dashboard page if user is logged in, otherwise the landing/home page
 export default function Home() {
   const { user } = useUser();
+  const router = useRouter();
   const isNavbarOpen = useNavbar();
 
   const [currentTime, setCurrentTime] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const date = new Date();
   const formattedDate = date.toLocaleDateString("en-US", {
@@ -41,17 +45,39 @@ export default function Home() {
 
   return (
     <>
-      {!user ? (
-        <div className="italic select-none flex flex-col items-center justify-center h-screen w-fit gap-8 transition-all duration-200 mx-auto text-text-dark dark:text-text-light relative z-10">
-          <p className="text-6xl font-bold font-montserrat drop-shadow-lg shadow-black text-center">
+      {isLoading ? (
+        <CustomLoader />
+      ) : !user ? (
+        <div className="italic select-none flex flex-col items-center justify-center h-screen w-fit gap-4 lg:gap-8 transition-all duration-200 mx-auto text-text-dark dark:text-text-light relative z-10">
+          <p className="text-3xl lg:text-6xl font-bold font-montserrat drop-shadow-lg shadow-black text-center">
             Omni
           </p>
-          <p className="text-xl font-montserrat drop-shadow-lg shadow-black text-center">
+          <p className="text-base lg:text-xl font-montserrat px-8 drop-shadow-lg shadow-black text-center">
             An (under construction) app for many things
           </p>
-          <div className="flex justify-center gap-24 w-full">
-            <LinkButton color="black" text="Log in" href="/login" />
-            <LinkButton color="black" text="Sign up" href="/signup" />
+          <div className="flex justify-center gap-6 lg:gap-12 w-full">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsLoading(true);
+                router.push("/login");
+                setIsLoading(false);
+              }}
+              className="text-sm lg:text-base px-4 py-1"
+            >
+              Log in
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsLoading(true);
+                router.push("/signup");
+                setIsLoading(false);
+              }}
+              className="text-sm lg:text-base px-4 py-1"
+            >
+              Sign up
+            </Button>
           </div>
         </div>
       ) : (

@@ -6,7 +6,7 @@ import { useUser } from "@/app/context/UserContext";
 import { useRouter } from "next/navigation";
 import NoSessionDiv from "@/app/components/NoSessionDiv";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter, faSort, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faFilter, faSort } from "@fortawesome/free-solid-svg-icons";
 import AddIncomeForm from "./components/AddIncomeForm";
 import IncomeTable from "./components/IncomeTable";
 import useCustomToast from "@/hooks/useCustomToast";
@@ -29,6 +29,7 @@ import {
 import EntryCard from "@/app/components/EntryCard";
 import { handleSortIncomes } from "../common/functions/handleSort";
 import { isIncomeInFilters } from "./functions/isIncomeInFilters";
+import CustomLoader from "../components/CustomLoader";
 
 const IncomePage = () => {
   const router = useRouter();
@@ -92,7 +93,7 @@ const IncomePage = () => {
     return value;
   });
 
-  const { mutate: deleteIncome } = useMutation({
+  const { mutate: deleteIncome, isPending: isDeletingIncome } = useMutation({
     mutationFn: async (id: string) => {
       const response = await axios.delete(
         `${process.env.NEXT_PUBLIC_API_URL}/income/${id}`
@@ -149,13 +150,10 @@ const IncomePage = () => {
     });
   };
 
-  return incomeDataLoading ? (
-    <div className="w-screen h-screen overflow-x-hidden flex justify-center items-center">
-      <FontAwesomeIcon
-        icon={faSpinner}
-        className="animate-spin w-8 h-8 dark:text-light"
-      />
-    </div>
+  const isAnythingLoading = incomeDataLoading || isDeletingIncome;
+
+  return isAnythingLoading ? (
+    <CustomLoader />
   ) : user ? (
     <div className="w-screen h-screen overflow-x-hidden pb-8">
       <OpenNavbarButton />

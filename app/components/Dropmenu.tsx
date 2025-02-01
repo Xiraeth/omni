@@ -117,7 +117,7 @@ const Dropmenu = ({
               return (
                 <div
                   className={clsx(
-                    "cursor-pointer px-4 py-2 hover:bg-slate-200/80 dark:hover:bg-slate-800 text-dark dark:text-light transition-all duration-200",
+                    "cursor-pointer px-4 py-2 truncate hover:bg-slate-200/80 dark:hover:bg-slate-800 text-dark dark:text-light transition-all duration-200",
                     {
                       "rounded-t-md": isFirst,
                       "rounded-b-md": isLast,

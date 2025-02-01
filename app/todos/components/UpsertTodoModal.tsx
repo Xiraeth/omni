@@ -16,7 +16,7 @@ import { useUser } from "@/app/context/UserContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import useCustomToast from "@/hooks/useCustomToast";
-import Loader from "@/app/components/Loader";
+import CustomLoader from "@/app/components/CustomLoader";
 
 const UpsertTodoModalForm = ({
   onClose,
@@ -109,7 +109,7 @@ const UpsertTodoModalForm = ({
     >
       {isPending ? (
         <div className="flex justify-center items-center">
-          <Loader />
+          <CustomLoader />
         </div>
       ) : (
         <>

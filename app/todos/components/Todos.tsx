@@ -7,7 +7,7 @@ import TodosSection from "./TodosSection";
 import CalendarSection from "./CalendarSection";
 import { useTodosContext } from "../context/TodosProvider";
 import { useEffect } from "react";
-import Loader from "@/app/components/Loader";
+import CustomLoader from "@/app/components/CustomLoader";
 
 const Todos = () => {
   const { user } = useUser();
@@ -41,7 +41,7 @@ const Todos = () => {
   }, [todoCategories]);
 
   return todoCategoriesLoading || todosLoading ? (
-    <Loader />
+    <CustomLoader />
   ) : (
     <div className="w-full flex font-montserrat h-screen text-dark dark:text-light">
       <CategoriesSection todoCategories={todoCategories || []} />
