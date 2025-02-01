@@ -1,5 +1,10 @@
 import { getDateInfo } from "@/app/common/functions/getTemporalInfo";
-import { TodoSortByType, TodoSortOrderType, TodoType } from "../lib/types";
+import {
+  TodoCategoryType,
+  TodoSortByType,
+  TodoSortOrderType,
+  TodoType,
+} from "../lib/types";
 import Dropmenu from "@/app/components/Dropmenu";
 import { useState } from "react";
 import { SORT_BY_OPTIONS } from "../lib/constants";
@@ -10,19 +15,48 @@ import { faSort, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getAmountOfTodosColor, handleTodoSort } from "../lib/functions";
 import { format, isPast, isToday } from "date-fns";
-import { faCalendar as faRegularCalendar } from "@fortawesome/free-regular-svg-icons";
 import { Calendar } from "@/components/ui/calendar";
 import ButtonOuttlined from "@/app/components/ButtonOuttlined";
+import { LucideCalendar, LucideList } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import CategoriesList from "./CategoriesList";
+import { Button } from "@/components/ui/button";
+import { useUser } from "@/app/context/UserContext";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useCustomToast from "@/hooks/useCustomToast";
+import axios from "axios";
+import CreateCategoryModal from "./CreateCategoryModal";
+import Modal from "@/app/components/Modal";
 
 const TodosSection = ({ todos }: { todos: TodoType[] }) => {
+  const { user } = useUser();
+  const queryClient = useQueryClient();
+
   const [sortBy, setSortBy] = useState<TodoSortByType>(null);
   const [sortOrder, setSortOrder] = useState<TodoSortOrderType>("asc");
   const [isAddTodoOpen, setIsAddTodoOpen] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+  const [isDeleteCategoryOpen, setIsDeleteCategoryOpen] =
+    useState<boolean>(false);
+  const [isCreateCategoryOpen, setIsCreateCategoryOpen] =
+    useState<boolean>(false);
 
-  const { categories, selectedCategory, selectedDate, setSelectedDate } =
-    useTodosContext();
+  const [deleteCategoryId, setDeleteCategoryId] = useState<string | null>(null);
+  const [clickedCategoryToEdit, setClickedCategoryToEdit] =
+    useState<TodoCategoryType | null>(null);
+
+  const {
+    categories,
+    selectedCategory,
+    selectedDate,
+    setSelectedDate,
+    setSelectedCategory,
+  } = useTodosContext();
 
   const numberOfTasksForSelectedDate = todos.filter((todo) => {
     const { DDMMYYYY: todoDDMMYYYY } = getDateInfo(new Date(todo?.dateFor));
@@ -62,6 +96,60 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
     setIsCalendarOpen((prev) => !prev);
   };
 
+  const deleteSuccessToast = useCustomToast({
+    message: "Category deleted successfully",
+    type: "success",
+  });
+
+  const deleteErrorToast = useCustomToast({
+    type: "error",
+  });
+
+  const { mutate: deleteTodoCategoryMutation, isPending: isDeleteInProgress } =
+    useMutation({
+      mutationFn: async (categoryId: string) => {
+        const response = await axios.delete(
+          `${process.env.NEXT_PUBLIC_API_URL}/deleteTodoCategory`,
+          { data: { categoryId, userId: user?.id } }
+        );
+        return response.data;
+      },
+      onSuccess: (data: TodoCategoryType) => {
+        setIsDeleteCategoryOpen(false);
+        deleteSuccessToast();
+        queryClient?.setQueryData(
+          ["todoCategories"],
+          (oldData: TodoCategoryType[]) => {
+            return oldData.filter(
+              (category: TodoCategoryType) => category._id !== data._id
+            );
+          }
+        );
+      },
+      onError: (error: Error) => {
+        if (axios.isAxiosError(error)) {
+          deleteErrorToast(
+            error.response?.data?.error || "Error deleting category"
+          );
+        } else {
+          deleteErrorToast("Error deleting category");
+        }
+        setIsDeleteCategoryOpen(false);
+      },
+    });
+
+  const handleDeleteTodoCategory = (id: string) => {
+    deleteTodoCategoryMutation(id);
+  };
+
+  const handleCategoryClick = (category: TodoCategoryType) => {
+    if (selectedCategory?._id === category._id) {
+      setSelectedCategory(null);
+    } else {
+      setSelectedCategory(category);
+    }
+  };
+
   return (
     <>
       {isCalendarOpen && (
@@ -96,6 +184,35 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
           />
         </div>
       )}
+
+      {(isCreateCategoryOpen || clickedCategoryToEdit) && (
+        <CreateCategoryModal
+          onCancelClick={() => {
+            setIsCreateCategoryOpen(false);
+            setClickedCategoryToEdit(null);
+          }}
+          initialValues={clickedCategoryToEdit || undefined}
+        />
+      )}
+
+      {isDeleteCategoryOpen && (
+        <Modal
+          width="w-[350px]"
+          height="h-[250px]"
+          onConfirm={() =>
+            deleteCategoryId && handleDeleteTodoCategory(deleteCategoryId)
+          }
+          isPending={isDeleteInProgress}
+          onCancel={() => setIsDeleteCategoryOpen(false)}
+          header={isDeleteInProgress ? "" : "Delete Category"}
+          text={
+            isDeleteInProgress
+              ? ""
+              : "Are you sure you want to delete this category?"
+          }
+        />
+      )}
+
       <div className="centerPart pt-6 grow min-w-[300px] flex flex-col items-center">
         {/* modal for adding a new todo */}
         {isAddTodoOpen && (
@@ -107,15 +224,12 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
 
         {!isCalendarOpen && (
           <div className="ml-auto absolute z-10 top-6 right-6 text-md sm:text-xl md:hidden text-dark dark:text-light">
-            <FontAwesomeIcon
-              icon={faRegularCalendar}
-              onClick={toggleCalendar}
-            />
+            <LucideCalendar onClick={toggleCalendar} />
           </div>
         )}
 
         {/* header */}
-        <div className="text-xl w-10/12 lg:w-8/12 mx-auto text-center font-bold flex flex-col lg:flex-row items-center justify-center gap-2 lg:gap-20 border-b-[1px] border-black/15 dark:border-white/15 pb-8 mb-8">
+        <div className="text-xl w-10/12 lg:w-8/12 mx-auto text-center font-bold flex flex-col lg:flex-row items-center justify-center gap-2 lg:gap-20 border-b-[1px] border-black/15 dark:border-white/15 pb-8 mb-6 md:mb-8">
           <div className="flex flex-row lg:flex-col gap-4 lg:gap-0 justify-center items-center text-teal-600 dark:text-teal-500 md:w-auto w-full">
             <p className="font-bold text-2xl md:text-lg md:ml-0">
               {todaysDayOfWeek}
@@ -138,6 +252,35 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
           </p>
         </div>
 
+        <Popover open={isCategoriesOpen} onOpenChange={setIsCategoriesOpen}>
+          <PopoverTrigger asChild>
+            <div className="mb-4 w-10/12 h-8 flex flex-col items-center justify-center md:hidden">
+              <Button variant="default" className="w-full">
+                <LucideList size={16} />
+                Categories
+              </Button>
+
+              {selectedCategory && (
+                <p className="text-xs italic opacity-90 my-1">
+                  <span>Selected category:</span> {selectedCategory.name}
+                </p>
+              )}
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className="w-80 bg-slate-100/95 dark:bg-slate-800/95 backdrop-blur-sm z-10">
+            <CategoriesList
+              todoCategories={categories}
+              handleCategoryClick={handleCategoryClick}
+              selectedCategory={selectedCategory}
+              setIsCreateCategoryOpen={setIsCreateCategoryOpen}
+              isDeleteCategoryOpen={isDeleteCategoryOpen}
+              setIsDeleteCategoryOpen={setIsDeleteCategoryOpen}
+              setClickedCategoryToEdit={setClickedCategoryToEdit}
+              setDeleteCategoryId={setDeleteCategoryId}
+            />
+          </PopoverContent>
+        </Popover>
+
         {/* input button for adding a new todo and sorting button */}
         <div className="w-10/12 md:w-8/12 flex flex-row items-center gap-4 mb-4 justify-between">
           <button
@@ -158,7 +301,7 @@ const TodosSection = ({ todos }: { todos: TodoType[] }) => {
               value={sortBy || ""}
               width="w-fit lg:w-28"
               height="h-[30px] lg:h-[36px]"
-              className="text-xs lg:text-sm"
+              className="text-xs lg:text-sm min-w-[90px]"
             />
 
             <div

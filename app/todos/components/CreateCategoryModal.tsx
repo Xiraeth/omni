@@ -1,6 +1,7 @@
 import Modal from "@/app/components/Modal";
 import CategoryForm from "./CategoryForm";
 import { TodoCategoryType } from "../lib/types";
+
 const CreateCategoryModal = ({
   onCancelClick,
   initialValues,
