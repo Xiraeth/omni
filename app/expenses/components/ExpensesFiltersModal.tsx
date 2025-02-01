@@ -4,27 +4,27 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  INCOME_CATEGORIES,
-  INCOME_CATEGORIES_LOWERCASE,
-  INITIAL_FILTERS_DATA,
+  EXPENSES_CATEGORIES,
+  EXPENSES_CATEGORIES_LOWERCASE,
+  INITIAL_EXPENSES_FILTERS,
 } from "@/app/constants/constants";
-import DateInput from "./DateInput";
+import DateInput from "@/app/components/DateInput";
 import GenericButton from "@/app/components/GenericButton";
 import FormElement from "@/app/components/FormElement";
-import { CategoriesType, FiltersType } from "../types";
+import { ExpensesCategoriesType, ExpensesFiltersType } from "../types";
 import { checkValidityOfFilters } from "../functions/checkValidityOfFilters";
 
-const FiltersModal = ({
+const ExpensesFiltersModal = ({
   handleCloseFiltersModal,
 }: {
   handleCloseFiltersModal: () => void;
 }) => {
   const queryClient = useQueryClient();
-  const filtersFromCache = queryClient.getQueryData<FiltersType>([
-    "filtersData",
+  const filtersFromCache = queryClient.getQueryData<ExpensesFiltersType>([
+    "expensesFiltersData",
   ]);
-  const [filtersData, setFiltersData] = useState<FiltersType>(
-    filtersFromCache || INITIAL_FILTERS_DATA
+  const [filtersData, setFiltersData] = useState<ExpensesFiltersType>(
+    filtersFromCache || INITIAL_EXPENSES_FILTERS
   );
   const [dateError, setDateError] = useState<string>("");
 
@@ -34,10 +34,13 @@ const FiltersModal = ({
     setFiltersData((prev) => ({
       ...prev,
       toggledCategories: prev.toggledCategories?.includes(
-        category as CategoriesType
+        category as ExpensesCategoriesType
       )
         ? prev.toggledCategories?.filter((c) => c !== category)
-        : [...(prev.toggledCategories || []), category as CategoriesType],
+        : [
+            ...(prev.toggledCategories || []),
+            category as ExpensesCategoriesType,
+          ],
     }));
   };
 
@@ -49,14 +52,14 @@ const FiltersModal = ({
 
     setDateError("");
 
-    queryClient.setQueryData(["filtersData"], filtersData);
+    queryClient.setQueryData(["expensesFiltersData"], filtersData);
 
     handleCloseFiltersModal();
   };
 
   const handleClearFilters = () => {
-    setFiltersData(INITIAL_FILTERS_DATA);
-    queryClient.removeQueries({ queryKey: ["filtersData"] });
+    setFiltersData(INITIAL_EXPENSES_FILTERS);
+    queryClient.removeQueries({ queryKey: ["expensesFiltersData"] });
     handleCloseFiltersModal();
   };
 
@@ -126,24 +129,26 @@ const FiltersModal = ({
             Toggle categories
           </p>
           <div className="flex flex-col gap-[1px]">
-            {INCOME_CATEGORIES_LOWERCASE.map((category, index) => (
-              <div
-                key={category}
-                className="flex items-center justify-between gap-2 mt-2"
-              >
-                <p className="text-dark dark:text-light font-roboto">
-                  {INCOME_CATEGORIES[index]}
-                </p>
-                <Checkbox
-                  checked={
-                    filtersData?.toggledCategories?.includes(
-                      category as CategoriesType
-                    ) || false
-                  }
-                  onCheckedChange={() => handleToggleCategory(category)}
-                />
-              </div>
-            ))}
+            {EXPENSES_CATEGORIES_LOWERCASE.map((category, index) => {
+              return (
+                <div
+                  key={`${category}-${index}`}
+                  className="flex items-center justify-between gap-2 mt-2"
+                >
+                  <p className="text-dark dark:text-light font-roboto">
+                    {EXPENSES_CATEGORIES[index]}
+                  </p>
+                  <Checkbox
+                    checked={
+                      filtersData?.toggledCategories?.includes(
+                        category as ExpensesCategoriesType
+                      ) || false
+                    }
+                    onCheckedChange={() => handleToggleCategory(category)}
+                  />
+                </div>
+              );
+            })}
           </div>
 
           <p className="font-montserrat text-dark dark:text-light font-bold mt-4 text-center">
@@ -192,4 +197,4 @@ const FiltersModal = ({
   );
 };
 
-export default FiltersModal;
+export default ExpensesFiltersModal;

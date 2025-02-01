@@ -1,22 +1,22 @@
-export type CategoriesType =
+export type IncomeCategoriesType =
   | "salary"
   | "freelance"
   | "investment"
   | "other"
   | undefined;
 
-export type FiltersType = {
+export type IncomeFiltersType = {
   filterName?: string;
   dateFrom?: string;
   dateTo?: string;
-  toggledCategories?: CategoriesType[];
+  toggledCategories?: IncomeCategoriesType[];
 };
 
 export type IncomeFormDataType = {
   name: string;
   amount: string;
   date: string;
-  category: CategoriesType;
+  category: IncomeCategoriesType;
   userId: string;
 };
 
@@ -29,7 +29,7 @@ export type IncomeDataType = {
   name: string;
   amount: number;
   date: string;
-  category: CategoriesType;
+  category: IncomeCategoriesType;
   userId: string;
 };
 

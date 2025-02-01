@@ -1,11 +1,11 @@
 import dbConnect from "@/lib/connectToDb";
-import Income from "@/models/income";
+import Expense from "@/models/expense";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * GET handler to retrieve income records with optional date filtering and sorting
+ * GET handler to retrieve expense records with optional date filtering and sorting
  * @param req - Next.js request object
- * @returns NextResponse containing filtered and sorted array of income records
+ * @returns NextResponse containing filtered and sorted array of expense records
  */
 export async function GET(req: NextRequest) {
   try {
@@ -33,25 +33,25 @@ export async function GET(req: NextRequest) {
     } = { userId: userId || "" };
 
     try {
-      const incomes = await Income.find(query).sort({ date: -1 });
-      return NextResponse.json(incomes);
+      const expenses = await Expense.find(query).sort({ date: -1 });
+      return NextResponse.json(expenses);
     } catch (error) {
       console.error("Database query error:", error);
       return NextResponse.json([], { status: 500 });
     }
   } catch (error) {
-    console.error("Failed to fetch income records:", error);
+    console.error("Failed to fetch expense records:", error);
     return NextResponse.json(
-      { error: "Failed to fetch income records" },
+      { error: "Failed to fetch expense records" },
       { status: 500 }
     );
   }
 }
 
 /**
- * POST handler to create a new income record
- * @param req - Next.js request object containing income data
- * @returns NextResponse containing the created income record
+ * POST handler to create a new expense record
+ * @param req - Next.js request object containing expense data
+ * @returns NextResponse containing the created expense record
  */
 export async function POST(req: NextRequest) {
   try {
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const income = new Income({
+    const expense = new Expense({
       name,
       category,
       amount: Number(amount),
@@ -82,13 +82,13 @@ export async function POST(req: NextRequest) {
       userId,
     });
 
-    await income.save();
+    await expense.save();
 
-    return NextResponse.json({ income }, { status: 201 });
+    return NextResponse.json({ expense }, { status: 201 });
   } catch (error) {
-    console.error("Failed to create income record:", error);
+    console.error("Failed to create expense record:", error);
     return NextResponse.json(
-      { error: "Failed to create income record" },
+      { error: "Failed to create expense record" },
       { status: 500 }
     );
   }

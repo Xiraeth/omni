@@ -41,7 +41,7 @@ const Navbar = () => {
   };
 
   const handleExpensesClick = () => {
-    // router.push("/expenses");
+    router.push("/expenses");
   };
 
   const handleTodosClick = () => {

@@ -1,23 +1,55 @@
-import { CategoriesType, FiltersType } from "../income/types";
+import { ExpensesCategoriesType, ExpensesFiltersType } from "../expenses/types";
+import { IncomeCategoriesType, IncomeFiltersType } from "../income/types";
 
 export const PUBLIC_ROUTES = ["/login", "/signup", "/"];
 
 export const INCOME_CATEGORIES = ["Salary", "Freelance", "Investment", "Other"];
 
+export const EXPENSES_CATEGORIES = [
+  "Food",
+  "Transportation",
+  "Entertainment",
+  "House",
+  "Shopping",
+  "Healthcare",
+  "Education",
+  "Travelling",
+  "Other",
+];
+
 export const SORT_FIELDS = ["Date", "Amount", "Category", "Name"];
 
-export const INCOME_CATEGORIES_LOWERCASE: CategoriesType[] = [
+export const INCOME_CATEGORIES_LOWERCASE: IncomeCategoriesType[] = [
   "salary",
   "freelance",
   "investment",
   "other",
 ];
 
-export const INITIAL_FILTERS_DATA: FiltersType = {
+export const EXPENSES_CATEGORIES_LOWERCASE: ExpensesCategoriesType[] = [
+  "food",
+  "transportation",
+  "entertainment",
+  "house",
+  "shopping",
+  "healthcare",
+  "education",
+  "travelling",
+  "other",
+];
+
+export const INITIAL_INCOME_FILTERS: IncomeFiltersType = {
   filterName: "",
   dateFrom: "",
   dateTo: "",
   toggledCategories: INCOME_CATEGORIES_LOWERCASE,
+};
+
+export const INITIAL_EXPENSES_FILTERS: ExpensesFiltersType = {
+  filterName: "",
+  dateFrom: "",
+  dateTo: "",
+  toggledCategories: EXPENSES_CATEGORIES_LOWERCASE,
 };
 
 export const DAYS_OF_WEEK_SHORT = [

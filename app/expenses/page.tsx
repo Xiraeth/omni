@@ -7,30 +7,30 @@ import { useRouter } from "next/navigation";
 import NoSessionDiv from "@/app/components/NoSessionDiv";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faSort, faSpinner } from "@fortawesome/free-solid-svg-icons";
-import AddIncomeForm from "./components/AddIncomeForm";
-import IncomeTable from "./components/IncomeTable";
+import AddExpenseForm from "./components/AddExpenseForm";
+import ExpensesTable from "./components/ExpensesTable";
 import useCustomToast from "@/hooks/useCustomToast";
 import { changeUrlParams } from "@/app/common/functions/changeParams";
-import FiltersModal from "./components/IncomeFiltersModal";
+import FiltersModal from "./components/ExpensesFiltersModal";
 import Dropmenu from "@/app/components/Dropmenu";
 import axios from "axios";
 import {
-  IncomeFiltersType,
-  IncomeDataType,
+  ExpensesFiltersType,
+  ExpensesDataType,
   SortFieldType,
   SortOrderType,
 } from "./types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  INITIAL_INCOME_FILTERS,
+  INITIAL_EXPENSES_FILTERS,
   SORT_FIELDS,
-  INCOME_CATEGORIES_LOWERCASE,
+  EXPENSES_CATEGORIES_LOWERCASE,
 } from "@/app/constants/constants";
 import EntryCard from "@/app/components/EntryCard";
-import { handleSortIncomes } from "../common/functions/handleSort";
-import { isIncomeInFilters } from "./functions/isIncomeInFilters";
+import { handleSortExpenses } from "../common/functions/handleSort";
+import { isExpenseInFilters } from "./functions/isExpenseInFilters";
 
-const IncomePage = () => {
+const ExpensesPage = () => {
   const router = useRouter();
   const { user } = useUser();
   const queryClient = useQueryClient();
@@ -47,16 +47,16 @@ const IncomePage = () => {
     }
   }, [user]);
 
-  const query = `income?${new URLSearchParams({
+  const query = `expenses?${new URLSearchParams({
     ...(user?.id && { userId: user.id }),
   }).toString()}`;
 
   const successToast = useCustomToast({
-    message: "Income deleted successfully",
+    message: "Expense deleted successfully",
   });
 
   const errorToast = useCustomToast({
-    message: "Error deleting income",
+    message: "Error deleting expense",
   });
 
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState<boolean>(false);
@@ -71,8 +71,8 @@ const IncomePage = () => {
     setIsFiltersModalOpen(false);
   };
 
-  const { data: incomeData, isLoading: incomeDataLoading } = useQuery({
-    queryKey: ["incomeData"],
+  const { data: expensesData, isLoading: expensesDataLoading } = useQuery({
+    queryKey: ["expensesData"],
     queryFn: async () => {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/${query}`
@@ -82,20 +82,20 @@ const IncomePage = () => {
   });
 
   const filtersData =
-    queryClient.getQueryData<IncomeFiltersType>(["incomeFiltersData"]) ||
-    INITIAL_INCOME_FILTERS;
+    queryClient.getQueryData<ExpensesFiltersType>(["expensesFiltersData"]) ||
+    INITIAL_EXPENSES_FILTERS;
 
   const areThereFilters = Object.values(filtersData).some((value) => {
     if (Array.isArray(value)) {
-      return value?.length < INCOME_CATEGORIES_LOWERCASE?.length;
+      return value?.length < EXPENSES_CATEGORIES_LOWERCASE?.length;
     }
     return value;
   });
 
-  const { mutate: deleteIncome } = useMutation({
+  const { mutate: deleteExpense } = useMutation({
     mutationFn: async (id: string) => {
       const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/income/${id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/expenses/${id}`
       );
       return response.data;
     },
@@ -104,52 +104,61 @@ const IncomePage = () => {
 
       const deletedEntry = data?.response;
 
-      queryClient.setQueryData(["incomeData"], (oldData: IncomeDataType[]) => {
-        return oldData.filter((item) => item._id !== deletedEntry._id);
-      });
+      queryClient.setQueryData(
+        ["expensesData"],
+        (oldData: ExpensesDataType[]) => {
+          return oldData.filter((item) => item._id !== deletedEntry._id);
+        }
+      );
     },
     onError: () => {
       errorToast();
     },
   });
 
-  const handleDeleteIncome = async (id: string) => {
-    deleteIncome(id);
+  const handleDeleteExpense = async (id: string) => {
+    deleteExpense(id);
   };
 
-  const incomeTotalAmount = incomeData?.reduce(
-    (acc: number, cur: IncomeDataType) => {
-      return isIncomeInFilters(cur, filtersData) ? acc + cur.amount : acc;
+  const expensesTotalAmount = expensesData?.reduce(
+    (acc: number, cur: ExpensesDataType) => {
+      return isExpenseInFilters(cur, filtersData) ? acc + cur.amount : acc;
     },
     0
   );
 
-  const handleSortIncomesSelection = (option: string) => {
+  const handleSortSelection = (option: string) => {
     setSortField(option as SortFieldType);
 
-    queryClient.setQueryData(["incomeData"], (oldData: IncomeDataType[]) => {
-      return handleSortIncomes(
-        [...oldData],
-        option as SortFieldType,
-        sortOrder as SortOrderType
-      );
-    });
+    queryClient.setQueryData(
+      ["expensesData"],
+      (oldData: ExpensesDataType[]) => {
+        return handleSortExpenses(
+          [...oldData],
+          option as SortFieldType,
+          sortOrder as SortOrderType
+        );
+      }
+    );
   };
 
-  const handleSortIncomesOrder = () => {
+  const handleSortOrder = () => {
     const newOrder = sortOrder === "asc" ? "desc" : "asc";
     setSortOrder(newOrder);
 
-    queryClient.setQueryData(["incomeData"], (oldData: IncomeDataType[]) => {
-      return handleSortIncomes(
-        [...oldData],
-        sortField as SortFieldType,
-        newOrder as SortOrderType
-      );
-    });
+    queryClient.setQueryData(
+      ["expensesData"],
+      (oldData: ExpensesDataType[]) => {
+        return handleSortExpenses(
+          [...oldData],
+          sortField as SortFieldType,
+          newOrder as SortOrderType
+        );
+      }
+    );
   };
 
-  return incomeDataLoading ? (
+  return expensesDataLoading ? (
     <div className="w-screen h-screen overflow-x-hidden flex justify-center items-center">
       <FontAwesomeIcon
         icon={faSpinner}
@@ -159,26 +168,26 @@ const IncomePage = () => {
   ) : user ? (
     <div className="w-screen h-screen overflow-x-hidden pb-8">
       <OpenNavbarButton />
-      <AddIncomeForm />
+      <AddExpenseForm />
       {isFiltersModalOpen && (
         <FiltersModal handleCloseFiltersModal={handleCloseFiltersModal} />
       )}
 
       {/* filter and sorting */}
-      {(incomeData?.length || areThereFilters) && (
+      {(expensesData?.length || areThereFilters) && (
         <>
           <div className="w-10/12 mx-auto mb-4 flex justify-between items-center">
             <div className="flex items-center gap-4">
               <Dropmenu
                 options={SORT_FIELDS}
                 placeholder="Sort by"
-                onSelect={handleSortIncomesSelection}
+                onSelect={handleSortSelection}
                 value={sortField}
               />
 
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center text-dark dark:text-light bg-buttonBgLight dark:bg-buttonBgDark border-[1px] dark:border-buttonBorderDark hover:border-buttonBorderLightHover dark:hover:border-buttonBorderDarkHover transition-all duration-200 cursor-pointer active:bg-buttonBgLightFocus dark:active:bg-buttonBgDarkFocus drop-shadow-md"
-                onClick={handleSortIncomesOrder}
+                onClick={handleSortOrder}
               >
                 <FontAwesomeIcon icon={faSort} />
               </div>
@@ -198,14 +207,14 @@ const IncomePage = () => {
             </div>
           </div>
 
-          <IncomeTable
-            incomeData={incomeData}
-            filtersData={filtersData as IncomeFiltersType}
-            handleDeleteIncome={handleDeleteIncome}
+          <ExpensesTable
+            expensesData={expensesData}
+            filtersData={filtersData as ExpensesFiltersType}
+            handleDeleteExpense={handleDeleteExpense}
           />
 
           {/* total amount of money earned */}
-          {incomeTotalAmount ? (
+          {expensesTotalAmount ? (
             <div className="w-10/12 mx-auto mt-12">
               <EntryCard hasBorder={true}>
                 <div className="flex gap-2 items-center">
@@ -215,8 +224,8 @@ const IncomePage = () => {
                   </div>
                 </div>
                 <div className="flex gap-2 items-center">
-                  <div className="text-green-600 sm:font-bold text-base sm:text-lg dark:text-green-500">
-                    {incomeTotalAmount}&#8364;
+                  <div className="text-red-600 sm:font-bold text-base sm:text-lg dark:text-red-500">
+                    {expensesTotalAmount}&#8364;
                   </div>
                 </div>
               </EntryCard>
@@ -230,4 +239,4 @@ const IncomePage = () => {
   );
 };
 
-export default IncomePage;
+export default ExpensesPage;

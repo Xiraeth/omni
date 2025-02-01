@@ -82,7 +82,7 @@ const Dropmenu = ({
       >
         <div
           className={clsx(
-            "flex items-center justify-betwen lg:justify-between gap-4 px-2",
+            "flex items-center justify-betwen lg:justify-between gap-4 px-4",
             height ? height : "h-[38px] lg:h-[46px]"
           )}
         >
