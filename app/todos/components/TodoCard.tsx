@@ -33,6 +33,13 @@ const TodoCard = ({
   const { DDMMYYYY: todoDDMMYYYY } = getDateInfo(new Date(todo?.dateFor));
   const todoHHMMSS = getTimeInfo(todo?.timeFor || "");
 
+  const priorityColor = getPriorityColor(todo?.priority as TodoPriorityType);
+
+  const priorityColorWithBreakpoints = getPriorityColor(
+    todo?.priority as TodoPriorityType,
+    true
+  );
+
   const editClickHandler = () => {
     setInitialValues({
       _id: todo._id,
@@ -54,7 +61,7 @@ const TodoCard = ({
     <div
       key={todo?._id}
       className={clsx(
-        "px-4 py-2 shadow-md rounded-md w-full flex flex-col lg:flex-row items-center lg:items-start gap-1 lg:gap-4 text-dark dark:text-light "
+        "px-4 py-2 shadow-md rounded-md w-full flex flex-col lg:flex-row items-center lg:items-start gap-2 lg:gap-4 text-dark dark:text-light "
       )}
     >
       {/* container for checkbox and title, description, priority, time, date and buttons for editing and deleting */}
@@ -92,7 +99,12 @@ const TodoCard = ({
             )}
           >
             <div className="flex items-center gap-4">
-              <p className="text-md lg:text-base font-roboto font-bold">
+              <p
+                className={clsx(
+                  "text-md lg:text-base font-roboto font-bold",
+                  priorityColorWithBreakpoints
+                )}
+              >
                 {todo?.title}
               </p>
 
@@ -116,7 +128,7 @@ const TodoCard = ({
             <p
               className={clsx(
                 "hidden lg:block text-xs lg:text-sm font-geistSans",
-                getPriorityColor(todo?.priority as TodoPriorityType)
+                priorityColor
               )}
             >
               {todo?.priority?.slice(0, 1).toUpperCase() +
@@ -142,7 +154,7 @@ const TodoCard = ({
       <div className="space-x-2 flex lg:hidden w-full">
         <ButtonOuttlined
           text="Edit"
-          className="text-xs px-2 py-[2px] w-1/3"
+          className="text-xs px-2 py-[4px] w-1/3"
           hasPadding={false}
           variant="default"
           onClick={editClickHandler}
@@ -150,7 +162,7 @@ const TodoCard = ({
 
         <ButtonOuttlined
           text="Delete"
-          className="text-xs px-2 py-[2px] w-1/3"
+          className="text-xs px-2 py-[4px] w-1/3"
           hasPadding={false}
           variant="danger"
           onClick={deleteClickHandler}
