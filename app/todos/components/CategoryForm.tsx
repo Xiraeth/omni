@@ -136,12 +136,15 @@ const CategoryForm = ({
           name="name"
           rules={{ required: "Name is required" }}
           render={({ field: { onChange, value } }) => (
-            <div className="flex flex-col xl:items-center w-full">
+            <div className="flex flex-col items-center w-full">
               <label htmlFor="name" className="text-center xl:text-start">
                 Name
               </label>
 
-              <FormElement errorMsg={errors?.name?.message} width="w-10/12">
+              <FormElement
+                errorMsg={errors?.name?.message}
+                width="w-full md:w-10/12"
+              >
                 <input
                   {...register("name")}
                   id="name"
@@ -159,7 +162,7 @@ const CategoryForm = ({
           control={control}
           name="description"
           render={({ field: { onChange, value } }) => (
-            <div className="flex flex-col xl:items-center w-full">
+            <div className="flex flex-col items-center w-full">
               <label
                 htmlFor="description"
                 className="text-center xl:text-start"
@@ -169,7 +172,7 @@ const CategoryForm = ({
 
               <FormElement
                 errorMsg={errors?.description?.message}
-                width="w-10/12"
+                width="w-full md:w-10/12"
               >
                 <input
                   {...register("description")}
@@ -184,7 +187,7 @@ const CategoryForm = ({
           )}
         />
 
-        <div className="flex flex-col lg:flex-row justify-center w-full gap-4 mt-4 text-xs">
+        <div className="flex flex-col md:flex-row justify-center w-full gap-4 mt-4 text-xs">
           <ButtonOuttlined text="Cancel" onClick={onCancelClick} />
           <ButtonOuttlined
             text={initialValues ? "Update" : "Create"}

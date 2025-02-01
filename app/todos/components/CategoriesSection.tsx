@@ -86,7 +86,7 @@ const CategoriesSection = ({
   return (
     <div
       className={clsx(
-        "leftPart pt-6 bg-slate-400/15 border-r-[1px] border-r-black/20 dark:bg-black/20 flex flex-col items-center transition-all duration-300 ease-out w-[150px] lg:w-[200px] xl:w-[250px]"
+        "leftPart pt-14 lg:pt-6 bg-slate-400/15 border-r-[1px] border-r-black/20 dark:bg-black/20 flex flex-col items-center transition-all duration-300 ease-out w-[150px] lg:w-[200px] xl:w-[250px]"
       )}
     >
       {isDeleteCategoryOpen && (
@@ -115,23 +115,23 @@ const CategoriesSection = ({
         />
       )}
       <div className="w-full flex flex-col">
-        <p className="text-xl font-bold mx-auto mb-6 pb-4 border-b-[1px] border-b-black/15 w-8/12 text-center">
+        <p className="text-base lg:text-xl font-bold mx-auto mb-6 pb-4 border-b-[1px] border-b-black/15 w-8/12 text-center">
           Categories
         </p>
-        <div className="mb-2 flex flex-col gap-4 px-8">
+        <div className="mb-2 flex flex-col gap-4 px-4">
           {todoCategories?.map((category: TodoCategoryType) => (
             <div
               onClick={() => handleCategoryClick(category)}
               key={category._id}
               className={clsx(
-                "flex justify-between items-center rounded-md px-4 py-2 hover:bg-slate-400/20 transition-colors duration-200 cursor-pointer dark:hover:bg-black/30",
+                "flex justify-between items-center rounded-md px-4 py-2 hover:bg-slate-400/20 transition-colors duration-200 cursor-pointer dark:hover:bg-black/30 gap-2 lg:ga-0",
                 selectedCategory?._id === category._id &&
                   "border-[1px] border-sky-400 dark:border-amber-400 bg-slate-400/30 dark:bg-black/30",
                 selectedCategory?._id !== category._id &&
                   "bg-slate-300 dark:bg-black/20"
               )}
             >
-              <p className="font-montserrat text-lg select-none">
+              <p className="font-montserrat text-sm lg:text-lg select-none truncate">
                 {category.name}
               </p>
 
@@ -143,7 +143,7 @@ const CategoriesSection = ({
                     setIsCreateCategoryOpen(true);
                     e.stopPropagation();
                   }}
-                  className="text-sm text-dark dark:text-light hover:text-indigo-500 cursor-pointer dark:hover:text-blue-600 font-bold font-montserrat transition-colors duration-200 select-none"
+                  className="text-xs lg:text-base text-dark dark:text-light hover:text-indigo-500 cursor-pointer dark:hover:text-blue-600 font-bold font-montserrat transition-colors duration-200 select-none"
                 />
 
                 <FontAwesomeIcon
@@ -153,7 +153,7 @@ const CategoriesSection = ({
                     setDeleteCategoryId(category._id);
                     setIsDeleteCategoryOpen(true);
                   }}
-                  className="text-sm text-dark dark:text-light hover:text-red-500 cursor-pointer dark:hover:text-red-500 font-bold font-montserrat transition-colors duration-200 select-none"
+                  className="text-xs lg:text-base text-dark dark:text-light hover:text-red-500 cursor-pointer dark:hover:text-red-500 font-bold font-montserrat transition-colors duration-200 select-none"
                 />
               </div>
             </div>
