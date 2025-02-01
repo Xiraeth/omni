@@ -100,8 +100,12 @@ const UpsertTodoModalForm = ({
   return (
     <Modal
       onCancel={onClose}
-      width="w-[450px]"
-      height={Object.values(errors).length > 0 ? "h-[400px]" : "h-[350px]"}
+      width="w-[300px] md:w-[450px]"
+      height={
+        Object.values(errors).length > 0
+          ? "h-fit md:h-[400px]"
+          : "h-fit md:h-[350px]"
+      }
     >
       {isPending ? (
         <div className="flex justify-center items-center">
@@ -117,7 +121,7 @@ const UpsertTodoModalForm = ({
             className="flex flex-col gap-4 w-full text-sm"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <div className="flex gap-2">
+            <div className="flex flex-col md:flex-row gap-4">
               <FormElement
                 width="w-full"
                 errorMsg={errors?.title?.message as string}
@@ -148,21 +152,28 @@ const UpsertTodoModalForm = ({
                 />
               </FormElement>
             </div>
-            <div className="flex gap-4">
+            <div className="flex flex-col md:flex-row gap-4">
               <FormElement
-                width="w-1/2"
+                width="w-full md:w-1/2"
                 errorMsg={errors?.dateFor?.message as string}
               >
                 <input
                   type="date"
                   id="dateFor"
+                  defaultValue={
+                    initialValues?.dateFor
+                      ? new Date(initialValues?.dateFor)
+                          .toISOString()
+                          .split("T")[0]
+                      : new Date().toISOString().split("T")[0]
+                  }
                   className="font-lato drop-shadow-md border-[1px] rounded-md p-2 w-full transition-all duration-200 min-w-32 text-dark dark:text-light hover:border-buttonBorderLightHover dark:border-slate-600 dark:hover:border-slate-500 dark:bg-buttonBgDark bg-buttonBgLight focus:dark:border-amber-400 focus:border-sky-400 focus:dark:bg-buttonBgDarkFocus focus:bg-buttonBgLightFocus outline-none"
                   {...register("dateFor", { required: "Date is required" })}
                 />
               </FormElement>
 
               <FormElement
-                width="w-1/2"
+                width="w-full md:w-1/2"
                 errorMsg={errors?.timeFor?.message as string}
               >
                 <input
@@ -174,7 +185,7 @@ const UpsertTodoModalForm = ({
               </FormElement>
             </div>
 
-            <div className="w-full flex gap-4">
+            <div className="w-full flex flex-col md:flex-row gap-4">
               <FormElement
                 width="w-full"
                 errorMsg={errors?.priority?.message as string}

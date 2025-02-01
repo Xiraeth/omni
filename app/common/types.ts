@@ -45,3 +45,5 @@ export interface UserType {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export type ButtonVariantsType = "default" | "success" | "warning" | "danger";

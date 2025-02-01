@@ -111,6 +111,7 @@ const AddIncomeForm = () => {
                 options={INCOME_CATEGORIES}
                 placeholder="Category"
                 value={value || ""}
+                width="w-full"
                 onSelect={(option) => onChange(option)}
               />
             </FormElement>

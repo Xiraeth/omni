@@ -30,10 +30,10 @@ function Calendar({
         nav_button_previous: "absolute left-1",
         nav_button_next: "absolute right-1",
         table: "w-full border-collapse space-y-1",
-        head_row: "flex my-2 gap-2",
+        head_row: "flex my-2 gap-0 lg:gap-2",
         head_cell:
           "text-slate-700 rounded-md w-10 font-normal text-base dark:text-slate-100",
-        row: "flex w-full gap-2 mt-2",
+        row: "flex w-full gap-0 lg:gap-2 mt-2",
         cell: cn(
           "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-slate-100 [&:has([aria-selected].day-outside)]:bg-slate-100/50 [&:has([aria-selected].day-range-end)]:rounded-r-md dark:[&:has([aria-selected])]:bg-slate-800 dark:[&:has([aria-selected].day-outside)]:bg-slate-800/50",
           props.mode === "range"
@@ -47,10 +47,11 @@ function Calendar({
         day_range_start: "day-range-start",
         day_range_end: "day-range-end",
         day_selected:
-          "bg-slate-900 text-white hover:bg-slate-500 hover:text-slate-100 focus:bg-slate-900 focus:text-slate-50 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-600 dark:hover:text-slate-900 dark:focus:bg-slate-50 dark:focus:text-slate-900",
-        day_today: "bg-indigo-600 text-slate-300 dark:text-slate-50",
+          "bg-slate-900 text-white focus:bg-slate-900 focus:text-slate-50 dark:bg-slate-50 dark:text-black dark:focus:bg-slate-50 dark:focus:text-slate-900",
+        day_today:
+          "bg-teal-600 dark:bg-teal-500 text-slate-300 dark:text-slate-50",
         day_outside:
-          "day-outside text-slate-500 aria-selected:bg-slate-100/50 aria-selected:text-slate-500 dark:text-slate-400 dark:aria-selected:bg-slate-800/50 dark:aria-selected:text-slate-400 opacity-75",
+          "day-outside text-slate-500 aria-selected:bg-slate-100/50 aria-selected:text-slate-500 dark:text-slate-200/50 dark:aria-selected:bg-slate-800/50 dark:aria-selected:text-slate-400 opacity-75",
         day_disabled: "text-slate-500 opacity-50 dark:text-slate-400",
         day_range_middle:
           "aria-selected:bg-slate-100 aria-selected:text-slate-900 dark:aria-selected:bg-slate-800 dark:aria-selected:text-slate-50",
