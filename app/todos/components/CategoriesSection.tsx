@@ -86,7 +86,7 @@ const CategoriesSection = ({
   return (
     <div
       className={clsx(
-        "leftPart pt-14 lg:pt-6 bg-slate-400/15 border-r-[1px] border-r-black/20 dark:bg-black/20 flex flex-col items-center transition-all duration-300 ease-out w-[150px] lg:w-[200px] xl:w-[250px]"
+        "leftPart pt-14 lg:pt-6 bg-slate-400/15 border-r-[1px] border-r-black/20 dark:bg-black/20 hidden md:flex flex-col items-center transition-all duration-300 ease-out w-[150px] lg:w-[200px] xl:w-[250px]"
       )}
     >
       {isDeleteCategoryOpen && (

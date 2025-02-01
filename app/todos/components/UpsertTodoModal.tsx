@@ -160,6 +160,13 @@ const UpsertTodoModalForm = ({
                 <input
                   type="date"
                   id="dateFor"
+                  defaultValue={
+                    initialValues?.dateFor
+                      ? new Date(initialValues?.dateFor)
+                          .toISOString()
+                          .split("T")[0]
+                      : new Date().toISOString().split("T")[0]
+                  }
                   className="font-lato drop-shadow-md border-[1px] rounded-md p-2 w-full transition-all duration-200 min-w-32 text-dark dark:text-light hover:border-buttonBorderLightHover dark:border-slate-600 dark:hover:border-slate-500 dark:bg-buttonBgDark bg-buttonBgLight focus:dark:border-amber-400 focus:border-sky-400 focus:dark:bg-buttonBgDarkFocus focus:bg-buttonBgLightFocus outline-none"
                   {...register("dateFor", { required: "Date is required" })}
                 />

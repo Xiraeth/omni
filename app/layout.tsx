@@ -83,7 +83,7 @@ export default async function RootLayout({
             pauseOnFocusLoss={false}
             draggable={true}
             pauseOnHover={true}
-            className="select-none"
+            className="select-none z-50 !w-fit"
           />
         </Providers>
       </body>

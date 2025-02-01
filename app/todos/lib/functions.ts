@@ -59,3 +59,13 @@ export const handleTodoSort = (
 
   return todos; // Return unsorted array if sortBy doesn't match
 };
+
+export const getAmountOfTodosColor = (amount: number) => {
+  if (amount === 0) return "text-gray-600 dark:text-gray-400";
+  if (amount > 0 && amount <= 3) return "text-green-600 dark:text-green-400";
+  if (amount > 3 && amount <= 6) return "text-amber-600 dark:text-amber-400";
+  if (amount > 6 && amount <= 9) return "text-orange-600 dark:text-orange-400";
+  if (amount > 9) return "text-red-600 dark:text-red-400";
+
+  return "text-dark dark:text-light";
+};
