@@ -46,8 +46,7 @@ const ForgotPasswordPage = () => {
       );
       return response.data;
     },
-    onSuccess: (data: any) => {
-      console.log(data);
+    onSuccess: () => {
       successToast("Email sent successfully");
       setValue("email", "");
       setViewMode("success");

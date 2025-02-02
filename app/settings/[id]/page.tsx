@@ -103,6 +103,7 @@ const SettingsPage = () => {
           ...data.user,
         },
       });
+
       successToast();
 
       setTimeout(() => {
@@ -110,8 +111,11 @@ const SettingsPage = () => {
       }, 1000);
     },
     onError: (error: any) => {
-      console.log(error);
-      errorToast();
+      if (axios.isAxiosError(error)) {
+        errorToast(error.response?.data?.error || "Error updating user");
+      } else {
+        errorToast("Error updating user");
+      }
     },
   });
 
@@ -119,12 +123,14 @@ const SettingsPage = () => {
     await updateUserMutation.mutateAsync({ ...data, id: user?.id || "" });
   };
 
-  const onSubmitEmail = async (data: EmailFormDataType) => {
+  const onSubmitEmail = async () => {
+    // eslint-disable-next-line no-console
     console.log("to be implemented sometime in the future (or not) :)");
     // await updateUserMutation.mutateAsync({ ...data, id: user?.id || "" });
   };
 
-  const onSubmitPassword = async (data: PasswordFormDataType) => {
+  const onSubmitPassword = async () => {
+    // eslint-disable-next-line no-console
     console.log("to be implemented sometime in the future (or not) :)");
     // await updateUserMutation.mutateAsync({ ...data, id: user?.id || "" });
   };
