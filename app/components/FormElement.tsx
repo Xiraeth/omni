@@ -5,6 +5,7 @@ interface FormElementProps {
   errorMsg?: string;
   children: ReactNode;
   width?: string;
+  className?: string;
 }
 
 /**
@@ -15,21 +16,25 @@ interface FormElementProps {
  * @param {ReactNode} props.children - Form element(s) to wrap
  * @returns {JSX.Element} Wrapped form element with error handling
  */
-const FormElement = memo(({ errorMsg, children, width }: FormElementProps) => {
-  return (
-    <div className={clsx("flex flex-col gap-1 items-center", width)}>
-      {children}
-      {errorMsg && (
-        <span
-          className="text-xs relative bottom-1 text-center text-red-600 font-bold rounded-full flex 
+const FormElement = memo(
+  ({ errorMsg, children, width, className }: FormElementProps) => {
+    return (
+      <div
+        className={clsx("flex flex-col gap-1 items-center", width, className)}
+      >
+        {children}
+        {errorMsg && (
+          <span
+            className="text-xs relative bottom-1 text-center text-red-600 font-bold rounded-full flex 
         items-center justify-center px-2"
-        >
-          {errorMsg}
-        </span>
-      )}
-    </div>
-  );
-});
+          >
+            {errorMsg}
+          </span>
+        )}
+      </div>
+    );
+  }
+);
 
 // Add displayName for better debugging
 FormElement.displayName = "FormElement";

@@ -10,7 +10,7 @@ type ToastPropsType = {
     | "bottom-right"
     | "bottom-center"
     | "bottom-left";
-  autoClose?: number;
+  duration?: number;
   hideProgressBar?: boolean;
   closeOnClick?: boolean;
   closeButton?: boolean;
@@ -30,7 +30,7 @@ const useCustomToast = (toastProps: ToastPropsType) => {
   const customToast = (message?: string) => {
     toast[toastProps.type || "success"](message || toastProps.message, {
       position: toastProps.position || "top-right",
-      autoClose: toastProps.autoClose || 5000,
+      autoClose: toastProps.duration || 5000,
       hideProgressBar: toastProps.hideProgressBar || false,
       pauseOnHover: toastProps.pauseOnHover || true,
       pauseOnFocusLoss: toastProps.pauseOnFocusLoss || false,

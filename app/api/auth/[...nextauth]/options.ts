@@ -92,7 +92,7 @@ export const options: NextAuthOptions = {
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },
-    async jwt({ token, user, profile, account }) {
+    jwt({ token, user, profile, account, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.email = user.email as string;
@@ -105,6 +105,9 @@ export const options: NextAuthOptions = {
           token.username = user.username as string;
         }
       }
+      if (trigger === "update" && session?.user?.username) {
+        token.username = session?.user?.username;
+      }
       return token;
     },
     async session({ session, token }) {
@@ -112,7 +115,6 @@ export const options: NextAuthOptions = {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
         session.user.username = token.username as string;
-        // Remove githibUsername as it's now handled in the unified username field
       }
       return session;
     },

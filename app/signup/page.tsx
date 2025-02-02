@@ -16,6 +16,7 @@ import Input from "../components/Input";
 import axios from "axios";
 import { useUser } from "../context/UserContext";
 import OpenNavbarButton from "../components/OpenNavbarButton";
+import Card from "../components/Card";
 
 const Signup = () => {
   const router = useRouter();
@@ -112,7 +113,7 @@ const Signup = () => {
     <div className="flex flex-col items-center justify-center h-screen w-full transition-all duration-150">
       <OpenNavbarButton />
 
-      <div className="w-[300px] sm:w-[500px] mx-auto bg-slate-200 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
+      <Card>
         <p className="text-xl sm:text-2xl font-bold font-geistSans transition-all duration-150">
           Sign Up
         </p>
@@ -259,7 +260,7 @@ const Signup = () => {
         <div className="text-xs sm:text-sm font-geistSans opacity-80 text-center transition-all duration-150">
           Placeholder for privacy policy and other stuff like that
         </div>
-      </div>
+      </Card>
     </div>
   );
 };
