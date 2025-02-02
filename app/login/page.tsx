@@ -4,7 +4,6 @@ import { useForm, Controller } from "react-hook-form";
 
 import FormElement from "../components/FormElement";
 import { LoginFormData } from "../common/types";
-import Link from "next/link";
 import GenericButton from "../components/GenericButton";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
@@ -17,6 +16,7 @@ import Input from "../components/Input";
 import useCustomToast from "@/hooks/useCustomToast";
 import { useUser } from "../context/UserContext";
 import CustomLoader from "../components/CustomLoader";
+import OpenNavbarButton from "../components/OpenNavbarButton";
 
 const Login = () => {
   const router = useRouter();
@@ -117,6 +117,7 @@ const Login = () => {
         isSubmitting ? "cursor-progress" : ""
       }`}
     >
+      <OpenNavbarButton />
       <div className="w-[300px] sm:w-[500px] mx-auto bg-slate-200 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
         <p className="text-xl sm:text-2xl font-bold font-geistSans transition-all duration-150">
           Login
@@ -182,14 +183,22 @@ const Login = () => {
           )}
           <GenericButton text="Log in" width="full" />
         </form>
-        <div className="flex items-center justify-center gap-2 font-lato opacity-80 mb-2 transition-all duration-150 text-xs sm:text-sm">
-          <p>Don&apos;t have an account?</p>
-          <Link
-            href="/signup"
-            className="text-blue-500 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-150"
+        <div className="flex flex-col md:flex-row items-center justify-center gap-2 font-lato opacity-80 mb-2 transition-all duration-150 text-xs sm:text-sm">
+          <div className="flex gap-2">
+            <p>Don&apos;t have an account?</p>
+            <p
+              className="text-blue-500 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-150 cursor-pointer"
+              onClick={() => router.push("/signup")}
+            >
+              Sign up
+            </p>
+          </div>
+          <p
+            className="text-orange-600 hover:text-orange-700 text-sm dark:text-orange-400 dark:hover:text-orange-300 transition-all duration-150 italic cursor-pointer"
+            onClick={() => router.push("/forgot-password")}
           >
-            Sign up
-          </Link>
+            I forgot my password
+          </p>
         </div>
         <div className="w-full flex items-center justify-center gap-2 mb-4">
           <div className="h-[2px] w-full bg-black/10 dark:bg-white/10 transition-all duration-150"></div>

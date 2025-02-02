@@ -2,7 +2,6 @@
 
 import { useForm, Controller } from "react-hook-form";
 import "react-toastify/dist/ReactToastify.css";
-import Link from "next/link";
 import FormElement from "../components/FormElement";
 import { SignupFormData } from "../common/types";
 import { useRouter } from "next/navigation";
@@ -16,6 +15,7 @@ import GenericButton from "../components/GenericButton";
 import Input from "../components/Input";
 import axios from "axios";
 import { useUser } from "../context/UserContext";
+import OpenNavbarButton from "../components/OpenNavbarButton";
 
 const Signup = () => {
   const router = useRouter();
@@ -110,6 +110,8 @@ const Signup = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen w-full transition-all duration-150">
+      <OpenNavbarButton />
+
       <div className="w-[300px] sm:w-[500px] mx-auto bg-slate-200 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
         <p className="text-xl sm:text-2xl font-bold font-geistSans transition-all duration-150">
           Sign Up
@@ -232,12 +234,12 @@ const Signup = () => {
 
         <div className="flex items-center justify-center gap-2 font-lato opacity-80 mb-2 transition-all duration-150 text-xs sm:text-sm">
           <p>Already have an account?</p>
-          <Link
-            href="/login"
-            className="text-blue-500 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-150"
+          <p
+            className="text-blue-500 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-150 cursor-pointer"
+            onClick={() => router.push("/login")}
           >
             Sign in
-          </Link>
+          </p>
         </div>
         <div className="w-full flex items-center justify-center gap-2 mb-4">
           <div className="h-[2px] w-full bg-black/10 dark:bg-white/10 transition-all duration-150"></div>
