@@ -71,6 +71,14 @@ const Navbar = () => {
     setIsLoading(false);
   };
 
+  const handleSettingsClick = () => {
+    setIsLoading(true);
+    closeNavbar();
+    router.push(`/settings/${user?.id}`);
+    setIsLoading(false);
+    setIsDropdownOpen(false);
+  };
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -191,7 +199,11 @@ const Navbar = () => {
           {user && (
             <>
               {" "}
-              <NavbarButton text="Settings" onClick={() => {}} icon={faGear} />
+              <NavbarButton
+                text="Settings"
+                onClick={handleSettingsClick}
+                icon={faGear}
+              />
               <NavbarButton
                 text="Logout"
                 onClick={handleLogout}
