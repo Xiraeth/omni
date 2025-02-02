@@ -7,14 +7,15 @@ import Input from "../components/Input";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import useCustomToast from "@/hooks/useCustomToast";
-import { LucideLoader } from "lucide-react";
+import { LucideArrowLeft, LucideLoader } from "lucide-react";
 import { useState } from "react";
-
+import { useRouter } from "next/navigation";
 type ForgotPasswordFormData = {
   email: string;
 };
 
 const ForgotPasswordPage = () => {
+  const router = useRouter();
   const successToast = useCustomToast({ type: "success" });
   const errorToast = useCustomToast({ type: "error" });
   const [viewMode, setViewMode] = useState<"forgot-password" | "success">(
@@ -70,6 +71,12 @@ const ForgotPasswordPage = () => {
     <div
       className={`flex flex-col items-center justify-center h-screen w-full transition-all duration-150 text-dark dark:text-light font-lato`}
     >
+      <div className="absolute top-0 left-0 p-4">
+        <LucideArrowLeft
+          className="cursor-pointer"
+          onClick={() => router.push("/login")}
+        />
+      </div>
       {viewMode === "forgot-password" ? (
         <div className="w-[300px] sm:w-[500px] mx-auto bg-slate-200 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
           <p className="text-xl font-bold">Forgot your passowrd?</p>

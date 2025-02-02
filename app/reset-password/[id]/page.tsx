@@ -64,7 +64,7 @@ const ResetPasswordPage = () => {
     <div
       className={`flex flex-col items-center justify-center h-screen w-full transition-all duration-150 text-dark dark:text-light font-lato`}
     >
-      <div className="w-[300px] sm:w-[500px] mx-auto bg-slate-200 dark:bg-slate-800 flex flex-col items-center justify-center gap-2 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
+      <div className="w-[300px] sm:w-[500px] mx-auto bg-slate-200 dark:bg-slate-800 flex flex-col items-center justify-center gap-4 py-12 px-6 sm:px-20 h-fit drop-shadow-lg shadow-black rounded-lg transition-all duration-150 dark:text-white">
         <p className="text-xl font-bold">Enter your new password</p>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
           <Controller
