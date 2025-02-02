@@ -120,11 +120,13 @@ const SettingsPage = () => {
   };
 
   const onSubmitEmail = async (data: EmailFormDataType) => {
-    await updateUserMutation.mutateAsync({ ...data, id: user?.id || "" });
+    console.log("too much work to implement :)");
+    // await updateUserMutation.mutateAsync({ ...data, id: user?.id || "" });
   };
 
   const onSubmitPassword = async (data: PasswordFormDataType) => {
-    await updateUserMutation.mutateAsync({ ...data, id: user?.id || "" });
+    console.log("too much work to implement :)");
+    // await updateUserMutation.mutateAsync({ ...data, id: user?.id || "" });
   };
 
   return (
