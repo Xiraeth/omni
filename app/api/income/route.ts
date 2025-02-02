@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import dbConnect from "@/lib/connectToDb";
 import Income from "@/models/income";
 import { NextRequest, NextResponse } from "next/server";

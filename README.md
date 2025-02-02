@@ -37,3 +37,19 @@ Some of there features used in this app so far are:
 
 - Custom login and signup authentication pages
 - Github authentication
+
+## Income & Expenses pages
+
+Pages for income and expenses
+
+## Todo-list page
+
+Page for creating and tracking todo-lists
+
+## Settings page
+
+Page for updating user settings
+
+## Stats page
+
+Dashboard for viewing stats (under construction)

@@ -19,7 +19,6 @@ const CategoryForm = ({
   onCancelClick: () => void;
   initialValues?: TodoCategoryType;
 }) => {
-  console.log(initialValues);
   const { user } = useUser();
   const queryClient = useQueryClient();
   const successMessage = initialValues

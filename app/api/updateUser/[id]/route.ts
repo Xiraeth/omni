@@ -15,9 +15,13 @@ export async function PUT(req: NextRequest) {
   }
 
   // Verify 'old password' entered matches the user's password
-  const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+  let isPasswordValid: boolean | undefined;
 
-  if (!isPasswordValid) {
+  if (oldPassword) {
+    isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+  }
+
+  if (oldPassword && !isPasswordValid) {
     return NextResponse.json(
       { error: "Old password is incorrect" },
       { status: 400 }

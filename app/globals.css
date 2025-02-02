@@ -2,23 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: light dark;
-  --dark: #334155; /* slate-700 */
-  --light: #cbd5e1; /* slate-300 */
-  --button-bg-light: #ffffff99; /*white/60*/
-  --button-border-light-hover: #94a3b8cc; /* slate-400/80 */
-  --button-bg-light-focus: #ffffffcc; /*white/80*/
-  --button-bg-dark: #1e293b; /* slate-800 */
-  --button-border-dark: #475569; /* slate-600 */
-  --button-border-dark-hover: #64748b; /* slate-500 */
-  --button-bg-dark-focus: #0f172a; /* slate-900 */
-  --text-light: #cbd5e1;
-  --text-dark: #334155;
-  --background-light: #cbd5e1;
-  --background-dark: #334155;
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
@@ -44,4 +27,40 @@
   padding: 8px;
   border-radius: 4px;
   box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1), 0 2px 15px 0 rgba(0, 0, 0, 0.05);
+}
+
+@layer base {
+  :root {
+    color-scheme: light dark;
+
+    /* charts colors */
+    --chart-1: 140 70% 43%; /* Green */
+    --chart-2: 0 75% 43%; /* Red */
+    --chart-3: 210 100% 30%; /* Blue */
+    --chart-4: 270 60% 50%; /* Purple */
+    --chart-5: 45 100% 50%; /* Amber */
+
+    /* rest of the app colors */
+    --dark: #334155; /* slate-700 */
+    --light: #cbd5e1; /* slate-300 */
+    --button-bg-light: #ffffff99; /*white/60*/
+    --button-border-light-hover: #94a3b8cc; /* slate-400/80 */
+    --button-bg-light-focus: #ffffffcc; /*white/80*/
+    --button-bg-dark: #1e293b; /* slate-800 */
+    --button-border-dark: #475569; /* slate-600 */
+    --button-border-dark-hover: #64748b; /* slate-500 */
+    --button-bg-dark-focus: #0f172a; /* slate-900 */
+    --text-light: #cbd5e1;
+    --text-dark: #334155;
+    --background-light: #cbd5e1;
+    --background-dark: #334155;
+  }
+
+  .dark {
+    --chart-1: 120 70% 41%; /* Lighter Green */
+    --chart-2: 0 76% 45%; /* Lighter Red */
+    --chart-3: 210 100% 40%; /* Lighter Blue */
+    --chart-4: 270 60% 60%; /* Lighter Purple */
+    --chart-5: 45 100% 60%; /* Lighter Amber */
+  }
 }

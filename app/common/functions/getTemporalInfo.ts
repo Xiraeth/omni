@@ -7,16 +7,17 @@ import {
 import { addZero } from "./addZero";
 
 type DateInfoType = {
-  day: number;
-  dayOfWeekShort: string;
-  dayOfWeekLong: string;
-  monthShort: string;
-  monthLong: string;
-  year: number;
-  yearShort: string;
-  DDMMYYYY: string;
-  MMDDYYYY: string;
-  HHMMSS: string;
+  day: number; // 1
+  dayOfWeekShort: string; // Mon
+  dayOfWeekLong: string; // Monday
+  monthShort: string; // Jan
+  monthIndex: number; // 0
+  monthLong: string; // January
+  year: number; // 2025
+  yearShort: string; // 25
+  DDMMYYYY: string; // 01/01/2025
+  MMDDYYYY: string; // 01/01/2025
+  HHMMSS: string; // 00:00:00
 };
 
 export const getDateInfo = (date: Date): DateInfoType => {
@@ -40,6 +41,7 @@ export const getDateInfo = (date: Date): DateInfoType => {
     dayOfWeekShort,
     dayOfWeekLong,
     monthShort,
+    monthIndex,
     monthLong,
     year,
     yearShort,
