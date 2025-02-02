@@ -34,46 +34,38 @@ const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const closeNavbar = () => {
-    setIsDropdownOpen(false);
     changeUrlParams({ params: "isNavbarOpen", value: null });
     setIsLoading(false);
+    setIsDropdownOpen(false);
   };
 
   const handleDashboardClick = () => {
-    setIsDropdownOpen(false);
-    closeNavbar();
     router.push("/");
     setIsLoading(false);
+    setIsDropdownOpen(false);
   };
 
   const handleIncomeClick = () => {
     setIsLoading(true);
-    closeNavbar();
     router.push("/income");
     setIsLoading(false);
   };
 
   const handleExpensesClick = () => {
     setIsLoading(true);
-    closeNavbar();
     router.push("/expenses");
     setIsLoading(false);
   };
 
   const handleTodosClick = () => {
     setIsLoading(true);
-    closeNavbar();
     router.push("/todos");
     setIsLoading(false);
-  };
-
-  const handleThemeChange = () => {
-    toggleTheme();
+    setIsDropdownOpen(false);
   };
 
   const handleLogout = async () => {
     setIsLoading(true);
-    closeNavbar();
     await signOut();
     setIsLoading(false);
   };
@@ -176,7 +168,7 @@ const Navbar = () => {
           <div>
             <NavbarButton
               text="Toggle theme"
-              onClick={handleThemeChange}
+              onClick={toggleTheme}
               icon={theme === "light" ? faSun : faMoon}
             />
           </div>
