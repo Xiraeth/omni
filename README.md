@@ -53,3 +53,19 @@ Some of there features used in this app so far are:
 ## Stats page
 
 - Dashboard for viewing stats (eternally under construction)
+
+<hr/>
+
+## Key Libraries Overview
+
+| Category                     | Libraries                                                                                                                      | Purpose                                                                               |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| **Framework & Core**         | Next.js 15, React 18, TypeScript                                                                                               | Core application framework, UI library, and static typing.                            |
+| **UI & Styling**             | Tailwind CSS, tailwind-merge, tailwindcss-animate, Lucide React, FontAwesome, Radix UI (shadcn) | Styling system, animation utilities, icons, and accessible headless UI components.    |
+| **Forms & User Interaction** | React Hook Form, React Day Picker, React Toastify                                                                              | Form handling, date selection UI, and toast notifications.                            |
+| **Data Fetching & State**    | @tanstack/react-query, React Query DevTools                                                                                    | Server-state management, caching, and async data fetching.                            |
+| **Backend / Full-Stack**     | Mongoose, bcrypt, NextAuth, Nodemailer                                                                                         | MongoDB ORM, password hashing, authentication, and email sending.                     |
+| **Utilities**                | Axios, clsx, class-variance-authority, date-fns                                                                                | HTTP client, conditional class helpers, variant-based styling, and date manipulation. |
+| **Charts & Visualization**   | Recharts                                                                                                                       | Data visualization and chart components.                                              |
+| **Tooling & Linting (Dev)**  | ESLint, eslint-config-next, @typescript-eslint, PostCSS, Tailwind build tools, TypeScript types                                | Linting, formatting, and build tooling for development.                               |
+
