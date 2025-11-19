@@ -40,16 +40,16 @@ Some of there features used in this app so far are:
 
 ## Income & Expenses pages
 
-Pages for income and expenses
+- Pages for income and expenses that let you filter entries based on various criteria.
 
 ## Todo-list page
 
-Page for creating and tracking todo-lists
+- Page for creating and tracking todo-lists with categories and date selection.
 
 ## Settings page
 
-Page for updating user settings
+- Page for updating user settings
 
 ## Stats page
 
-Dashboard for viewing stats (under construction)
+- Dashboard for viewing stats (eternally under construction)
